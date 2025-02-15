@@ -19,20 +19,20 @@ const Sidebar = () => {
             ))}
 
             {/* other links */}
-            <div className='px-4'>
+            <div className=''>
                 <h4 className='capitalize font-semibold text-zinc-800 mt-3 mb-3'>others</h4>
 
-                <button className='w-full py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                <button className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                     <span className='text-xl'>🤖</span>
                     code of conduct
                 </button>
 
-                <button className='w-full py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                <button className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                     <span className='text-xl'>🔒</span>
                     privcy policy
                 </button>
 
-                <button className='w-full py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                <button className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                     <span className='text-xl'>📝</span>
                     terms of use
                 </button>

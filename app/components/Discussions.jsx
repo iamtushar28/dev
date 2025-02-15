@@ -16,14 +16,14 @@ const Discussions = () => {
 
                 <hr />
 
-                {discussions.map((discussions, index) => (
+                {discussions.map((links, index) => (
                     <>
                         <div key={index} className='px-4'>
                             <button className='text-start hover:text-blue-700'>
-                                {discussions.title}
+                                {links.title}
                             </button>
                             <button className='text-zinc-400'>
-                                {discussions.comments} comments
+                                {links.comments} comments
                             </button>
                         </div>
                     </>
