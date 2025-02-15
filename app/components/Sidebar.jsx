@@ -5,13 +5,16 @@ import { FiGithub, FiLinkedin } from "react-icons/fi"; //github icon
 
 const Sidebar = () => {
     return (
-        <section className='hidden md:flex w-[18%] h-fit flex-col gap-1'>
+        <section className='flex h-fit flex-col gap-1'>
 
-            {/*  sidebar links */}
-            {sidebarLinks.map((sidebarLinks, index) => (
-                <button key={index} className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
-                    <span className='text-xl'>{sidebarLinks.icon}</span>
-                    {sidebarLinks.title}
+            {/* Sidebar links */}
+            {sidebarLinks.map((link, index) => (
+                <button
+                    key={index}
+                    className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'
+                >
+                    <span className='text-xl'>{link.icon}</span>
+                    {link.title}
                 </button>
             ))}
 

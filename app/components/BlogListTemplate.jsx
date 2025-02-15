@@ -31,27 +31,27 @@ const BlogListTemplate = () => {
                     <div>
 
                         <h2 className='font-semibold'>Tushar Suryawanshi</h2>
-                        <p className='text-sm text-zinc-500 font-thin'>15 feb (1 hour ago)</p>
+                        <p className='text-sm text-zinc-500'>15 feb (1 hour ago)</p>
 
                     </div>
 
                 </div>
 
                 {/* blog info - title, tags, comments */}
-                <div className='pl-14 mt-3'>
+                <div className='mt-3'>
 
                     {/* blog title */}
                     <h2 className='text-xl md:text-2xl font-semibold'>Frontend Challenge with Next Js: February Edition is coming soon</h2>
 
                     {/* tags */}
                     <div className='mt-2'>
-                        <button className='text-sm text-zinc-500 font-thin px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
+                        <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
                             #NextJs
                         </button>
-                        <button className='text-sm text-zinc-500 font-thin px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
+                        <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
                             #Frontend-dev
                         </button>
-                        <button className='text-sm text-zinc-500 font-thin px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
+                        <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
                             #Javascript
                         </button>
 
@@ -60,7 +60,7 @@ const BlogListTemplate = () => {
                     {/* button - reactions, comment, save blog  */}
                     <div className='mt-4 flex justify-between items-center'>
 
-                        <div className='flex gap-2'>
+                        <div className='flex flex-col md:flex-row items-start md:items-center gap-2'>
 
                             {/* reactions */}
                             <button className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>

@@ -1,4 +1,5 @@
 import "./globals.css";
+import ReduxProvider from "./redux-store/ReduxProvider"; // Import Redux Provider
 
 export const metadata = {
   title: "Create Next App",
@@ -8,7 +9,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-100">{children}</body>
+      <body className="bg-zinc-100">
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
+      </body>
     </html>
   );
 }

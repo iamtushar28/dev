@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux';
+import { toggleMobileSidebar } from '../redux-store/sidebarSlice'
 
 import { IoSearchOutline, IoSettingsOutline } from "react-icons/io5"; //search, setting icon
 import { MdMenu } from "react-icons/md"; //menu
@@ -11,6 +13,8 @@ import { TbLogout2, TbWritingSign } from "react-icons/tb"; //logout, writing ico
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu"; //list, dashboard icon
 
 const Navbar = () => {
+
+    const dispatch = useDispatch();
 
     const [openProfileMenu, setOpenProfileMenu] = useState(false);
     const wrapperRef = useRef(null);
@@ -48,7 +52,7 @@ const Navbar = () => {
             <section className='flex items-center gap-4 w-[60%]'>
 
                 {/* toogle sidebr button */}
-                <button className='text-2xl block md:hidden'>
+                <button  onClick={() => dispatch(toggleMobileSidebar())} className='text-2xl block md:hidden'>
                     <MdMenu />
                 </button>
 
