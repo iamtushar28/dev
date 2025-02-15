@@ -46,13 +46,13 @@ const Navbar = () => {
 
 
     return (
-        <nav className='z-50 w-full h-16 px-2 md:px-4 bg-white shadow-sm flex justify-between items-center fixed top-0 right-0 left-0'>
+        <nav className='z-50 w-full h-16 px-2 md:px-2 bg-white shadow-sm flex justify-between items-center fixed top-0 right-0 left-0'>
 
             {/* section 1 - logo, searchbar */}
             <section className='flex items-center gap-4 w-[60%]'>
 
                 {/* toogle sidebr button */}
-                <button  onClick={() => dispatch(toggleMobileSidebar())} className='text-2xl block md:hidden'>
+                <button onClick={() => dispatch(toggleMobileSidebar())} className='text-2xl block md:hidden'>
                     <MdMenu />
                 </button>
 

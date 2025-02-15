@@ -11,7 +11,7 @@ export default function Home() {
 
       <section className="w-full flex gap-4 mt-16 px-2 py-4 md:px-4 relative">
         {/* Sidebar only visible on desktop */}
-        <div className="hidden md:block w-[18%]">
+        <div className="hidden md:block md:w-[27%] lg:w-[20%]">
           <Sidebar />
         </div>
 

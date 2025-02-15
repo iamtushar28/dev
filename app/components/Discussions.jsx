@@ -6,7 +6,7 @@ import BlogImage from '@/public/images/myImage.jpg'
 
 const Discussions = () => {
     return (
-        <section className='hidden md:flex w-[25%] gap-3 flex-col'>
+        <section className='hidden sm:hidden md:hidden lg:flex w-[25%] gap-3 flex-col'>
 
             {/* section 1 - discussions */}
             <section className='w-full h-fit py-4 bg-white rounded flex gap-6 flex-col'>

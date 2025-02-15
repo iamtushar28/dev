@@ -37,7 +37,7 @@ const Blog = () => {
 
 
     return (
-        <section className='w-full md:w-[60%]'>
+        <section className='w-full md:w-[72%] lg:w-[60%]'>
 
             {/* buttons - discover, following, filter blogs */}
             <div className='flex justify-between items-center relative'>
