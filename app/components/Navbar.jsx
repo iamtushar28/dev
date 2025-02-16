@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux';
 import { toggleMobileSidebar } from '../redux-store/sidebarSlice'
 
-import { IoSearchOutline, IoSettingsOutline } from "react-icons/io5"; //search, setting icon
+import { IoSettingsOutline } from "react-icons/io5"; //setting icon
+import { FiSearch } from "react-icons/fi";//search
 import { MdMenu } from "react-icons/md"; //menu
 import { IoMdNotificationsOutline } from "react-icons/io"; //notification icon
 import { FaRegUser } from "react-icons/fa"; //user icon
@@ -62,11 +63,11 @@ const Navbar = () => {
                 </button>
 
                 {/* searchbar - hidden at mobile screen */}
-                <div className='hidden md:flex h-10 w-8/12 rounded border border-gray-300 hover:border-blue-500 hover:ring-2 hover:ring-blue-500 justify-center items-center relative transition-all duration-200'>
+                <div className='hidden md:flex h-10 w-9/12 rounded border border-gray-300 hover:border-blue-500 hover:ring-2 hover:ring-blue-500 justify-center items-center relative transition-all duration-200'>
 
                     {/* search icon */}
-                    <button className='h-10 w-10 text-xl flex justify-center items-center'>
-                        <IoSearchOutline />
+                    <button className='h-10 w-10 text-xl font-semibold flex justify-center items-center'>
+                        <FiSearch />
                     </button>
 
                     {/* search box */}
@@ -81,7 +82,7 @@ const Navbar = () => {
 
                 {/* search button - hidden at desktop */}
                 <button className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
-                    <IoSearchOutline />
+                    <FiSearch />
                 </button>
 
                 {/* create post button - hidden at mobile */}
@@ -130,25 +131,25 @@ const Navbar = () => {
                     <div className='w-full'>
 
                         {/* dashboard link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2'>
+                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuLayoutDashboard className='text-lg' />
                             dashboard
                         </button>
 
                         {/* create post link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2'>
+                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <TbWritingSign className='text-lg' />
                             create post
                         </button>
 
                         {/* reading list link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2'>
+                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuClipboardList className='text-lg' />
                             reading list
                         </button>
 
                         {/* settings link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2'>
+                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <IoSettingsOutline className='text-lg' />
                             settings
                         </button>
@@ -157,7 +158,7 @@ const Navbar = () => {
                         <div className='h-[0.5px] w-full bg-zinc-200 mt-2 mb-2'></div>
 
                         {/* sign out link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2'>
+                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <TbLogout2 className='text-lg' />
                             sign out
                         </button>

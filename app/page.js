@@ -1,14 +1,11 @@
 import Blog from "./components/Blog";
 import Discussions from "./components/Discussions";
 import MobileSidebar from "./components/MobileSidebar";
-import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-
       <section className="w-full flex gap-4 mt-16 px-2 py-4 md:px-4 relative">
         {/* Sidebar only visible on desktop */}
         <div className="hidden md:block md:w-[27%] lg:w-[20%]">

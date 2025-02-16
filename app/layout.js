@@ -1,3 +1,5 @@
+import MobileSidebar from "./components/MobileSidebar";
+import Navbar from "./components/Navbar";
 import "./globals.css";
 import ReduxProvider from "./redux-store/ReduxProvider"; // Import Redux Provider
 
@@ -11,6 +13,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-zinc-100">
         <ReduxProvider>
+          <Navbar/>
+          <MobileSidebar/>
           {children}
         </ReduxProvider>
       </body>

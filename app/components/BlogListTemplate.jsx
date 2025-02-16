@@ -7,7 +7,7 @@ import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
 
 const BlogListTemplate = () => {
     return (
-        <div className='w-full h-fit md:pb-3 bg-white rounded overflow-hidden hover:ring-2 hover:ring-blue-300 transition-all duration-200'>
+        <div className='w-full h-fit pb-4 md:pb-6 bg-white rounded overflow-hidden'>
 
             {/* blog thumbnail image */}
             <Image
@@ -103,6 +103,70 @@ const BlogListTemplate = () => {
 
                     </div>
 
+                </div>
+
+            </div>
+
+            {/* comments section */}
+            <div className='px-4 flex flex-col gap-4'>
+
+                {/* comment - 1 */}
+                <div className='flex gap-2'>
+
+                    {/* profile image */}
+                    <div className='h-8 w-8 rounded-full bg-zinc-200'>
+                    </div>
+
+                    {/* comment box */}
+                    <div className='w-full h-fit p-4 bg-zinc-100 rounded'>
+
+                        <div className='flex items-center gap-2'>
+                            {/* commenter name */}
+                            <h4 className='font-semibold text-zinc-600 capitalize'>Jay</h4>
+                            {/* time */}
+                            <p className='text-xs text-zinc-500'>(4 hours ago)</p>
+                        </div>
+
+                        {/* comment */}
+                        <p className='text-zinc-600 text-sm'>
+                            This is very helpful. Thanks for sharing 👏🏻
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {/* comment - 2 */}
+                <div className='flex gap-2'>
+
+                    {/* profile image */}
+                    <div className='h-8 w-8 rounded-full bg-zinc-200'>
+                    </div>
+
+                    {/* comment box */}
+                    <div className='w-full h-fit p-4 bg-zinc-100 rounded'>
+
+                        <div className='flex items-center gap-2'>
+                            {/* commenter name */}
+                            <h4 className='font-semibold text-zinc-600 capitalize'>Ram</h4>
+                            {/* time */}
+                            <p className='text-xs text-zinc-500'>(6 hours ago)</p>
+                        </div>
+
+                        {/* comment */}
+                        <p className='text-zinc-600 text-sm'>
+                            Good to mention Github address and Live Demo for each of your projects.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {/* see all coment button */}
+                <div className='px-10'>
+                    <button className='text-sm text-zinc-600 px-3 py-2 font-semibold w-fit hover:bg-zinc-100 rounded transition-all duration-200'>
+                        See all 10 comments
+                    </button>
                 </div>
 
             </div>
