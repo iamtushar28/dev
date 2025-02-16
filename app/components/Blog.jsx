@@ -42,14 +42,14 @@ const Blog = () => {
             {/* buttons - discover, following, filter blogs */}
             <div className='flex justify-between items-center relative'>
 
-                <div>
+                <div className='flex gap-2'>
                     {/* discover blogs btn */}
                     <button className='capitalize py-1 px-4 text-lg bg-white rounded font-semibold'>
                         discover
                     </button>
 
                     {/* following blogs btn */}
-                    <button className='capitalize py-2 px-4 text-lg rounded font-medium'>
+                    <button className='capitalize py-1 px-4 text-lg hover:text-blue-500 hover:bg-white rounded transition-all duration-200'>
                         following
                     </button>
                 </div>

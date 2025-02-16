@@ -17,7 +17,7 @@ const Discussions = () => {
                 <hr />
 
                 {discussions.map((links, index) => (
-                    <>
+                    
                         <div key={index} className='px-4'>
                             <button className='text-start hover:text-blue-700'>
                                 {links.title}
@@ -26,7 +26,7 @@ const Discussions = () => {
                                 {links.comments} comments
                             </button>
                         </div>
-                    </>
+                
                 ))}
             </section>
 

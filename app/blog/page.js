@@ -1,6 +1,7 @@
 import BlogPost from "./components/BlogPost";
 import BlogSidebar from "./components/BlogSidebar";
 import BlogWriter from "./components/BlogWriter";
+import MobileBlogSidebar from "./components/MobileBlogSidebar";
 
 export const metadata = {
   title: "Create Next App",
@@ -9,8 +10,9 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <section className="mt-16 p-2 mb-4 md:p-4 w-full flex flex-wrap md:flex-nowrap gap-4">
-      <BlogSidebar />
+    <section className="mt-16 mb-16 p-2 md:mb-4 md:p-4 w-full flex flex-wrap md:flex-nowrap gap-4">
+      <BlogSidebar /> 
+      <MobileBlogSidebar/>
       <BlogPost/>
       <BlogWriter/>
     </section>
