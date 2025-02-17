@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <section className="w-full mt-16 mb-6 flex gap-6 flex-col justify-center items-center">
         <ProfileBanner />
-        <section className="w-full md:w-[78%] flex flex-col-reverse gap-3 md:gap-[1%] justify-center">
+        <section className="w-full md:w-[78%] flex flex-col-reverse md:flex-row gap-3 md:gap-[1%] justify-center">
           <ProfileCard />
           <BlogList />
         </section>
