@@ -6,7 +6,7 @@ import { BsThreeDots } from "react-icons/bs"; // setting icon
 const MobileBlogSidebar = () => {
     return (
         <div className='block md:hidden'>
-        <section className='flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t justify-around'>
+        <section className='flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
 
             {/* like/reaction button */}
             <button className='text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-1 items-center'>
