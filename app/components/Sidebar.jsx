@@ -11,10 +11,10 @@ const Sidebar = () => {
             {sidebarLinks.map((link, index) => (
                 <button
                     key={index}
-                    className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'
+                    className='group w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'
                 >
                     <span className='text-xl'>{link.icon}</span>
-                    {link.title}
+                    <span className='group-hover:underline'>{link.title}</span>
                 </button>
             ))}
 

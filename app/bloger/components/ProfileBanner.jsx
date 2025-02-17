@@ -9,13 +9,13 @@ const ProfileBanner = () => {
         <div className='flex flex-col justify-center items-center'>
 
             {/* background strip */}
-            <div className='w-full h-28 md:h-36 bg-black'></div>
+            <div className='w-full h-28 md:h-36 bg-zinc-900'></div>
 
             {/* section 1 - profile banner */}
             <section className='w-full md:w-[78%] h-fit px-4 pb-11 -mt-14 bg-white shadow-sm md:rounded-lg flex gap-6 flex-col items-start md:items-center relative'>
 
                 {/* profile image */}
-                <div className='h-16 w-16 md:h-28 md:w-28 -mt-9 md:-mt-12 ring-4 md:ring-[6px] ring-black rounded-full flex justify-center items-center'>
+                <div className='h-16 w-16 md:h-28 md:w-28 -mt-9 md:-mt-12 ring-4 md:ring-[6px] ring-zinc-900 rounded-full flex justify-center items-center'>
                     <Image src={ProfileImage} alt='profile image' className='h-16 w-16 md:h-28 md:w-28 rounded-full' />
                 </div>
 
