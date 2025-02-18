@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogSidebar = () => {
+const DashboardSidebar = () => {
   return (
     <section className='hidden md:flex w-72 h-screen flex-col gap-2'>
 
@@ -53,4 +53,4 @@ const BlogSidebar = () => {
   )
 }
 
-export default BlogSidebar
+export default DashboardSidebar

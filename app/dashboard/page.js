@@ -1,4 +1,5 @@
-import BlogSidebar from "./components/BlogSidebar";
+import MobileDashboardSidebar from "./components/MobileDashboardSidebar";
+import BlogSidebar from "./components/DashboardSidebar";
 import BlogStats from "./components/BlogStats";
 import MenuSection from "./components/MenuSection";
 
@@ -13,6 +14,7 @@ export default function Home() {
       <BlogStats />
       <section className="w-full mt-4 flex gap-4">
         <BlogSidebar />
+        <MobileDashboardSidebar/>
         <MenuSection />
       </section>
     </section>
