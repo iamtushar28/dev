@@ -10,7 +10,7 @@ export const metadata = {
 export default function Home() {
   return (
     <section className="mt-16 py-8 w-full flex items-center justify-center">
-      <div className="w-full md:w-[80%] flex gap-4">
+      <div className="w-full md:w-[80%] flex gap-4 mb-10">
         <SettingsSidebar />
         <MobileSettingsSidebar/>
         <Profile/>

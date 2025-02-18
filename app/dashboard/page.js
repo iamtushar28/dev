@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <section className="mt-16 py-4 md:p-6 h-fit w-full">
       <BlogStats />
-      <section className="w-full mt-4 flex gap-4">
+      <section className="w-full mt-4 flex gap-4 mb-14">
         <BlogSidebar />
         <MobileDashboardSidebar/>
         <MenuSection />

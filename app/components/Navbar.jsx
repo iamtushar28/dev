@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { toggleMobileSidebar } from '../redux-store/sidebarSlice'
 
@@ -58,9 +59,11 @@ const Navbar = () => {
                 </button>
 
                 {/* brand logo */}
-                <button className='bg-black text-white h-fit px-2 py-1 font-bold uppercase rounded'>
+                <Link
+                href={'/'}
+                className='bg-black text-white h-fit px-2 py-1 font-bold uppercase rounded'>
                     Dev
-                </button>
+                </Link>
 
                 {/* searchbar - hidden at mobile screen */}
                 <div className='hidden md:flex h-10 w-9/12 rounded border border-gray-300 hover:border-blue-500 hover:ring-2 hover:ring-blue-500 justify-center items-center relative transition-all duration-200'>
@@ -81,9 +84,11 @@ const Navbar = () => {
             <section className='flex gap-1 md:gap-4 items-center'>
 
                 {/* search button - hidden at desktop */}
-                <button className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
+                <Link
+                href={'/search'}
+                className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                     <FiSearch />
-                </button>
+                </Link>
 
                 {/* create post button - hidden at mobile */}
                 <div className='hidden md:block'>
@@ -95,9 +100,11 @@ const Navbar = () => {
 
                 {/* notifiction button */}
                 <div className='relative'>
-                    <button className='h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
+                    <Link
+                    href={'/notifications'}
+                    className='h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                         <RiNotification2Line />
-                    </button>
+                    </Link>
 
                     {/* notifiction count */}
                     <div className='h-5 w-5 rounded-full text-xs text-white bg-red-500 flex justify-center items-center absolute top-0 right-0'>
@@ -119,10 +126,12 @@ const Navbar = () => {
                 <section ref={wrapperRef} className='md:w-[17rem] h-fit p-4 bg-white rounded absolute top-[5rem] left-2 right-2 md:top-14 md:right-6 md:left-auto flex gap-2 flex-col justify-center items-start shadow z-50'>
 
                     {/* user name */}
-                    <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
+                    <Link
+                    href={'/bloger'}
+                    className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
                         <h2 className='font-semibold capitalize'>Tushar Suryawanshi</h2>
                         <h4 className=''>@iamtushar28</h4>
-                    </button>
+                    </Link>
 
                     {/* devide line */}
                     <div className='h-[0.5px] w-full bg-zinc-200'></div>
@@ -131,10 +140,12 @@ const Navbar = () => {
                     <div className='w-full'>
 
                         {/* dashboard link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <Link
+                        href={'/dashboard'}
+                         className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuLayoutDashboard className='text-lg' />
                             dashboard
-                        </button>
+                        </Link>
 
                         {/* create post link */}
                         <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
@@ -143,16 +154,20 @@ const Navbar = () => {
                         </button>
 
                         {/* reading list link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <Link 
+                        href={'/readinglist'}
+                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuClipboardList className='text-lg' />
                             reading list
-                        </button>
+                        </Link>
 
                         {/* settings link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <Link
+                        href={'/settings'}
+                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <IoSettingsOutline className='text-lg' />
                             settings
-                        </button>
+                        </Link>
 
                         {/* devide line */}
                         <div className='h-[0.5px] w-full bg-zinc-200 mt-2 mb-2'></div>
