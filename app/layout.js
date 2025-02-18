@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-100">
+      <body className="bg-white">
         <ReduxProvider>
           <Navbar/>
           <MobileSidebar/>
