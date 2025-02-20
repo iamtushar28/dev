@@ -92,10 +92,12 @@ const Navbar = () => {
 
                 {/* create post button - hidden at mobile */}
                 <div className='hidden md:block'>
-                    <button className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
+                    <Link
+                    href={'/new'}
+                     className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
                         <TbWritingSign className='text-xl' />
                         create post
-                    </button>
+                    </Link>
                 </div>
 
                 {/* notifiction button */}

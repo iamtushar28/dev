@@ -5,3 +5,23 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Remove black outline */
+.tiptap-editor {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  min-height: 200px;
+  outline: none; /* Removes black outline */
+  font-size: 16px;
+}
+
+/* Style the placeholder text */
+.tiptap-editor p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  font-style: italic;
+  pointer-events: none;
+  display: block;
+}
+
