@@ -135,18 +135,11 @@ const Navbar = () => {
                     </>
                 ) : (
                     <>
-                        <Link
-                            href={'/signin'}
-                            onClick={() => signIn()}
-                            className="p-2 capitalize hover:underline hover:text-blue-500 rounded hover:bg-blue-100 transition-all duration-200 flex gap-1 items-center"
-                        >
-                            Log In
-                        </Link>
                         <div className=''>
                             <Link
-                                href={'/signup'}
+                                href={'/signin'}
                                 className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
-                                create account
+                                Log In
                             </Link>
                         </div>
                     </>
