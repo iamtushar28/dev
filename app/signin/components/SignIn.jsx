@@ -6,7 +6,7 @@ import { FaSquareFacebook } from "react-icons/fa6"; //facebook icon
 
 const SignIn = () => {
     return (
-        <section className='mt-16 w-full h-fit py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
+        <section className='mt-16 w-full min-h-screen max-h-fit bg-white py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
 
             {/* brand logo */}
             <Link

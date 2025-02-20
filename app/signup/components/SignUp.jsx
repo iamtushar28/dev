@@ -6,7 +6,7 @@ import { FaSquareFacebook } from "react-icons/fa6"; //facebook icon
 
 const SignUp = () => {
   return (
-    <section className='mt-16 w-full h-fit py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
+    <section className='mt-16 w-full min-h-screen max-h-fit bg-white py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
 
     {/* brand logo */}
     <Link
@@ -38,7 +38,7 @@ const SignUp = () => {
         <FaSquareFacebook className='absolute top-3 left-4 text-2xl text-blue-600' />
     </button>
 
-    <p className='text-center text-sm text-zinc-400 italic'>By signing up, you are agreeing to our <span className='text-blue-500'>privacy policy</span>, <span className='text-blue-500'>terms of use</span> <br /> and <span className='text-blue-500'>code of conduct.</span></p>
+    <p className='text-center text-sm text-zinc-400 italic'>By signing up, you are agreeing to our <span className='text-blue-500'>privacy policy</span>, <span className='text-blue-500'>terms of use</span> and <span className='text-blue-500'>code of conduct.</span></p>
 
     {/* devider */}
     <div className='w-full md:w-[45%] h-[1.2px] bg-zinc-200'></div>
