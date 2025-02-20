@@ -1,3 +1,5 @@
+"use client";
+import { signIn } from "next-auth/react";
 import React from 'react'
 import Link from 'next/link'
 import { FcGoogle } from "react-icons/fc"; //google icon
@@ -21,13 +23,17 @@ const SignIn = () => {
             {/* sign in options */}
 
             {/* google */}
-            <button className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
+            <button
+             onClick={() => signIn("google")}
+            className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
                 Continue with Google
                 <FcGoogle className='absolute top-3 left-4 text-2xl' />
             </button>
 
             {/* github */}
-            <button className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
+            <button 
+             onClick={() => signIn("github")}
+            className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
                 Continue with Github
                 <BsGithub className='absolute top-3 left-4 text-2xl' />
             </button>

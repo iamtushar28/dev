@@ -1,8 +1,10 @@
 'use client'
 
+import { useSession, signIn, signOut } from "next-auth/react";
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link';
+import Image from "next/image";
 import { useDispatch } from 'react-redux';
 import { toggleMobileSidebar } from '../redux-store/sidebarSlice'
 
@@ -15,6 +17,8 @@ import { TbLogout2, TbWritingSign } from "react-icons/tb"; //logout, writing ico
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu"; //list, dashboard icon
 
 const Navbar = () => {
+
+    const { data: session } = useSession();
 
     const dispatch = useDispatch();
 
@@ -60,8 +64,8 @@ const Navbar = () => {
 
                 {/* brand logo */}
                 <Link
-                href={'/'}
-                className='bg-black text-white h-fit px-2 py-1 font-bold uppercase rounded'>
+                    href={'/'}
+                    className='bg-black text-white h-fit px-2 py-1 font-bold uppercase rounded'>
                     Dev
                 </Link>
 
@@ -85,40 +89,69 @@ const Navbar = () => {
 
                 {/* search button - hidden at desktop */}
                 <Link
-                href={'/search'}
-                className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
+                    href={'/search'}
+                    className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                     <FiSearch />
                 </Link>
 
-                {/* create post button - hidden at mobile */}
-                <div className='hidden md:block'>
-                    <Link
-                    href={'/new'}
-                     className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
-                        <TbWritingSign className='text-xl' />
-                        create post
-                    </Link>
-                </div>
 
-                {/* notifiction button */}
-                <div className='relative'>
-                    <Link
-                    href={'/notifications'}
-                    className='h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
-                        <RiNotification2Line />
-                    </Link>
+                {session ? (
+                    <>
+                        {/* create post button - hidden at mobile */}
+                        <div className='hidden md:block'>
+                            <Link
+                                href={'/new'}
+                                className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
+                                <TbWritingSign className='text-xl' />
+                                create post
+                            </Link>
+                        </div>
 
-                    {/* notifiction count */}
-                    <div className='h-5 w-5 rounded-full text-xs text-white bg-red-500 flex justify-center items-center absolute top-0 right-0'>
-                        2
-                    </div>
+                        {/* Notification button */}
+                        <div className="relative">
+                            <Link
+                                href={"/notifications"}
+                                className="h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center"
+                            >
+                                <RiNotification2Line />
+                            </Link>
 
-                </div>
+                            {/* Notification count */}
+                            <div className="h-5 w-5 rounded-full text-xs text-white bg-red-500 flex justify-center items-center absolute top-0 right-0">
+                                2
+                            </div>
+                        </div>
 
-                {/* user button */}
-                <button ref={buttonRef} onClick={toggleProfileMenu} className='h-10 w-10 text-xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
-                    <FaRegUser />
-                </button>
+                        {/* User button */}
+                        <button ref={buttonRef} onClick={toggleProfileMenu} className="">
+                            <Image
+                                src={session.user.image}
+                                alt="User image"
+                                width={40}
+                                height={40}
+                                className="rounded-full"
+                            />
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <Link
+                            href={'/signin'}
+                            onClick={() => signIn()}
+                            className="p-2 capitalize hover:underline hover:text-blue-500 rounded hover:bg-blue-100 transition-all duration-200 flex gap-1 items-center"
+                        >
+                            Log In
+                        </Link>
+                        <div className=''>
+                            <Link
+                                href={'/signup'}
+                                className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
+                                create account
+                            </Link>
+                        </div>
+                    </>
+                )}
+
 
             </section>
 
@@ -129,9 +162,9 @@ const Navbar = () => {
 
                     {/* user name */}
                     <Link
-                    href={'/bloger'}
-                    className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
-                        <h2 className='font-semibold capitalize'>Tushar Suryawanshi</h2>
+                        href={'/bloger'}
+                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
+                        <h2 className='font-semibold capitalize'>{session.user.name}</h2>
                         <h4 className=''>@iamtushar28</h4>
                     </Link>
 
@@ -143,8 +176,8 @@ const Navbar = () => {
 
                         {/* dashboard link */}
                         <Link
-                        href={'/dashboard'}
-                         className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                            href={'/dashboard'}
+                            className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuLayoutDashboard className='text-lg' />
                             dashboard
                         </Link>
@@ -156,17 +189,17 @@ const Navbar = () => {
                         </button>
 
                         {/* reading list link */}
-                        <Link 
-                        href={'/readinglist'}
-                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <Link
+                            href={'/readinglist'}
+                            className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <LuClipboardList className='text-lg' />
                             reading list
                         </Link>
 
                         {/* settings link */}
                         <Link
-                        href={'/settings'}
-                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                            href={'/settings'}
+                            className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <IoSettingsOutline className='text-lg' />
                             settings
                         </Link>
@@ -175,7 +208,9 @@ const Navbar = () => {
                         <div className='h-[0.5px] w-full bg-zinc-200 mt-2 mb-2'></div>
 
                         {/* sign out link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <button
+                            onClick={() => signOut()}
+                            className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <TbLogout2 className='text-lg' />
                             sign out
                         </button>

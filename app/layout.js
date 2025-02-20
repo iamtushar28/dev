@@ -1,3 +1,4 @@
+import AuthProvider from "./provider/AuthProvider"; // Import AuthProvider
 import MobileSidebar from "./components/MobileSidebar";
 import Navbar from "./components/Navbar";
 import "./globals.css";
@@ -13,9 +14,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-zinc-100">
         <ReduxProvider>
-          <Navbar/>
-          <MobileSidebar/>
-          {children}
+          <AuthProvider> {/* Wrap with AuthProvider */}
+            <Navbar />
+            <MobileSidebar />
+            {children}
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

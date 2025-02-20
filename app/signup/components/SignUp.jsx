@@ -1,10 +1,22 @@
-import React from 'react'
+"use client";
+import React from "react";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 import Link from 'next/link'
 import { FcGoogle } from "react-icons/fc"; //google icon
 import { BsGithub } from "react-icons/bs"; //git hub icon
 import { FaSquareFacebook } from "react-icons/fa6"; //facebook icon
 
 const SignUp = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+  
+    const handleSignup = async (e) => {
+      e.preventDefault();
+      // Implement signup logic if needed
+      alert("Signup logic is not implemented yet!");
+    };
+    
   return (
     <section className='mt-16 w-full min-h-screen max-h-fit bg-white py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
 
