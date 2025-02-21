@@ -24,6 +24,9 @@ export const authOptions = {
       session.user.id = token.sub; // Attach user ID to session
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return baseUrl; // Redirects to home page ("/") after login
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

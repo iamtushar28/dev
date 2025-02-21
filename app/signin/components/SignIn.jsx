@@ -24,7 +24,7 @@ const SignIn = () => {
 
             {/* google */}
             <button
-             onClick={() => signIn("google")}
+             onClick={() => signIn("google" , { callbackUrl: "/" })}
             className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
                 Continue with Google
                 <FcGoogle className='absolute top-3 left-4 text-2xl' />
@@ -32,7 +32,7 @@ const SignIn = () => {
 
             {/* github */}
             <button 
-             onClick={() => signIn("github")}
+             onClick={() => signIn("github", { callbackUrl: "/" })}
             className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
                 Continue with Github
                 <BsGithub className='absolute top-3 left-4 text-2xl' />

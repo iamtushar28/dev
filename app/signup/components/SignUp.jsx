@@ -1,21 +1,12 @@
 "use client";
 import React from "react";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
 import Link from 'next/link'
 import { FcGoogle } from "react-icons/fc"; //google icon
 import { BsGithub } from "react-icons/bs"; //git hub icon
 import { FaSquareFacebook } from "react-icons/fa6"; //facebook icon
 
 const SignUp = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-  
-    const handleSignup = async (e) => {
-      e.preventDefault();
-      // Implement signup logic if needed
-      alert("Signup logic is not implemented yet!");
-    };
     
   return (
     <section className='mt-16 w-full min-h-screen max-h-fit bg-white py-8 px-3 md:px-0 md:py-12 flex gap-4 md:gap-6 flex-col justify-center items-center'>
@@ -33,13 +24,17 @@ const SignUp = () => {
     {/* sign in options */}
 
     {/* google */}
-    <button className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
+    <button 
+    onClick={() => signIn("google", { callbackUrl: "/" })}
+    className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
         Continue with Google
         <FcGoogle className='absolute top-3 left-4 text-2xl' />
     </button>
 
     {/* github */}
-    <button className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
+    <button 
+    onClick={() => signIn("github", { callbackUrl: "/" })}
+    className='h-12 w-full md:w-[45%] border rounded hover:bg-zinc-50 text-center text-sm font-semibold relative'>
         Continue with Github
         <BsGithub className='absolute top-3 left-4 text-2xl' />
     </button>
