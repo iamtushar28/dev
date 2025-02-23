@@ -1,10 +1,13 @@
-import React from 'react'
+'use client'
+import { useSession } from "next-auth/react"; //getting user session
 import Image from 'next/image'
-import ProfileImage from '@/public/images/profile.jpeg'
 
 import { FiCalendar, FiExternalLink } from "react-icons/fi"; //calender, link icon
 
 const ProfileBanner = () => {
+
+    const { data: session } = useSession(); //getting user
+
     return (
         <div className='flex flex-col justify-center items-center'>
 
@@ -16,7 +19,12 @@ const ProfileBanner = () => {
 
                 {/* profile image */}
                 <div className='h-16 w-16 md:h-28 md:w-28 -mt-9 md:-mt-12 ring-4 md:ring-[6px] ring-zinc-900 rounded-full flex justify-center items-center'>
-                    <Image src={ProfileImage} alt='profile image' className='h-16 w-16 md:h-28 md:w-28 rounded-full' />
+                    <Image
+                        src={session?.user?.image}
+                        alt='profile image'
+                        width={112}  
+                        height={112}
+                        className='h-16 w-16 md:h-28 md:w-28 rounded-full' />
                 </div>
 
                 {/* follow button */}
@@ -27,7 +35,7 @@ const ProfileBanner = () => {
                 </div>
 
                 {/* bloger name */}
-                <h2 className='text-2xl md:text-3xl font-bold capitalize text-zinc-800'>Tushar suryawanshi</h2>
+                <h2 className='text-2xl md:text-3xl font-bold capitalize text-zinc-800'>{session?.user?.name}</h2>
 
                 {/* about */}
                 <p className='text-start md:text-center md:px-24 text-zinc-900'>Hi, I’m Arpit Gupta, creator of innovative tools like SecretStack, CloudStack, and ElasticStack. I’m passionate about building open-source solutions that simplify complex developer workflows.</p>

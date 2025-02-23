@@ -39,8 +39,8 @@ const Profile = () => {
 
                 </div>
 
-                {/* profile image */}
-                <div>
+                {/* profile image - hidden for now */}
+                <div className='hidden'>
 
                     <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Profile Image</h6>
 
@@ -89,6 +89,8 @@ const Profile = () => {
                 </div>
 
             </div>
+
+            <button className='mt-4 px-3 py-1 md:px-4 md:py-2 w-fit capitalize text-white font-semibold rounded bg-blue-600 hover:bg-blue-700 transition-all duration-200'>save details</button>
 
         </section>
     )

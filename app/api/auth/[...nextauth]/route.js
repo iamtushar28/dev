@@ -20,16 +20,12 @@ export const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ account, profile }) {
-      // Allow sign in if the email is the same, even if the provider is different
-      return true;  // This allows account linking if email matches between Google and GitHub
-    },
     async session({ session, token }) {
       session.user.id = token.sub; // Attach user ID to session
       return session;
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl; // Redirect to home page ("/") after login
+      return baseUrl; // Redirects to home page ("/") after login
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
