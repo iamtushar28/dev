@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation"; // Import useRouter
-import Editor from "./components/Editor"; // Import normally, no dynamic()
+import BlogEditor from "./components/BlogEditor";
 
 export default function NewPostPage() {
 
@@ -19,7 +19,7 @@ export default function NewPostPage() {
     
   return (
     <div className="mt-20 py-4 md:py-8 md:px-8 w-full flex justify-center items-center">
-      <Editor />
+      <BlogEditor/>
     </div>
   );
 }

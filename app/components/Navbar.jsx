@@ -176,10 +176,12 @@ const Navbar = () => {
                         </Link>
 
                         {/* create post link */}
-                        <button className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                        <Link
+                        href={'/new'}
+                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <TbWritingSign className='text-lg' />
                             create post
-                        </button>
+                        </Link>
 
                         {/* reading list link */}
                         <Link

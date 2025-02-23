@@ -1,79 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { BiBold, BiItalic, BiUnderline, BiStrikethrough, BiListUl, BiListOl } from "react-icons/bi";
+import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
 
-import { BiBold, BiItalic, BiLink, BiListOl, BiListUl, BiCode, BiCodeBlock, BiImage, BiUnderline, BiStrikethrough } from "react-icons/bi"; // icons
-import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs"; //headings icons
+const Menu = ({ onFormat }) => {
+  const [activeFormats, setActiveFormats] = useState({});
 
-const Menu = () => {
-    return (
-        <section className='h-fit p-2 border rounded flex gap-4 flex-wrap justify-center md:justify-around items-center border-zinc-100'>
+  // Function to check active formatting
+  const updateActiveFormats = () => {
+    setActiveFormats({
+      bold: document.queryCommandState("bold"),
+      italic: document.queryCommandState("italic"),
+      underline: document.queryCommandState("underline"),
+      strikeThrough: document.queryCommandState("strikeThrough"),
+      insertOrderedList: document.queryCommandState("insertOrderedList"),
+      insertUnorderedList: document.queryCommandState("insertUnorderedList"),
+      h1: document.queryCommandValue("formatBlock") === "h1",
+      h2: document.queryCommandValue("formatBlock") === "h2",
+      h3: document.queryCommandValue("formatBlock") === "h3",
+    });
+  };
 
-            {/* bold button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiBold />
-            </button>
+  useEffect(() => {
+    document.addEventListener("selectionchange", updateActiveFormats);
+    return () => document.removeEventListener("selectionchange", updateActiveFormats);
+  }, []);
 
-            {/* italic button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiItalic />
-            </button>
+  return (
+    <section className="h-fit p-2 border rounded flex gap-4 flex-wrap justify-center md:justify-around items-center border-zinc-100">
+      {/* Text Formatting */}
+      <button onClick={() => onFormat("bold")} className={`menu-btn ${activeFormats.bold ? "bg-blue-100" : ""}`}><BiBold /></button>
+      <button onClick={() => onFormat("italic")} className={`menu-btn ${activeFormats.italic ? "bg-blue-100" : ""}`}><BiItalic /></button>
+      <button onClick={() => onFormat("underline")} className={`menu-btn ${activeFormats.underline ? "bg-blue-100" : ""}`}><BiUnderline /></button>
+      <button onClick={() => onFormat("strikeThrough")} className={`menu-btn ${activeFormats.strikeThrough ? "bg-blue-100" : ""}`}><BiStrikethrough /></button>
 
-            {/* link button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiLink />
-            </button>
+      {/* Lists */}
+      <button onClick={() => onFormat("insertOrderedList")} className={`menu-btn ${activeFormats.insertOrderedList ? "bg-blue-100" : ""}`}><BiListOl /></button>
+      <button onClick={() => onFormat("insertUnorderedList")} className={`menu-btn ${activeFormats.insertUnorderedList ? "bg-blue-100" : ""}`}><BiListUl /></button>
 
-            {/* ordered list button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiListOl />
-            </button>
+      {/* Headings */}
+      <button onClick={() => onFormat("formatBlock", "<h1>")} className={`menu-btn ${activeFormats.h1 ? "bg-blue-100" : ""}`}><BsTypeH1 /></button>
+      <button onClick={() => onFormat("formatBlock", "<h2>")} className={`menu-btn ${activeFormats.h2 ? "bg-blue-100" : ""}`}><BsTypeH2 /></button>
+      <button onClick={() => onFormat("formatBlock", "<h3>")} className={`menu-btn ${activeFormats.h3 ? "bg-blue-100" : ""}`}><BsTypeH3 /></button>
+    </section>
+  );
+};
 
-            {/* unordered list button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiListUl />
-            </button>
-
-            {/* h-1 button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BsTypeH1 />
-            </button>
-
-            {/* h-2 button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BsTypeH2 />
-            </button>
-
-            {/* h-3 button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BsTypeH3 />
-            </button>
-
-            {/* underline button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiUnderline />
-            </button>
-
-            {/* Strikethrough button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiStrikethrough />
-            </button>
-
-            {/* code button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiCode />
-            </button>
-
-            {/* code block button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiCodeBlock />
-            </button>
-
-            {/* image button */}
-            <button className='h-8 w-8 hover:bg-blue-100 hover:text-blue-600 text-2xl flex justify-center items-center rounded'>
-                <BiImage />
-            </button>
-
-        </section>
-    )
-}
-
-export default Menu
+export default Menu;

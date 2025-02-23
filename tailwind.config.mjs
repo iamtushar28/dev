@@ -7,11 +7,16 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            "ul, ol": {
+              color: theme("colors.black"),
+            },
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

@@ -6,22 +6,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Remove black outline */
-.tiptap-editor {
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 4px;
-  min-height: 200px;
-  outline: none; /* Removes black outline */
-  font-size: 16px;
+.prose ul, .prose ol {
+  color: black !important;
 }
 
-/* Style the placeholder text */
-.tiptap-editor p.is-empty::before {
+.menu-btn {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.menu-btn:hover {
+  background-color: #e0f2fe;
+  color: #2563eb;
+}
+
+[data-placeholder]:empty::before {
   content: attr(data-placeholder);
-  color: #aaa;
-  font-style: italic;
+  color: #71717a; /* Tailwind text-gray-400 */
   pointer-events: none;
-  display: block;
 }
-
