@@ -1,3 +1,4 @@
+'use client'
 import { useState, useRef, useEffect } from "react";
 
 const AutoResizeTextarea = () => {
@@ -17,7 +18,7 @@ const AutoResizeTextarea = () => {
       name="blog title"
       id="blog-title"
       placeholder="New post title here..."
-      className="placeholder:text-3xl md:placeholder:text-5xl placeholder:font-extrabold placeholder:text-zinc-600 text-3xl md:text-5xl font-extrabold h-auto w-full p-4 outline-none resize-none overflow-hidden"
+      className="placeholder:text-3xl md:placeholder:text-5xl placeholder:font-extrabold placeholder:text-zinc-600 text-3xl md:text-5xl font-extrabold h-auto w-full outline-none resize-none overflow-hidden"
       value={content}
       onChange={(e) => setContent(e.target.value)}
     />

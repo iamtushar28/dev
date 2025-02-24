@@ -26,8 +26,13 @@ body {
   color: #2563eb;
 }
 
-[data-placeholder]:empty::before {
-  content: attr(data-placeholder);
-  color: #71717a; /* Tailwind text-gray-400 */
-  pointer-events: none;
+.ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
+
+.ProseMirror ul,
+.ProseMirror ol {
+    color: black !important;
+}
+

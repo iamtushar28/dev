@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import Menu from "./Menu";
 import MainContent from "./MainContent";
-import BlogTitleEditor from "./BlogTitleEditor";
+import BlogTitleEditor from "../../editor/components/BlogTitleEditor";
 
 const BlogEditor = () => {
     const contentRef = useRef(null);
