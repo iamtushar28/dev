@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import BlogImage from '@/public/images/myImage.jpg'
+import BlogImage from '@/public/images/js.png'
 
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
@@ -13,7 +13,7 @@ const BlogListTemplate = () => {
             <Image
                 src={BlogImage}
                 alt="Blog Image"
-                className="w-full h-auto"
+                className="w-full h-auto max-h-72 object-cover"
             />
 
             {/* blog info */}

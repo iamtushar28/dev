@@ -6,26 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.prose ul, .prose ol {
-  color: black !important;
-}
-
-.menu-btn {
-  height: 36px;
-  width: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: large;
-  border-radius: 8px;
-  transition: 0.2s;
-}
-
-.menu-btn:hover {
-  background-color: #e0f2fe;
-  color: #2563eb;
-}
-
 .ProseMirror:focus {
   outline: none !important;
   box-shadow: none !important;

@@ -45,19 +45,24 @@ const Editor = () => {
     return (
         <div className="w-full md:w-[80%] min-h-screen md:h-fit max-h-fit py-4 px-2 md:py-8 md:px-8 bg-white rounded">
 
+            {/* heading */}
+            <h4 className="text-start font-semibold capitalize">Create Post</h4>
+
+
             {/* Add Cover Image Button */}
-            <div className="mt-4 mb-4 flex justify-center md:justify-normal items-center gap-3">
+            <div className="mt-4 mb-1 flex justify-center md:justify-normal items-center gap-3">
                 <input type="file" id="coverImage" className="hidden" onChange={handleImageChange} />
                 <label htmlFor="coverImage" className="cursor-pointer px-4 py-3 text-zinc-600 capitalize font-semibold bg-white border border-zinc-200 rounded-lg hover:border-blue-600 hover:ring hover:ring-blue-600 transition-all duration-200">
                     Add Cover Image
                 </label>
                 {imageName && <span className="text-gray-700 hidden md:block">{imageName}</span>} {/* Display file name */}
             </div>
+            <p className="text-xs mb-4 text-red-600">Use landscape images only*</p>
 
             {/* Display the Selected Image */}
             {coverImage && (
                 <div className="mb-4">
-                    <img src={coverImage} alt="Cover Preview" className="w-full h-fit object-cover md:rounded shadow-sm" />
+                    <img src={coverImage} alt="Cover Preview"  className="w-full h-auto object-cover shadow-sm" />
                 </div>
             )}
 
