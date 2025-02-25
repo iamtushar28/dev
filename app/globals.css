@@ -14,5 +14,6 @@ body {
 .ProseMirror ul,
 .ProseMirror ol {
     color: black !important;
+    /* color: #fa5d84; */
 }
 

@@ -1,99 +1,126 @@
-import React from 'react'
-import Image from 'next/image'
-import ProfileImage from '@/public/images/profile.jpeg'
+"use client"; // Required for Next.js 13+ App Router
 
-const Profile = () => {
-    return (
-        <section className='w-full'>
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
-            {/* user name */}
-            <h2 className='text-xl text-center md:text-3xl px-3 text-blue-600 font-semibold'>@tushar_suryawanshi_ab7e8d</h2>
+const Settings = () => {
+  const { data: session } = useSession(); // Get logged-in user data
+  const [loading, setLoading] = useState(false);
 
-            {/* user details section */}
-            <div className='w-full h-fit p-6 mt-4 bg-white md:rounded-lg shadow-sm flex flex-col gap-6'>
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
-                {/* heading */}
-                <h3 className='text-xl font-bold text-zinc-900'>User</h3>
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetch(`/api/user?email=${session.user.email}`)
+        .then(async (res) => {
+          const text = await res.text(); // Read response as text
+          console.log("Raw response:", text); // Debugging
+          return JSON.parse(text); // Convert text to JSON
+        })
+        .then((data) => {
+          console.log("Fetched user data:", data);
+          setValue("name", data.name || "");
+          setValue("email", data.email || "");
+          setValue("username", data.username || "");
+          setValue("website", data.website || "");
+          setValue("location", data.location || "");
+          setValue("bio", data.bio || "");
+          setValue("brandColor", data.brandColor || "");
+        })
+        .catch((error) => console.error("Error fetching user data:", error));
+    }
+  }, [session, setValue]);
+  
 
-                {/* user name */}
-                <div>
+  const onSubmit = async (formData) => {
+    setLoading(true);
+    const response = await fetch("/api/user", {
+      method: "PUT", // Update user data
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: session?.user?.email, // Ensure we're updating the right user
+        ...formData,
+      }),
+    });
 
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Name</h6>
-                    <input type="text" value={'Tushar Suryawanshi'} className='w-full px-2 py-2 capitalize border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200' />
+    setLoading(false);
+    if (response.ok) alert("Profile updated successfully!");
+    else alert("Error updating profile.");
+  };
 
-                </div>
+  if (!session) return <p className="text-center">Please sign in to edit your profile.</p>;
 
-                {/* user email */}
-                <div>
+  return (
+    <section className="w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full p-6 bg-white md:rounded-lg shadow-sm flex flex-col gap-6">
+        <h3 className="text-xl font-bold text-zinc-900">User Profile</h3>
 
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Email</h6>
-                    <input type="text" value={'tushar28@gmail.com'} className='w-full px-2 py-2 capitalize border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200' />
+        {/* Name */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Name</h6>
+          <input type="text" value={session.user.name} readOnly className="w-full px-2 py-2 border border-zinc-300 bg-gray-50 rounded outline-none" />
+        </div>
 
-                </div>
+        {/* Email (Read-only) */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Email</h6>
+          <input type="email" value={session.user.email} readOnly className="w-full px-2 py-2 border border-zinc-300 bg-gray-50 rounded outline-none" />
+        </div>
 
-                {/* user name */}
-                <div>
+        {/* Website URL */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Website URL</h6>
+          <input
+            {...register("website")}
+            type="text"
+            placeholder="www.example.com"
+            className="w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+          />
+        </div>
 
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Username</h6>
-                    <input type="text" value={'tushar28'} className='w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200' />
+        {/* Location */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Location</h6>
+          <input
+            {...register("location")}
+            type="text"
+            className="w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+          />
+        </div>
 
-                </div>
+        {/* Bio */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Bio</h6>
+          <textarea
+            {...register("bio")}
+            placeholder="A short bio..."
+            className="w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+          ></textarea>
+        </div>
 
-                {/* profile image - hidden for now */}
-                <div className='hidden'>
+        {/* brandColor */}
+        <div>
+          <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Brand Color</h6>
+          <input
+            {...register("brandColor")}
+            type="text"
+            className="w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+          />
+        </div>
 
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Profile Image</h6>
+        <button type="submit" className="mt-4 px-4 py-2 text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded transition">
+          {loading ? "Saving..." : "Save Details"}
+        </button>
+      </form>
+    </section>
+  );
+};
 
-                    <div className='flex gap-3 items-center'>
-                        {/* image */}
-                        <Image src={ProfileImage} alt='ProfileImage' className='h-12 w-12 rounded-full' />
-
-                        {/* choose file button */}
-                        <button className='px-3 py-1 md:px-4 md:py-2 w-fit capitalize text-zinc-600 font-semibold rounded bg-zinc-100 hover:bg-zinc-200 transition-all duration-200'>
-                            Choose file
-                        </button>
-                    </div>
-
-                </div>
-
-            </div>
-
-            {/* basic details section */}
-            <div className='w-full h-fit p-6 mt-4 bg-white md:rounded-lg shadow-sm flex flex-col gap-6'>
-
-                {/* heading */}
-                <h3 className='text-xl font-bold text-zinc-900'>Basic</h3>
-
-                {/* website url */}
-                <div>
-
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Website URL</h6>
-                    <input type="text" placeholder='www.tushar.in' className='w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200' />
-
-                </div>
-
-                {/* user location */}
-                <div>
-
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>Location</h6>
-                    <input type="text" className='w-full px-2 py-2 capitalize border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200' />
-
-                </div>
-
-                {/* user bio */}
-                <div>
-
-                    <h6 className='text-zinc-800 mb-2 text-sm font-semibold'>User Bio</h6>
-                    <textarea name="bio" id="bio" placeholder='A short bio...' className='w-full px-2 py-2 capitalize border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none transition-all duration-200'></textarea>
-
-                </div>
-
-            </div>
-
-            <button className='mt-4 px-3 py-1 md:px-4 md:py-2 w-fit capitalize text-white font-semibold rounded bg-blue-600 hover:bg-blue-700 transition-all duration-200'>save details</button>
-
-        </section>
-    )
-}
-
-export default Profile
+export default Settings;

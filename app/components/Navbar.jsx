@@ -12,7 +12,6 @@ import { IoSettingsOutline } from "react-icons/io5"; //setting icon
 import { FiSearch } from "react-icons/fi";//search
 import { MdMenu } from "react-icons/md"; //menu
 import { RiNotification2Line } from "react-icons/ri";//notification icon
-import { FaRegUser } from "react-icons/fa"; //user icon
 import { TbLogout2, TbWritingSign } from "react-icons/tb"; //logout, writing icon
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu"; //list, dashboard icon
 
