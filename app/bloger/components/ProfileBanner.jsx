@@ -71,7 +71,7 @@ const ProfileBanner = () => {
                 <div className='flex gap-8 md:gap-12 items-center'>
 
                     {/* joining date */}
-                    <button className='flex items-center gap-1 text-sm text-zinc-600'>
+                    <button className='hidden md:flex items-center gap-1 text-sm text-zinc-600'>
                         <FiCalendar className='text-xl' />
                         {userData?.joinedAt
                             ? new Date(userData.joinedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
