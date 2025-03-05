@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import BlogImage from '@/public/images/js.png'
+import Link from 'next/link';
 
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
@@ -57,7 +57,13 @@ const BlogTemplate = ({ blog }) => {
                 <div className='mt-3'>
 
                     {/* blog title */}
-                    <h2 className='text-xl md:text-2xl font-semibold'>{blog.title}</h2>
+                    <Link
+                        href={'/blog'} // Link to dynamic page
+                        className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
+                    >
+                        {blog.title}
+                    </Link>
+
 
                     {/* tags */}
                     <div className='mt-2'>
@@ -107,7 +113,7 @@ const BlogTemplate = ({ blog }) => {
                             {/* add comment */}
                             <button className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />
-                                200 comment
+                                {blog.commentsCount} comment
                             </button>
 
                         </div>

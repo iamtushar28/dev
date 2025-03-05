@@ -1,6 +1,6 @@
 const SkeletonLoader = () => {
     return (
-        <div className='w-full h-fit mt-2 p-2 pb-6 bg-white border-2 border-blue-100 rounded overflow-hidden'>
+        <div className='w-full h-fit mt-2 p-2 pb-6 bg-white shadow-sm rounded overflow-hidden'>
 
             {/* Image Skeleton */}
             <div className='w-full h-72 rounded skeleton'></div>

@@ -6,12 +6,12 @@ import path from "path";
 import fs from "fs/promises";
 import { ObjectId } from "mongodb";
 
-// ✅ POST: Create a new blog with image upload
+// POST: Create a new blog with image upload
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); 
     }
 
     const formData = await req.formData();
@@ -57,7 +57,7 @@ export async function POST(req) {
 }
 
 
-// ✅ GET: Fetch blogs
+// GET: Fetch blogs
 export async function GET(req) {
   try {
     const client = await clientPromise;
@@ -96,7 +96,7 @@ export async function GET(req) {
 }
 
 
-// ✅ PUT: Update an existing blog
+// PUT: Update an existing blog
 export async function PUT(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -152,7 +152,7 @@ export async function PUT(req) {
   }
 }
 
-// ✅ DELETE: Remove a blog post
+// DELETE: Remove a blog post
 export async function DELETE(req) {
   try {
     const session = await getServerSession(authOptions);

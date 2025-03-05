@@ -64,7 +64,7 @@ const Blog = () => {
                                     return {
                                         ...blog,
                                         creatorName: authorData.name,
-                                        creatorProfile: authorData.profileImage
+                                        creatorProfile: authorData.image
                                     };
                                 }
                             }

@@ -4,9 +4,11 @@ import { ObjectId } from "mongodb";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = params; // Extract user ID from URL params
+    // Explicitly await params before accessing its properties
+    const awaitedParams = await params; 
+    const id = awaitedParams.id; 
 
-    if (!ObjectId.isValid(id)) {
+    if (!id || !ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
 
@@ -16,7 +18,7 @@ export async function GET(req, { params }) {
     // Fetch the user details
     const user = await db.collection("users").findOne(
       { _id: new ObjectId(id) },
-      { projection: { name: 1, profileImage: 1 } } // Fetch only necessary fields
+      { projection: { name: 1, image: 1 } } // Fetch only necessary fields
     );
 
     if (!user) {
