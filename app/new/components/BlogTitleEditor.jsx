@@ -13,6 +13,7 @@ const AutoResizeTextarea = () => {
   }, [content]); // Run effect when content changes
 
   return (
+    <>
     <textarea
       ref={textareaRef}
       name="blog title"
@@ -22,6 +23,7 @@ const AutoResizeTextarea = () => {
       value={content}
       onChange={(e) => setContent(e.target.value)}
     />
+  </>
   );
 };
 

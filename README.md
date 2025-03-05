@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# **Data base structure**
 
-## Getting Started
+1️⃣ Users Collection (users)
+Stores user details, including authentication data, additional profile info, and timestamps.
 
-First, run the development server:
+{
+  _id: ObjectId,           // Unique user ID
+  name: String,            // Full name from auth provider
+  email: String,           // Email (unique)
+  profileImage: String,    // Profile picture URL
+  provider: String,        // Auth provider (Google, GitHub, etc.)
+  website: String,         // Personal website URL (optional)
+  location: String,        // User location (optional)
+  bio: String,             // Short bio about user
+  brandColor: String,      // User's preferred UI color
+  joinedAt: Date,          // Timestamp when account was created
+  followers: [ObjectId],   // List of users following this user
+  following: [ObjectId],   // List of users this user follows
+  bookmarks: [ObjectId],   // List of bookmarked blog IDs
+}
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2️⃣ Blogs Collection (blogs)
+Stores all blog posts created by users.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+{
+  _id: ObjectId,           // Unique blog ID
+  title: String,           // Blog title
+  description: String,     // Blog content
+  coverImage: String,      // Cover image URL (optional)
+  authorId: ObjectId,      // Reference to `users` collection
+  createdAt: Date,         // Timestamp when blog was created
+  updatedAt: Date,         // Timestamp when blog was last updated
+  likes: Number,           // Number of likes
+  commentsCount: Number,   // Number of comments
+  tags: [String],          // Tags for categorization
+}
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3️⃣ Comments Collection (comments)
+Stores comments made on blogs.
 
-## Learn More
+{
+  _id: ObjectId,           // Unique comment ID
+  blogId: ObjectId,        // Reference to `blogs` collection
+  userId: ObjectId,        // Reference to `users` collection
+  content: String,         // Comment text
+  createdAt: Date,         // Timestamp when comment was posted
+}
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4️⃣ Followers Collection (followers)
+Stores relationships between users who follow each other.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+{
+  _id: ObjectId,           // Unique ID for this follow relationship
+  followerId: ObjectId,    // User who follows
+  followingId: ObjectId,   // User being followed
+  createdAt: Date,         // Timestamp when follow happened
+}
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5️⃣ Bookmarks Collection (bookmarks)
+Stores blog bookmarks for users.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+{
+  _id: ObjectId,           // Unique bookmark ID
+  userId: ObjectId,        // Reference to `users` collection
+  blogId: ObjectId,        // Reference to `blogs` collection
+  createdAt: Date,         // Timestamp when blog was bookmarked
+}
+

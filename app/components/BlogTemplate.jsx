@@ -5,34 +5,50 @@ import BlogImage from '@/public/images/js.png'
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
 
-const BlogListTemplate = () => {
+const BlogTemplate = ({ blog }) => {
     return (
         <div className='w-full h-fit pb-4 md:pb-6 bg-white rounded overflow-hidden'>
 
-            {/* blog thumbnail image */}
-            <Image
-                src={BlogImage}
-                alt="Blog Image"
-                className="w-full h-auto max-h-72 object-cover"
-            />
+            {/* Cover Image (if uploaded) */}
+            {blog.coverImage && (
+                <Image
+                    src={blog.coverImage}
+                    alt="Blog Cover"
+                    className="w-full h-auto max-h-72 object-cover"
+                    width={500}
+                    height={300}
+                />
+            )}
 
             {/* blog info */}
             <div className='p-2 md:p-4'>
 
-                {/* creater info */}
+                {/* Creator Info */}
                 <div className='flex gap-2 items-center'>
 
-                    {/* profile image */}
-                    <div className='h-10 w-10 md:h-12 md:w-12 rounded-full bg-zinc-200'>
-
+                    {/* Profile Image */}
+                    <div className='h-10 w-10 md:h-12 md:w-12 rounded-full overflow-hidden'>
+                        {blog.creatorProfile && (
+                            <Image
+                                src={blog.creatorProfile}
+                                alt="Creator Profile"
+                                width={48}
+                                height={48}
+                                className="w-full h-full object-cover"
+                            />
+                        )}
                     </div>
 
-                    {/* name & date of blog post */}
+                    {/* Name & Date of Blog Post */}
                     <div>
-
-                        <h2 className='font-semibold'>Tushar Suryawanshi</h2>
-                        <p className='text-sm text-zinc-500'>15 feb (1 hour ago)</p>
-
+                        <h2 className='font-semibold'>{blog.creatorName}</h2>
+                        <p className='text-sm text-zinc-500'>
+                            {new Date(blog?.createdAt).toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            })}
+                        </p>
                     </div>
 
                 </div>
@@ -41,7 +57,7 @@ const BlogListTemplate = () => {
                 <div className='mt-3'>
 
                     {/* blog title */}
-                    <h2 className='text-xl md:text-2xl font-semibold'>Frontend Challenge with Next Js: February Edition is coming soon</h2>
+                    <h2 className='text-xl md:text-2xl font-semibold'>{blog.title}</h2>
 
                     {/* tags */}
                     <div className='mt-2'>
@@ -175,4 +191,4 @@ const BlogListTemplate = () => {
     )
 }
 
-export default BlogListTemplate
+export default BlogTemplate
