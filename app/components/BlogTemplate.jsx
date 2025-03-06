@@ -58,11 +58,12 @@ const BlogTemplate = ({ blog }) => {
 
                     {/* blog title */}
                     <Link
-                        href={'/blog'} // Link to dynamic page
+                        href={`/blog/${blog._id}`} // Pass blog ID dynamically
                         className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
                     >
                         {blog.title}
                     </Link>
+
 
 
                     {/* tags */}
