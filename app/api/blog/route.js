@@ -5,8 +5,16 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import path from "path";
 import fs from "fs/promises";
 import { ObjectId } from "mongodb";
+import cloudinary from "cloudinary";
+
 
 // POST: Create a new blog with image upload
+cloudinary.v2.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
+
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -18,18 +26,22 @@ export async function POST(req) {
     const title = formData.get("title") || "Untitled";
     const description = formData.get("description") || "";
     const tags = formData.get("tags") ? formData.get("tags").split(",") : [];
-
+    
     let coverImageUrl = "";
 
     // Handle Image Upload
     const file = formData.get("coverImage");
-    if (file && file.name) {
+    if (file) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const fileName = `${Date.now()}-${file.name}`;
-      const uploadPath = path.join(process.cwd(), "public/uploads", fileName);
-      await fs.writeFile(uploadPath, buffer);
-      coverImageUrl = `/uploads/${fileName}`;
+      const base64Image = buffer.toString("base64");
+
+      // Upload to Cloudinary
+      const uploadedImage = await cloudinary.v2.uploader.upload(`data:image/jpeg;base64,${base64Image}`, {
+        folder: "blogs",  // Organize images in Cloudinary
+      });
+
+      coverImageUrl = uploadedImage.secure_url; // Get Cloudinary image URL
     }
 
     // Save to MongoDB
@@ -38,7 +50,7 @@ export async function POST(req) {
     const newBlog = {
       title,
       description,
-      coverImage: coverImageUrl,
+      coverImage: coverImageUrl,  // Store Cloudinary image URL in DB
       authorId: new ObjectId(session.user.id),
       createdAt: new Date(),
       updatedAt: new Date(),

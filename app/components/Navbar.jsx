@@ -157,7 +157,6 @@ const Navbar = () => {
                         href={'/bloger'}
                         className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
                         <h2 className='font-semibold capitalize'>{session.user.name}</h2>
-                        <h4 className=''>@iamtushar28</h4>
                     </Link>
 
                     {/* devide line */}

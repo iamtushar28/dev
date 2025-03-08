@@ -8,9 +8,11 @@ import ListItem from "@tiptap/extension-list-item";
 import Color from "@tiptap/extension-color";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@tiptap/extension-placeholder";
+import { useSWRConfig } from "swr"; // Import SWR for cache update
 import Toolbar from "./Toolbar";
 
 const Editor = () => {
+    const { mutate } = useSWRConfig(); // Use mutate to refresh blog list
     const [title, setTitle] = useState("");
     const textareaRef = useRef(null);
     const [coverImage, setCoverImage] = useState(null);
@@ -29,6 +31,8 @@ const Editor = () => {
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            // Revoke previous preview to avoid memory leak
+            if (coverImage) URL.revokeObjectURL(coverImage);
             setCoverImage(URL.createObjectURL(file));
             setImageFile(file);
         }
@@ -73,6 +77,9 @@ const Editor = () => {
                 editor.commands.clearContent();      // Clear editor content
                 setCoverImage(null);                 // Remove cover image preview
                 setImageFile(null);                  // Reset image file reference
+
+                // ✅ Refresh the blog list after publishing
+                mutate("/api/blog"); 
             } else {
                 alert(result.error || "Something went wrong.");
             }

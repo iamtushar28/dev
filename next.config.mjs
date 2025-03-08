@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["lh3.googleusercontent.com", "avatars.githubusercontent.com"], // Add GitHub domain
+     /**
+     * Specifies external domains allowed to serve images.
+     * Ensures Next.js optimizes images from these sources securely.
+     */
+    domains: [
+      "lh3.googleusercontent.com", // Google profile images
+      "avatars.githubusercontent.com", // github profile images
+      "res.cloudinary.com"], // Cloudinary-hosted profile images
   },
 };
 
