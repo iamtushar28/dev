@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
+import BlogDate from './BlogDate';
 
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
@@ -42,13 +43,7 @@ const BlogTemplate = ({ blog }) => {
                     {/* Name & Date of Blog Post */}
                     <div>
                         <h2 className='font-semibold'>{blog.creatorName}</h2>
-                        <p className='text-sm text-zinc-500'>
-                            {new Date(blog?.createdAt).toLocaleDateString('en-GB', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric'
-                            })}
-                        </p>
+                        <BlogDate createdAt={blog?.createdAt} />
                     </div>
 
                 </div>
