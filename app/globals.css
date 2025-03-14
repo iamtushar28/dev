@@ -6,8 +6,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 ::selection{
-  background-color: white;
-  color: black;
+  background-color: black;
+  color: white;
 }
 
 .ProseMirror:focus {
