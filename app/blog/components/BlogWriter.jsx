@@ -1,23 +1,37 @@
 import React from 'react'
+import Image from 'next/image'
 
-const BlogWriter = () => {
+const BlogWriter = ({ author }) => {
     return (
         <section className='w-full md:w-[26%] flex flex-col gap-4'>
             {/* section 1 - author detils */}
             <section className='w-full h-fit pb-4 bg-white rounded overflow-hidden'>
 
                 {/* black banner */}
-                <div className='h-8 w-full bg-zinc-900'></div>
+                <div
+                    className='h-8 w-full'
+                    style={{ backgroundColor: author?.brandColor || "#18181b" }} // Default to zinc-900 if not set
+                >
+                </div>
 
                 {/* blog author name, profile image */}
                 <div className='px-4 flex items-center gap-2'>
 
                     {/* profile image */}
-                    <div className='h-12 w-12 md:h-12 md:w-12 rounded-full bg-zinc-200 -mt-3'>
+                    <div className='h-12 w-12 md:h-12 md:w-12 rounded-full -mt-3'>
+                        {author.image && (
+                            <Image
+                                src={author.image}
+                                alt="Creator Profile"
+                                width={48}
+                                height={48}
+                                className="w-full h-full rounded-full object-cover"
+                            />
+                        )}
                     </div>
 
                     {/* name */}
-                    <h2 className='text-lg font-semibold text-zinc-800 -mb-4'>Tushar Suryawanshi</h2>
+                    <h2 className='text-lg font-semibold text-zinc-800 -mb-4'>{author.name}</h2>
 
                 </div>
 
@@ -31,20 +45,26 @@ const BlogWriter = () => {
                 {/* about author */}
                 <div className='px-4 mt-4'>
                     <p className='text-zinc-600'>
-                        Software Engineer | Frontend developer | Next JS | React JS | Tailwind CSS
+                        {author.bio}
                     </p>
                 </div>
 
                 {/* author location */}
                 <div className='px-4 mt-4'>
                     <h4 className='text-zinc-600 font-semibold text-xs uppercase'>Location</h4>
-                    <h3 className='text-zinc-500 text-sm mt-1'>SATARA</h3>
+                    <h3 className='text-zinc-500 text-sm mt-1'>{author.location || "NA"}</h3>
                 </div>
 
                 {/* joined date */}
                 <div className='px-4 mt-4'>
                     <h4 className='text-zinc-600 font-semibold text-xs uppercase'>joined date</h4>
-                    <h3 className='text-zinc-500 text-sm mt-1'>15 Feb 2025</h3>
+                    <h3 className='text-zinc-500 text-sm mt-1'>
+                        {new Date(author?.joinedAt).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        })}
+                    </h3>
                 </div>
 
             </section>
@@ -82,8 +102,8 @@ const BlogWriter = () => {
 
                 <hr />
 
-                 {/* blogs list */}
-                 <div>
+                {/* blogs list */}
+                <div>
                     {/* title */}
                     <button className='text-zinc-600 hover:text-blue-600 text-start'>
                         Free APIs You Need to Know About in 2025

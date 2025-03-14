@@ -11,15 +11,19 @@ const BlogTemplate = ({ blog }) => {
         <div className='w-full h-fit pb-2 bg-white rounded overflow-hidden'>
 
             {/* Cover Image (if uploaded) */}
-            {blog.coverImage && (
-                <Image
-                    src={blog.coverImage}
-                    alt="Blog Cover"
-                    className="w-full h-auto max-h-72 object-cover"
-                    width={500}
-                    height={300}
-                />
-            )}
+            <Link
+                href={`/blog/${blog._id}`} // Pass blog ID dynamically
+            >
+                {blog.coverImage && (
+                    <Image
+                        src={blog.coverImage}
+                        alt="Blog Cover"
+                        className="w-full h-auto max-h-72 object-cover"
+                        width={500}
+                        height={300}
+                    />
+                )}
+            </Link>
 
             {/* blog info */}
             <div className='p-2 md:p-4'>
@@ -58,8 +62,6 @@ const BlogTemplate = ({ blog }) => {
                     >
                         {blog.title}
                     </Link>
-
-
 
                     {/* tags */}
                     <div className='mt-2'>

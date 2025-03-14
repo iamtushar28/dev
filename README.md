@@ -7,7 +7,7 @@ Stores user details, including authentication data, additional profile info, and
 -  _id: ObjectId,           // Unique user ID
  - name: String,            // Full name from uth provider
  - email: String,           // Email (unique)
- - profileImage: String,    // Profile picture URL
+ - image: String,    // Profile picture URL
  - provider: String,        // Auth provider (Google, GitHub, etc.)
  - website: String,         // Personal website URL (optional)
  - location: String,        // User location (optional)

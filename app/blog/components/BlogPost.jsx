@@ -1,17 +1,21 @@
 import React from 'react'
 import Image from 'next/image'
-import BlogImage from '@/public/images/myImage.jpg'
+import BlogDate from '@/app/components/BlogDate'//for showing date of blog posting
 
-const BlogPost = () => {
+const BlogPost = ({ blog, author }) => {
     return (
         <section className='md:ml-24 w-full md:w-[66%] h-fit pb-8 bg-white rounded overflow-hidden'>
 
             {/* blog thumbnail image */}
             <Image
-                src={BlogImage}
-                alt="Blog Image"
-                className="w-full h-auto"
+                src={blog.coverImage}
+                alt="Blog Cover"
+                className="w-full h-auto object-cover"
+                width={800} // Adjust as needed
+                height={350} // Adjust as needed
+                layout="responsive"
             />
+
 
             {/* blog info */}
             <div className='p-2 md:px-10 py-6'>
@@ -20,16 +24,22 @@ const BlogPost = () => {
                 <div className='flex gap-2 items-center'>
 
                     {/* profile image */}
-                    <div className='h-10 w-10 md:h-12 md:w-12 rounded-full bg-zinc-200'>
-
+                    <div className='h-10 w-10 md:h-12 md:w-12 rounded-full'>
+                        {author.image && (
+                            <Image
+                                src={author.image}
+                                alt="Creator Profile"
+                                width={48}
+                                height={48}
+                                className="w-full h-full rounded-full object-cover"
+                            />
+                        )}
                     </div>
 
                     {/* name & date of blog post */}
                     <div>
-
-                        <h2 className='font-semibold'>Tushar Suryawanshi</h2>
-                        <p className='text-sm text-zinc-500 font-light'>Posted on Feb 15</p>
-
+                        <h2 className='font-semibold'>{author.name}</h2>
+                        <BlogDate createdAt={blog?.createdAt} />
                     </div>
 
                 </div>
@@ -55,7 +65,7 @@ const BlogPost = () => {
 
                     {/* blog title */}
                     <h2 className='text-2xl md:text-4xl font-extrabold'>
-                        The Ultimate JavaScript Project Repository: 500+ Ideas for Developers 🚀
+                        {blog.title}
                     </h2>
 
                     {/* tags */}
@@ -78,30 +88,10 @@ const BlogPost = () => {
 
             {/* blog discreption */}
             <div className='px-4 md:px-10 mb-8'>
-                <h2 className='text-2xl font-bold'>Introduction</h2>
-                <p className='mt-2 text-lg'>JavaScript is one of the most versatile and widely used programming languages today. Whether you're a beginner, an experienced developer, or someone preparing for technical interviews, working on projects is the best way to learn and grow. But often, developers struggle with the question: "What should I build next?"
-                    <br />
-                    <br />
-                    To solve this, I created the ULTIMATE-JAVASCRIPT-PROJECT repository on GitHub, featuring 500+ project ideas across different categories, from beginner-friendly applications to advanced, real-world solutions.</p>
-
-                <h2 className='text-3xl font-extrabold mt-2'>What’s Inside? 🔥</h2>
-                <h2 className='text-xl font-extrabold mt-5 mb-3'>1️⃣ Beginner-Friendly Projects 🎯</h2>
-                <p className='text-lg'>If you're just starting out, these projects will help you practice core JavaScript concepts:
-                    <br />
-                    - To-Do List ✅ <br />
-                    - Calculator 🧮 <br />
-                    - Weather App 🌤️ <br />
-                    - Random Quote Generator 📝 <br />
-                    - Expense Tracker 💰</p>
-
-                <h2 className='text-xl font-extrabold mt-5 mb-3'>2️⃣ Frontend Web Projects 🎨</h2>
-                <p className='text-lg'>Master HTML, CSS, and JavaScript by building:
-                    <br />
-                    - E-commerce Website 🛒 <br />
-                    - Portfolio Website 🌐 <br />
-                    - Chat Application 💬 <br />
-                    - Blogging Platform ✍️</p>
-
+                <div
+                    className="prose prose-lg prose-blue max-w-full"
+                    dangerouslySetInnerHTML={{ __html: blog.description }}
+                />
             </div>
 
             <hr />
@@ -110,7 +100,7 @@ const BlogPost = () => {
             <div className='mt-8 px-2 md:px-10'>
 
                 {/* heading */}
-                <h2 className='text-2xl font-bold capitalize'>Comments (2)</h2>
+                <h2 className='text-2xl font-bold capitalize'>Comments ({blog.commentsCount})</h2>
 
                 {/* comment */}
                 <div className='flex flex-col gap-4 mt-6'>
