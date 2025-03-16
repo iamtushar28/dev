@@ -7,15 +7,17 @@ const BlogPost = ({ blog, author }) => {
         <section className='md:ml-24 w-full md:w-[66%] h-fit pb-8 bg-white rounded overflow-hidden'>
 
             {/* blog thumbnail image */}
-            <Image
-                src={blog.coverImage}
-                alt="Blog Cover"
-                className="w-full h-auto object-cover"
-                width={800} // Adjust as needed
-                height={350} // Adjust as needed
-                layout="responsive"
-            />
 
+            {blog.coverImage && (
+                <Image
+                    src={blog.coverImage}
+                    alt="Blog Cover"
+                    className="w-full h-auto object-cover"
+                    width={800} // Adjust as needed
+                    height={350} // Adjust as needed
+                    layout="responsive"
+                />
+            )}
 
             {/* blog info */}
             <div className='p-2 md:px-10 py-6'>

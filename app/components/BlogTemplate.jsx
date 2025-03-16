@@ -8,7 +8,7 @@ import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
 
 const BlogTemplate = ({ blog }) => {
     return (
-        <div className='w-full h-fit pb-2 bg-white rounded overflow-hidden'>
+        <div className='w-full h-fit bg-white rounded overflow-hidden'>
 
             {/* Cover Image (if uploaded) */}
             <Link
@@ -74,7 +74,6 @@ const BlogTemplate = ({ blog }) => {
                         <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
                             #Javascript
                         </button>
-
                     </div>
 
                     {/* button - reactions, comment, save blog  */}
@@ -117,7 +116,7 @@ const BlogTemplate = ({ blog }) => {
                         </div>
 
                         {/* save blog */}
-                        <button className='md:text-xl text-zinc-500 hover:scale-90 transition-all duration-200'>
+                        <button className='text-xl text-zinc-500 hover:scale-90 transition-all duration-200'>
                             <FaRegBookmark />
                         </button>
 
