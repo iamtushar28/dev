@@ -27,10 +27,19 @@ body {
   }
 }
 
+::selection{
+  background-color: black;
+  color: white;
+}
+
 .skeleton {
   background: linear-gradient(90deg, #f3f3f3 25%, #e0e0e0 50%, #f3f3f3 75%);
   background-size: 200% 100%;
   animation: shimmer 2.9s infinite linear;
+}
+
+::-webkit-scrollbar{
+  scroll-behavior: smooth;
 }
 
 

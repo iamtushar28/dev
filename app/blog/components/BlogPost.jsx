@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import BlogDate from '@/app/components/BlogDate'//for showing date of blog posting
+import AddComment from './AddComment'
+import Comments from './Comments'
 
 const BlogPost = ({ blog, author }) => {
     return (
@@ -20,7 +22,7 @@ const BlogPost = ({ blog, author }) => {
             )}
 
             {/* blog info */}
-            <div className='p-2 md:px-10 py-6'>
+            <div className='md:px-6 py-6'>
 
                 {/* creater info */}
                 <div className='flex gap-2 items-center'>
@@ -89,7 +91,7 @@ const BlogPost = ({ blog, author }) => {
             </div>
 
             {/* blog discreption */}
-            <div className='px-4 md:px-10 mb-8'>
+            <div className='px-4 md:px-6 mb-8'>
                 <div
                     className="prose prose-lg prose-blue max-w-full"
                     dangerouslySetInnerHTML={{ __html: blog.description }}
@@ -99,41 +101,16 @@ const BlogPost = ({ blog, author }) => {
             <hr />
 
             {/* comments section */}
-            <div className='mt-8 px-2 md:px-10'>
+            <div className='mt-8 px-2 md:px-6' id='comments'>
 
                 {/* heading */}
-                <h2 className='text-2xl font-bold capitalize'>Comments ({blog.commentsCount})</h2>
+                <h2 className='text-2xl font-bold capitalize'>Comments</h2>
 
-                {/* comment */}
-                <div className='flex flex-col gap-4 mt-6'>
+                {/* for adding comment on blog */}
+                <AddComment blog={blog} />
 
-                    {/* comment - 1 */}
-                    <div className='flex gap-2'>
-
-                        {/* profile image */}
-                        <div className='h-8 w-8 rounded-full bg-zinc-200'>
-                        </div>
-
-                        {/* comment box */}
-                        <div className='w-full h-fit p-3 bg-zinc-100 rounded'>
-
-                            <div className='flex items-center gap-2'>
-                                {/* commenter name */}
-                                <h4 className='font-semibold text-zinc-600 capitalize'>Ram</h4>
-                                {/* time */}
-                                <p className='text-xs text-zinc-500'>(6 hours ago)</p>
-                            </div>
-
-                            {/* comment */}
-                            <p className='text-zinc-600 text-sm'>
-                                Good to mention Github address and Live Demo for each of your projects.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
+                {/* for showing all comments of blog */}
+                <Comments blogId={blog._id} />
 
             </div>
 
