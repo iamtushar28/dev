@@ -3,7 +3,7 @@ import React from 'react';
 const CommentsSkeleton = () => {
     return (
         <>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 mt-2'>
                 {Array.from({ length: 2 }).map((_, index) => (
                     <div key={index} className='flex gap-2 animate-pulse'>
                         {/* User image */}

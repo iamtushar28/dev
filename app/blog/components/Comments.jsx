@@ -1,86 +1,77 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import useSWR from "swr";
 import BlogDate from "@/app/components/BlogDate";
 import CommentsSkelaton from "./CommentsSkelaton";
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 const CommentsList = ({ blogId }) => {
+    const { data: commentsData, error, isLoading, mutate } = useSWR(`/api/comments?blog_id=${blogId}`, fetcher);
     const [comments, setComments] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const res = await fetch(`/api/comments?blog_id=${blogId}`);
-                if (!res.ok) throw new Error("Failed to fetch comments");
-                const data = await res.json();
+        const fetchUsers = async () => {
+            if (!commentsData) return;
 
-                // Fetch user details for each comment
+            try {
                 const commentsWithUserData = await Promise.all(
-                    data.map(async (comment) => {
+                    commentsData.map(async (comment) => {
                         const userRes = await fetch(`/api/user/${comment.user_id}`);
                         const userData = userRes.ok ? await userRes.json() : { name: "Unknown", image: "" };
 
                         return {
                             ...comment,
                             userName: userData.name || "NA",
-                            userProfile: userData.image,
+                            userProfile: userData.image || "/default-avatar.png",
                         };
                     })
                 );
 
                 setComments(commentsWithUserData);
             } catch (error) {
-                console.error("Error fetching comments:", error);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching user data:", error);
             }
         };
 
-        fetchComments();
-    }, [blogId]);
+        fetchUsers();
+    }, [commentsData]); // Run only when commentsData updates
+
+    if (isLoading) return <CommentsSkelaton />;
+    if (error) return <p className="text-red-500">Failed to load comments</p>;
+    if (!comments.length) return <p className="text-zinc-400">No comments yet. Be the first to comment!</p>;
 
     return (
-        <div className="mt-6">
-            {loading ? (
-                <>
-                    <CommentsSkelaton />
-                </>
-            ) : comments.length === 0 ? (
-                <p className="text-zinc-400">No comments yet. Be the first to comment!</p>
-            ) : (
-                <div className="flex flex-col gap-4 mt-4">
-                    {comments.map((comment) => (
-                        <div key={comment._id} className="flex gap-2">
+        <div className="mt-6 flex flex-col gap-4">
+            {comments.map((comment) => (
+                <div key={comment._id} className="flex gap-2">
 
-                            {/* User Profile Image */}
-                            <img
-                                src={comment.userProfile}
-                                alt={comment.userName}
-                                className="h-8 w-8 rounded-full object-cover"
-                            />
+                    {/* User Profile Image */}
+                    <img
+                        src={comment.userProfile}
+                        alt={comment.userName}
+                        className="h-8 w-8 rounded-full object-cover"
+                    />
 
-                            {/* Comment Box */}
-                            <div className="w-full p-3 border-[0.3px] border-zinc-100 rounded">
-                                <div className="flex flex-col md:flex-row md:items-center md:gap-2 mb-2">
+                    {/* Comment Box */}
+                    <div className="w-full p-3 border-[0.3px] border-zinc-100 rounded">
+                        <div className="flex flex-col md:flex-row md:items-center md:gap-2 mb-2">
 
-                                    {/* Commenter Name */}
-                                    <h4 className="font-semibold text-zinc-600 capitalize">
-                                        {comment.userName}
-                                    </h4>
+                            {/* Commenter Name */}
+                            <h4 className="font-semibold text-zinc-600 capitalize">
+                                {comment.userName}
+                            </h4>
 
-                                    {/* Time */}
-                                    <BlogDate createdAt={comment.createdAt} />
+                            {/* Time */}
+                            <BlogDate createdAt={comment.createdAt} />
 
-                                </div>
-
-                                {/* Comment Text */}
-                                <p className="text-zinc-600 text-sm">{comment.comment}</p>
-
-                            </div>
                         </div>
-                    ))}
+
+                        {/* Comment Text */}
+                        <p className="text-zinc-600 text-sm">{comment.comment}</p>
+                    </div>
                 </div>
-            )}
+            ))}
         </div>
     );
 };
