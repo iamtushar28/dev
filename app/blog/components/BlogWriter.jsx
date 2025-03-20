@@ -1,5 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { FiExternalLink } from "react-icons/fi"; //calender, link icon
+
 
 const BlogWriter = ({ author }) => {
     return (
@@ -49,22 +52,40 @@ const BlogWriter = ({ author }) => {
                     </p>
                 </div>
 
-                {/* author location */}
-                <div className='px-4 mt-4'>
-                    <h4 className='text-zinc-600 font-semibold text-xs uppercase'>Location</h4>
-                    <h3 className='text-zinc-500 text-sm mt-1'>{author.location || "NA"}</h3>
-                </div>
+                {/* website link */}
+                {author?.website && (
+                    <div className='px-4 mt-4'>
+                        <h4 className='text-zinc-600 font-semibold text-xs uppercase'>website</h4>
+                        <Link
+                            href={author.website}
+                            className='flex items-center mt-1 gap-1 text-sm text-zinc-600 hover:text-blue-600 transition-all duration-200'
+                            target="_blank" // Opens in a new tab
+                            rel="noopener noreferrer" // Security best practice
+                        >
+                            <FiExternalLink />
+                            {author.website}
+                        </Link>
+                    </div>
+                )}
 
-                {/* joined date */}
-                <div className='px-4 mt-4'>
-                    <h4 className='text-zinc-600 font-semibold text-xs uppercase'>joined date</h4>
-                    <h3 className='text-zinc-500 text-sm mt-1'>
-                        {new Date(author?.joinedAt).toLocaleDateString('en-GB', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
-                        })}
-                    </h3>
+                <div className='flex gap-4'>
+                    {/* author location */}
+                    <div className='px-4 mt-4'>
+                        <h4 className='text-zinc-600 font-semibold text-xs uppercase'>Location</h4>
+                        <h3 className='text-zinc-500 text-sm mt-1'>{author.location || "NA"}</h3>
+                    </div>
+
+                    {/* joined date */}
+                    <div className='px-4 mt-4'>
+                        <h4 className='text-zinc-600 font-semibold text-xs uppercase'>joined date</h4>
+                        <h3 className='text-zinc-500 text-sm mt-1'>
+                            {new Date(author?.joinedAt).toLocaleDateString('en-GB', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            })}
+                        </h3>
+                    </div>
                 </div>
 
             </section>

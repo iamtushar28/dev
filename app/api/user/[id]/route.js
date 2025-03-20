@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
     // Fetch the user details
     const user = await db.collection("users").findOne(
       { _id: new ObjectId(id) },
-      { projection: { name: 1, image: 1, bio:1, location:1, brandColor:1, joinedAt:1 } } // Fetch only necessary fields
+      { projection: { name: 1, image: 1, bio:1, location:1, website:1, brandColor:1, joinedAt:1 } } // Fetch only necessary fields
     );
 
     if (!user) {
