@@ -7,37 +7,43 @@ import CommentsSkelaton from "./CommentsSkelaton";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const CommentsList = ({ blogId }) => {
-    const { data: commentsData, error, isLoading, mutate } = useSWR(`/api/comments?blog_id=${blogId}`, fetcher);
+    const { data: commentsData, error, isLoading } = useSWR(`/api/comments?blog_id=${blogId}`, fetcher);
     const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true); // Control skeleton visibility
 
     useEffect(() => {
+        if (!commentsData) return;
+
+        setLoading(true); // Show skeleton while fetching user data
+
         const fetchUsers = async () => {
-            if (!commentsData) return;
-
             try {
-                const commentsWithUserData = await Promise.all(
-                    commentsData.map(async (comment) => {
-                        const userRes = await fetch(`/api/user/${comment.user_id}`);
-                        const userData = userRes.ok ? await userRes.json() : { name: "Unknown", image: "" };
+                const updatedComments = [...commentsData];
 
-                        return {
-                            ...comment,
-                            userName: userData.name || "NA",
-                            userProfile: userData.image || "/default-avatar.png",
-                        };
-                    })
-                );
+                for (let i = 0; i < updatedComments.length; i++) {
+                    const comment = updatedComments[i];
+                    const userRes = await fetch(`/api/user/${comment.user_id}`);
+                    const userData = userRes.ok ? await userRes.json() : { name: "Unknown", image: "" };
 
-                setComments(commentsWithUserData);
+                    updatedComments[i] = {
+                        ...comment,
+                        userName: userData.name || "NA",
+                        userProfile: userData.image || "/default-avatar.png",
+                    };
+
+                    setComments([...updatedComments.slice(0, i + 1)]); // Update incrementally
+                }
             } catch (error) {
                 console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false); // Hide skeleton after first batch loads
             }
         };
 
         fetchUsers();
-    }, [commentsData]); // Run only when commentsData updates
+    }, [commentsData]);
 
-    if (isLoading) return <CommentsSkelaton />;
+    if (isLoading || loading) return <CommentsSkelaton />;
     if (error) return <p className="text-red-500">Failed to load comments</p>;
     if (!comments.length) return <p className="text-zinc-400">No comments yet. Be the first to comment!</p>;
 
@@ -45,29 +51,18 @@ const CommentsList = ({ blogId }) => {
         <div className="mt-6 flex flex-col gap-4">
             {comments.map((comment) => (
                 <div key={comment._id} className="flex gap-2">
-
-                    {/* User Profile Image */}
                     <img
                         src={comment.userProfile}
                         alt={comment.userName}
                         className="h-8 w-8 rounded-full object-cover"
                     />
-
-                    {/* Comment Box */}
                     <div className="w-full p-3 border-[0.3px] border-zinc-100 rounded">
                         <div className="flex flex-col md:flex-row md:items-center md:gap-2 mb-2">
-
-                            {/* Commenter Name */}
                             <h4 className="font-semibold text-zinc-600 capitalize">
                                 {comment.userName}
                             </h4>
-
-                            {/* Time */}
                             <BlogDate createdAt={comment.createdAt} />
-
                         </div>
-
-                        {/* Comment Text */}
                         <p className="text-zinc-600 text-sm">{comment.comment}</p>
                     </div>
                 </div>
