@@ -22,7 +22,7 @@ const BlogPost = ({ blog, author }) => {
             )}
 
             {/* blog info */}
-            <div className='md:px-6 py-6'>
+            <div className='px-4 md:px-6 py-6'>
 
                 {/* creater info */}
                 <div className='flex gap-2 items-center'>
