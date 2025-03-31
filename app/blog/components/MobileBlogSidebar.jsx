@@ -15,10 +15,10 @@ const MobileBlogSidebar = ({ blog }) => {
                 </button>
 
                 {/* comment button */}
-                <Link href='#comments' className='text-zinc-600 hover:text-blue-500 transition-all duration-200 flex gap-1 items-center'>
+                <button className='text-zinc-600 hover:text-blue-500 transition-all duration-200 flex gap-1 items-center'>
                     <FaRegComment className='text-2xl' />
                     {blog.commentsCount}
-                </Link>
+                </button>
 
                 {/* bookmark button */}
                 <button className='text-zinc-600 hover:text-orange-500 transition-all duration-200 flex gap-1 items-center'>
