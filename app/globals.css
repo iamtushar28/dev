@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    color: black !important;
+    /* color: #fa5d84; */
+}
+
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+::selection{
+  background-color: black;
+  color: white;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f3f3f3 25%, #e0e0e0 50%, #f3f3f3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2.9s infinite linear;
+}
+
+::-webkit-scrollbar{
+  scroll-behavior: smooth;
+}
+
+
