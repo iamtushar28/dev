@@ -113,7 +113,7 @@ const BlogTemplate = ({ blog }) => {
                              href={`/blog/${blog._id}#comments`}
                             className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />
-                                <CommentsCount blogId={blog._id} />comment
+                                <CommentsCount blogId={blog._id} />
                             </Link>
 
                         </div>
