@@ -78,7 +78,7 @@ const BlogTemplate = ({ blog }) => {
                     </div>
 
                     {/* button - reactions, comment, save blog  */}
-                    <div className='mt-4 flex justify-between items-center'>
+                    <div className='mt-4 px-2 flex justify-between items-center'>
 
                         <div className='flex items-center gap-3'>
 
@@ -119,7 +119,7 @@ const BlogTemplate = ({ blog }) => {
                         </div>
 
                         {/* save blog */}
-                        <button className='text-xl text-zinc-500 hover:scale-90 transition-all duration-200'>
+                        <button className='text-lg text-zinc-500 hover:scale-90 transition-all duration-200'>
                             <FaRegBookmark />
                         </button>
 
