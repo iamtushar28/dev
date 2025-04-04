@@ -9,7 +9,7 @@ import { FaRegBookmark } from "react-icons/fa6"; //bookmrk icon
 
 const BlogTemplate = ({ blog }) => {
     return (
-        <div className='w-full h-fit bg-white overflow-hidden'>
+        <div className='w-full h-fit md:rounded bg-white overflow-hidden'>
 
             {/* Cover Image (if uploaded) */}
             <Link
