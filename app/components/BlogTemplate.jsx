@@ -80,7 +80,7 @@ const BlogTemplate = ({ blog }) => {
                     {/* button - reactions, comment, save blog  */}
                     <div className='mt-4 flex justify-between items-center'>
 
-                        <div className='flex flex-col md:flex-row items-start md:items-center gap-2'>
+                        <div className='flex items-center gap-3'>
 
                             {/* reactions */}
                             <button className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
