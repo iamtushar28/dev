@@ -1,31 +1,15 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
-import BlogDate from './BlogDate';
+import BlogDate from '../components/BlogDate';
 import CommentsCount from '../blog/components/CommentsCount';
-import BookmarkButton from './BookmarkButton';
+import BookmarkButton from '../components/BookmarkButton';
 
 import { FaRegComment } from "react-icons/fa"; //comment icon
 
 const BlogTemplate = ({ blog }) => {
     return (
         <div className='w-full h-fit pb-1 bg-white overflow-hidden'>
-
-            {/* Cover Image (if uploaded) */}
-            <Link
-                href={`/blog/${blog._id}`} // Pass blog ID dynamically
-            >
-                {blog.coverImage && (
-                    <Image
-                        src={blog.coverImage}
-                        alt="Blog Cover"
-                        priority={false}
-                        className="w-full h-auto max-h-72 object-cover"
-                        width={500}
-                        height={300}
-                    />
-                )}
-            </Link>
 
             {/* blog info */}
             <div className='p-2 md:p-4'>
