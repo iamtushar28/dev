@@ -70,16 +70,16 @@ export async function POST(req) {
 
 
 // GET: Fetch blogs
+// GET: Fetch blogs with author info
 export async function GET(req) {
   try {
     const client = await clientPromise;
     const db = client.db();
 
-    // Parse query parameters for filtering
     const { searchParams } = new URL(req.url);
-    const filter = searchParams.get("filter") || "latest"; // Default: latest
+    const filter = searchParams.get("filter") || "latest";
     const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 5;
+    const limit = parseInt(searchParams.get("limit")) || 25;
 
     const sortOptions = {
       latest: { createdAt: -1 },
@@ -91,21 +91,50 @@ export async function GET(req) {
 
     const sortBy = sortOptions[filter] || { createdAt: -1 };
 
-    const blogs = await db.collection("blogs")
-      .find({})
-      .sort(sortBy)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .toArray();
+    const blogs = await db.collection("blogs").aggregate([
+      // Sort and paginate
+      { $sort: sortBy },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
 
-      return NextResponse.json({ blogs: blogs || [] }, { status: 200 });
+      // Lookup author info from "users" collection
+      {
+        $lookup: {
+          from: "users",          // Your users collection
+          localField: "authorId", // Blog's authorId
+          foreignField: "_id",    // Users' _id
+          as: "author"
+        }
+      },
+      {
+        $unwind: {
+          path: "$author",
+          preserveNullAndEmptyArrays: true
+        }
+      },
 
+      // Optional: clean/rename fields
+      {
+        $project: {
+          title: 1,
+          content: 1,
+          createdAt: 1,
+          coverImage: 1,
+          authorId: 1,
+          creatorName: "$author.name",
+          creatorProfile: "$author.image"
+        }
+      }
+    ]).toArray();
+
+    return NextResponse.json({ blogs: blogs || [] }, { status: 200 });
 
   } catch (error) {
     console.error("GET /api/blog Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
 
 
 // PUT: Update an existing blog

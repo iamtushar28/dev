@@ -94,7 +94,7 @@ const BlogWriter = ({ author }) => {
             <section className='w-full h-fit p-4 bg-white rounded flex flex-col gap-4'>
 
                 {/* heading */}
-                <div className='text-lg font-semibold'>More from <button className='text-blue-600'>Tushar</button></div>
+                <div className='text-lg font-semibold'>More from <button className='text-blue-600'>DEV</button></div>
 
                 <hr />
 

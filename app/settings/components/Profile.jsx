@@ -1,7 +1,6 @@
 "use client"; // Required for Next.js 13+ App Router
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 
@@ -13,6 +12,7 @@ const Settings = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -37,7 +37,7 @@ const Settings = () => {
         .catch((error) => console.error("Error fetching user data:", error));
     }
   }, [session, setValue]);
-  
+
 
   const onSubmit = async (formData) => {
     setLoading(true);
@@ -106,12 +106,21 @@ const Settings = () => {
         </div>
 
         {/* brandColor */}
-        <div>
+        <div className="relative">
           <h6 className="text-zinc-800 mb-2 text-sm font-semibold">Brand Color</h6>
           <input
             {...register("brandColor")}
             type="text"
-            className="w-full px-2 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+            className="w-full px-12 py-2 border border-zinc-300 focus:ring-2 focus:ring-blue-600 rounded outline-none"
+          />
+
+          {/* selected color */}
+          <button
+            type="button"
+            className="h-8 w-8 rounded absolute left-1 mt-1"
+            style={{
+              backgroundColor: watch("brandColor") || "#000000",
+            }}
           />
         </div>
 

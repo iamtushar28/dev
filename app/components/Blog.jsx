@@ -41,7 +41,7 @@ const fetcher = async (url) => {
 const Blog = () => {
     const { data, error, isLoading } = useSWR("/api/blog", fetcher, {
         revalidateOnFocus: true, // Auto-refresh when user returns
-        refreshInterval: 30000, // Auto-refresh every 30 seconds
+        refreshInterval: 60000, // Auto-refresh every 30 seconds
     });
 
     const [openFilterMenu, setOpenFilterMenu] = useState(false);
