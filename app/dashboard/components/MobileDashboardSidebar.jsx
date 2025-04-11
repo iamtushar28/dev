@@ -2,7 +2,7 @@ import React from 'react'
 
 const MobileDashboardSidebar = () => {
     return (
-        <div className='block md:hidden fixed bottom-0 left-0 right-0 bg-white border-t w-full p-2'>
+        <div className='block md:hidden z-50 fixed bottom-0 left-0 right-0 bg-white border-t w-full p-2'>
 
             <div className='overflow-y-scroll scroll-smooth flex gap-2'>
                 {/* profile */}

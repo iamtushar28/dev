@@ -88,7 +88,7 @@ const Navbar = () => {
 
                 {/* search button - hidden at desktop */}
                 <Link
-                    href={'/search'}
+                    href={'/'}
                     className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                     <FiSearch />
                 </Link>
