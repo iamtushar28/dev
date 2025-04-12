@@ -8,7 +8,7 @@ const BlogWriter = ({ author }) => {
     return (
         <section className='w-full md:w-[26%] flex flex-col gap-4'>
             {/* section 1 - author detils */}
-            <section className='w-full h-fit pb-4 bg-white rounded overflow-hidden'>
+            <section className='w-full h-fit pb-4 bg-white md:rounded overflow-hidden'>
 
                 {/* black banner */}
                 <div

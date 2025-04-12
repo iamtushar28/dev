@@ -7,7 +7,7 @@ import CommentsCount from './CommentsCount'
 
 const BlogPost = ({ blog, author }) => {
     return (
-        <section className='md:ml-24 w-full md:w-[66%] h-fit pb-8 bg-white rounded overflow-hidden'>
+        <section className='md:ml-24 w-full md:w-[66%] h-fit pb-12 bg-white md:rounded'>
 
             {/* blog thumbnail image */}
 
@@ -15,7 +15,7 @@ const BlogPost = ({ blog, author }) => {
                 <Image
                     src={blog.coverImage}
                     alt="Blog Cover"
-                    className="w-full h-auto object-cover"
+                    className="w-full h-auto object-cover md:rounded-t"
                     width={800} // Adjust as needed
                     height={350} // Adjust as needed
                     layout="responsive"
@@ -44,6 +44,7 @@ const BlogPost = ({ blog, author }) => {
                     {/* name & date of blog post */}
                     <div>
                         <h2 className='font-semibold'>{author.name}</h2>
+                        <h2 className='font-semibold'>{blog.authorId}</h2>
                         <BlogDate createdAt={blog?.createdAt} />
                     </div>
 
@@ -114,7 +115,7 @@ const BlogPost = ({ blog, author }) => {
                 <AddComment blog={blog} />
 
                 {/* for showing all comments of blog */}
-                <Comments blogId={blog._id} />
+                <Comments blogId={blog._id} currentUserId={blog.authorId} />
 
             </div>
 

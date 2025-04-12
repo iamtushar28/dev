@@ -53,7 +53,7 @@ export default async function BlogPage({ params }) {
   const author = await getAuthor(blog.authorId);
 
   return (
-    <section className="mt-16 mb-16 p-2 md:mb-4 md:p-4 w-full flex flex-wrap md:flex-nowrap gap-4">
+    <section className="mt-16 mb-16 md:mb-4 md:p-4 w-full flex flex-wrap md:flex-nowrap gap-4">
       <BlogSidebar blog={blog} />
       <MobileBlogSidebar blog={blog} />
       <BlogPost blog={blog} author={author} /> {/*  Pass author details */}

@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import useSWR from "swr";
 import BlogTemplate from "./BlogTemplate";
+import SkelatonLoader from "./SkelatonLoader"
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -17,10 +18,10 @@ const MenuSection = () => {
             <h2 className="text-zinc-900 capitalize font-semibold mb-3 pl-2 md:pl-2">Posts</h2>
 
             {/* content box */}
-            <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4 mb-4">
 
                 {isLoading ? (
-                    <p className="text-center text-sm text-gray-500">Loading your posts...</p>
+                   <SkelatonLoader/>
                 ) : error ? (
                     <p className="text-red-500 text-center">Failed to load posts.</p>
                 ) : blogs.length === 0 ? (

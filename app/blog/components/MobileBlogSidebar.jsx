@@ -9,7 +9,7 @@ import BookmarkButton from '@/app/components/BookmarkButton';
 const MobileBlogSidebar = ({ blog }) => {
     return (
         <div className='block md:hidden'>
-            <section className='flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
+            <section className='z-20 flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
 
                 {/* like/reaction button */}
                 <button className='text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-2 items-center'>

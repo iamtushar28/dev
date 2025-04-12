@@ -15,7 +15,10 @@ export async function POST(req) {
     const { comment, user_id, blog_id } = await req.json();
 
     if (!comment || !user_id || !blog_id) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     const client = await clientPromise;
@@ -35,10 +38,12 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error("Error in API /api/comments:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
-
 
 // getting comment
 export async function GET(req) {
@@ -47,7 +52,10 @@ export async function GET(req) {
     const blog_id = searchParams.get("blog_id");
 
     if (!blog_id) {
-      return NextResponse.json({ error: "blog_id is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "blog_id is required" },
+        { status: 400 }
+      );
     }
 
     const client = await clientPromise;
@@ -62,6 +70,46 @@ export async function GET(req) {
     return NextResponse.json(comments, { status: 200 });
   } catch (error) {
     console.error("Error fetching comments:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+// delete comment
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const commentId = searchParams.get("comment_id");
+
+    if (!commentId) {
+      return NextResponse.json(
+        { error: "comment_id is required" },
+        { status: 400 }
+      );
+    }
+
+    const client = await clientPromise;
+    const db = client.db();
+
+    const result = await db.collection("comments").deleteOne({
+      _id: new ObjectId(commentId),
+    });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Comment deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

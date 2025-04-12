@@ -36,10 +36,10 @@ const BlogTemplate = ({ blog }) => {
     }, []);
 
     return (
-        <div className='w-full h-fit pb-1 bg-white overflow-hidden'>
+        <div className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
 
             {/* blog info */}
-            <div className='p-2 md:p-4'>
+            <div className='px-2 md:px-4 py-4'>
 
                 {/* Creator Info & options for delet and edit blog */}
                 <div className='relative flex justify-between items-center'>

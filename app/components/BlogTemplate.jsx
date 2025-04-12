@@ -9,7 +9,7 @@ import { FaRegComment } from "react-icons/fa"; //comment icon
 
 const BlogTemplate = ({ blog }) => {
     return (
-        <div className='w-full h-fit pb-1 bg-white overflow-hidden'>
+        <div className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
 
             {/* Cover Image (if uploaded) */}
             <Link
