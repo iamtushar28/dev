@@ -81,7 +81,7 @@ const BlogTemplate = ({ blog }) => {
                         <div ref={wrapperRef} className="absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
                             <ul className="space-y-2">
                                 <button
-                                    className="font-semibold cursor-pointer hover:bg-gray-100 p-2 rounded">
+                                    className="w-full flex items-start font-semibold cursor-pointer hover:bg-gray-100 p-2 rounded">
                                     Edit Blog 📝
                                 </button>
                                 <DeleteBlogButton blogId={blog._id} />

@@ -32,7 +32,7 @@ const DeleteBlogButton = ({ blogId }) => {
   return (
     <button
       onClick={handleDelete}
-      className="font-semibold text-red-500 cursor-pointer hover:bg-gray-100 p-2 rounded"
+      className="w-full flex items-start font-semibold text-red-500 cursor-pointer hover:bg-gray-100 p-2 rounded"
     >
       Delete Blog 🗑️
     </button>
