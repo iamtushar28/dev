@@ -114,7 +114,7 @@ const BlogPost = ({ blog, author }) => {
                 <AddComment blog={blog} />
 
                 {/* for showing all comments of blog */}
-                <Comments blogId={blog._id} currentUserId={blog.authorId} />
+                <Comments blogId={blog._id} />
 
             </div>
 

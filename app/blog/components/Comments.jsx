@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import BlogDate from "@/app/components/BlogDate";
 import CommentsSkelaton from "./CommentsSkelaton";
@@ -8,7 +9,10 @@ import DeleteComment from "./DeleteComment";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const CommentsList = ({ blogId, currentUserId }) => {
+const CommentsList = ({ blogId }) => {
+
+    const { data: session } = useSession(); //getting logged in user
+
     const [activeCommentId, setActiveCommentId] = useState(null);
     const wrapperRefs = useRef({});
     const buttonRefs = useRef({});
@@ -86,7 +90,7 @@ const CommentsList = ({ blogId, currentUserId }) => {
                             </div>
 
                             {/* ✅ Only show options if comment was written by the current user */}
-                            {comment.user_id === currentUserId && (
+                            {comment.user_id === session?.user?.id && (
                                 <button
                                     ref={(el) => (buttonRefs.current[comment._id] = el)}
                                     onClick={() =>
@@ -98,7 +102,7 @@ const CommentsList = ({ blogId, currentUserId }) => {
                             )}
 
                             {/* Option Menu */}
-                            {activeCommentId === comment._id && comment.user_id === currentUserId && (
+                            {activeCommentId === comment._id && comment.user_id === session?.user?.id && (
                                 <div
                                     ref={(el) => (wrapperRefs.current[comment._id] = el)}
                                     className="z-10 absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
