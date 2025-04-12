@@ -44,7 +44,6 @@ const BlogPost = ({ blog, author }) => {
                     {/* name & date of blog post */}
                     <div>
                         <h2 className='font-semibold'>{author.name}</h2>
-                        <h2 className='font-semibold'>{blog.authorId}</h2>
                         <BlogDate createdAt={blog?.createdAt} />
                     </div>
 
