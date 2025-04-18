@@ -61,7 +61,7 @@ const Sidebar = () => {
 
             {/* footer section */}
             <div className='px-4 mt-4 text-sm text-zinc-500'>
-             <button className='underline text-blue-500 hidden'>Tushar</button>🥰. DEV Community © 2025 - 2026.
+                DEV Community © 2025.
             </div>
 
         </section>

@@ -14,7 +14,6 @@ cloudinary.v2.config({
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET 
 });
-
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -68,7 +67,6 @@ export async function POST(req) {
   }
 }
 
-
 // GET: Fetch blogs with author info
 export async function GET(req) {
   try {
@@ -77,9 +75,10 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const filter = searchParams.get("filter") || "latest";
-    const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 25;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "25"), 100); // cap to 100 max for performance
 
+    // Sorting options
     const sortOptions = {
       latest: { createdAt: -1 },
       "top-week": { likes: -1 },
@@ -87,21 +86,36 @@ export async function GET(req) {
       "top-year": { likes: -1 },
       "top-infinity": { likes: -1 },
     };
-
     const sortBy = sortOptions[filter] || { createdAt: -1 };
 
-    const blogs = await db.collection("blogs").aggregate([
-      // Sort and paginate
+    // Projection stage (fields to include)
+    const projection = {
+      _id: 1,
+      title: 1,
+      content: 1,
+      createdAt: 1,
+      coverImage: 1,
+      authorId: 1,
+      creatorName: "$author.name",
+      creatorProfile: "$author.image"
+    };
+
+    const pipeline = [
       { $sort: sortBy },
       { $skip: (page - 1) * limit },
       { $limit: limit },
-
-      // Lookup author info from "users" collection
       {
         $lookup: {
-          from: "users",          // Your users collection
-          localField: "authorId", // Blog's authorId
-          foreignField: "_id",    // Users' _id
+          from: "users",
+          let: { authorId: "$authorId" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$_id", { $toObjectId: "$$authorId" }] }
+              }
+            },
+            { $project: { name: 1, image: 1 } } // only fetch required fields
+          ],
           as: "author"
         }
       },
@@ -111,20 +125,10 @@ export async function GET(req) {
           preserveNullAndEmptyArrays: true
         }
       },
+      { $project: projection }
+    ];
 
-      // Optional: clean/rename fields
-      {
-        $project: {
-          title: 1,
-          content: 1,
-          createdAt: 1,
-          // coverImage: 1,
-          authorId: 1,
-          creatorName: "$author.name",
-          creatorProfile: "$author.image"
-        }
-      }
-    ]).toArray();
+    const blogs = await db.collection("blogs").aggregate(pipeline).toArray();
 
     return NextResponse.json({ blogs: blogs || [] }, { status: 200 });
 
@@ -133,8 +137,6 @@ export async function GET(req) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
-
-
 
 // PUT: Update an existing blog
 export async function PUT(req) {

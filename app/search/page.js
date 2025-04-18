@@ -12,7 +12,7 @@ export default function Home() {
     <section className="mt-16 py-6 w-full flex items-center justify-center">
       <div className="md:w-[80%] w-full md:flex md:gap-4">
         <SearchSidebar />
-        <MobileSearchbar/>
+        {/* <MobileSearchbar/> */}
         <SearchedBlogsList/>
       </div>
     </section>

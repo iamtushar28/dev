@@ -86,7 +86,7 @@ const MobileSidebar = () => {
 
                 {/* footer section */}
                 <div className='px-4 mt-4 text-sm text-zinc-500'>
-                    Made by <button className='underline text-blue-500'>Tushar</button>🥰. <br /> DEV Community © 2025.
+                    DEV Community © 2025.
                 </div>
 
             </div>

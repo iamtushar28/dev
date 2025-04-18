@@ -1,5 +1,4 @@
 'use client'
-
 import { useSession, signIn, signOut } from "next-auth/react";
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
@@ -19,8 +18,8 @@ const Navbar = () => {
 
     const { data: session } = useSession();
 
+    // for opening and closing profile menu
     const dispatch = useDispatch();
-
     const [openProfileMenu, setOpenProfileMenu] = useState(false);
     const wrapperRef = useRef(null);
     const buttonRef = useRef(null);
@@ -49,6 +48,29 @@ const Navbar = () => {
         };
     }, [openProfileMenu]); // Depend on `openProfileMenu` to correctly track its state
 
+    // for getting search result
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [showBox, setShowBox] = useState(false);
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (query.trim()) {
+                fetch(`/api/blog/search?title=${query}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        setResults(data);
+                        setShowBox(true);
+                    });
+            } else {
+                setResults([]);
+                setShowBox(false);
+            }
+        }, 600); // debounce delay
+
+        return () => clearTimeout(delayDebounce);
+    }, [query]);
+
 
     return (
         <nav className='z-50 w-full h-16 px-2 md:px-6 bg-white shadow-sm flex justify-between items-center fixed top-0 right-0 left-0'>
@@ -69,7 +91,7 @@ const Navbar = () => {
                 </Link>
 
                 {/* searchbar - hidden at mobile screen */}
-                <div className='hidden md:flex h-10 w-9/12 rounded border border-gray-300 hover:border-blue-500 hover:ring-2 hover:ring-blue-500 justify-center items-center relative transition-all duration-200'>
+                <div className='hidden md:flex h-10 w-[40rem] rounded border border-gray-300 hover:border-blue-500 hover:ring-2 hover:ring-blue-500 justify-center items-center relative transition-all duration-200'>
 
                     {/* search icon */}
                     <button className='h-10 w-10 text-xl font-semibold flex justify-center items-center'>
@@ -77,9 +99,44 @@ const Navbar = () => {
                     </button>
 
                     {/* search box */}
-                    <input type="text" placeholder='search...' className='h-10 w-full outline-none bg-transparent' />
+                    <input
+                        type="text"
+                        placeholder='search...'
+                        className='h-10 w-full outline-none bg-transparent'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
 
                 </div>
+
+                {/* search suggestion box */}
+                {showBox && results.length > 0 && (
+                    <div className="absolute top-14 left-[5.5rem] w-[40rem] max-h-[30rem] rounded bg-white shadow-sm border border-gray-300 overflow-y-auto">
+
+                        {/* searched blog */}
+                        {results.map((blog) => (
+                            <div
+                                key={blog.id}
+                                className="p-4 hover:bg-blue-50 cursor-pointer"
+                                onClick={() => {
+                                    // redirect to blog detail if needed
+                                    window.location.href = `/blog/${blog.id}`;
+                                }}
+                            >
+                                <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
+                                <h2 className="text-lg font-semibold">{blog.title}</h2>
+                                <h6 className="text-sm text-zinc-600">
+                                    {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}
+                                </h6>
+                            </div>
+                        ))}
+
+                    </div>
+                )}
 
             </section>
 
@@ -88,7 +145,7 @@ const Navbar = () => {
 
                 {/* search button - hidden at desktop */}
                 <Link
-                    href={'/'}
+                    href={'/search'}
                     className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                     <FiSearch />
                 </Link>
@@ -147,7 +204,6 @@ const Navbar = () => {
 
             </section>
 
-
             {/* section 3 - user modal (name, dashboard, settings, logout, reading list) */}
             {openProfileMenu && (
                 <section ref={wrapperRef} className='md:w-[17rem] h-fit p-4 bg-white rounded absolute top-[5rem] left-2 right-2 md:top-14 md:right-6 md:left-auto flex gap-2 flex-col justify-center items-start shadow z-50'>
@@ -174,8 +230,8 @@ const Navbar = () => {
 
                         {/* create post link */}
                         <Link
-                        href={'/new'}
-                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
+                            href={'/new'}
+                            className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
                             <TbWritingSign className='text-lg' />
                             create post
                         </Link>
