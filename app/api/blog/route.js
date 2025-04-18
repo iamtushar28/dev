@@ -69,7 +69,6 @@ export async function POST(req) {
 }
 
 
-// GET: Fetch blogs
 // GET: Fetch blogs with author info
 export async function GET(req) {
   try {
@@ -119,7 +118,7 @@ export async function GET(req) {
           title: 1,
           content: 1,
           createdAt: 1,
-          coverImage: 1,
+          // coverImage: 1,
           authorId: 1,
           creatorName: "$author.name",
           creatorProfile: "$author.image"

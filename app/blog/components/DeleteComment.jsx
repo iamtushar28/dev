@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { mutate } from "swr";
+import { RiDeleteBin6Line } from "react-icons/ri"; //delet icon
 
 const DeleteComment = ({ commentId, blogId }) => {
     const deleteComment = async () => {
@@ -21,9 +22,10 @@ const DeleteComment = ({ commentId, blogId }) => {
     return (
         <button
             onClick={deleteComment}
-            className="w-full flex items-start font-semibold text-red-500 cursor-pointer hover:bg-gray-100 p-2 rounded"
+           className='w-full px-4 py-2 text-zinc-800 font-semibold hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 transition-all duration-200'
         >
-            Delete 🗑️
+            <RiDeleteBin6Line/>
+            Delete
         </button>
     );
 };

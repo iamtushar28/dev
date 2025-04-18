@@ -153,11 +153,10 @@ const Navbar = () => {
                 <section ref={wrapperRef} className='md:w-[17rem] h-fit p-4 bg-white rounded absolute top-[5rem] left-2 right-2 md:top-14 md:right-6 md:left-auto flex gap-2 flex-col justify-center items-start shadow z-50'>
 
                     {/* user name */}
-                    <Link
-                        href={'/bloger'}
-                        className='w-full px-4 py-2 text-zinc-500 hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
+                    <button
+                        className='w-full px-4 py-2 text-black hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded'>
                         <h2 className='font-semibold capitalize'>{session.user.name}</h2>
-                    </Link>
+                    </button>
 
                     {/* devide line */}
                     <div className='h-[0.5px] w-full bg-zinc-200'></div>

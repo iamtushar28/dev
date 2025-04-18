@@ -6,6 +6,7 @@ import BlogDate from "@/app/components/BlogDate";
 import CommentsSkelaton from "./CommentsSkelaton";
 import { BsThreeDots } from "react-icons/bs";
 import DeleteComment from "./DeleteComment";
+import { TbWritingSign } from "react-icons/tb"; //writing icon
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -106,10 +107,13 @@ const CommentsList = ({ blogId }) => {
                                 <div
                                     ref={(el) => (wrapperRefs.current[comment._id] = el)}
                                     className="z-10 absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
+                                        
                                     <button
-                                        className="w-full flex items-start font-semibold cursor-pointer hover:bg-gray-100 p-2 rounded">
-                                        Edit 📝
+                                        className='w-full px-4 py-2 text-zinc-800 font-semibold hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 transition-all duration-200'>
+                                        <TbWritingSign />
+                                        Edit
                                     </button>
+
                                     <DeleteComment commentId={comment._id} blogId={blogId} />
                                 </div>
                             )}
