@@ -78,7 +78,7 @@ const Blog = () => {
 
   return (
     <section className="w-full md:w-[72%] lg:w-[60%]">
-      <div className="px-2 flex justify-between items-center relative">
+      <div className="px-2 md:px-0 flex justify-between items-center relative">
         <div className="flex gap-2">
           <button className="capitalize py-1 px-4 text-lg bg-white rounded font-semibold">
             discover

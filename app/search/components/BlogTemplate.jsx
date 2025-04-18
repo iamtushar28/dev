@@ -9,7 +9,7 @@ import { FaRegComment } from "react-icons/fa"; //comment icon
 
 const BlogTemplate = ({ blog }) => {
     return (
-        <div className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
+        <div className='w-full h-fit pb-2 pt-2 bg-white overflow-hidden md:rounded'>
 
             {/* blog info */}
             <div className='p-2 md:p-4'>
@@ -44,7 +44,7 @@ const BlogTemplate = ({ blog }) => {
 
                     {/* blog title */}
                     <Link
-                        href={`/blog/${blog.id}`} // Pass blog ID dynamically
+                        href={`/blog/${blog._id}`} // Pass blog ID dynamically
                         className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
                     >
                         {blog.title}
@@ -96,7 +96,7 @@ const BlogTemplate = ({ blog }) => {
 
                             {/* comment count */}
                             <Link
-                                href={`/blog/${blog.id}#comments`}
+                                href={`/blog/${blog._id}#comments`}
                                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />
                                 <CommentsCount blogId={blog._id} />

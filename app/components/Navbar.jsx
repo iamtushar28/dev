@@ -116,11 +116,11 @@ const Navbar = () => {
                         {/* searched blog */}
                         {results.map((blog) => (
                             <div
-                                key={blog.id}
+                                key={blog._id}
                                 className="p-4 hover:bg-blue-50 cursor-pointer"
                                 onClick={() => {
                                     // redirect to blog detail if needed
-                                    window.location.href = `/blog/${blog.id}`;
+                                    window.location.href = `/blog/${blog._id}`;
                                 }}
                             >
                                 <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
