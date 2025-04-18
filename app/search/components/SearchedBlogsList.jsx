@@ -24,7 +24,7 @@ const SearchedBlogsList = () => {
       setLoading(false);
     };
 
-    const delayDebounce = setTimeout(fetchBlogs, 400); // debounce
+    const delayDebounce = setTimeout(fetchBlogs, 600); // debounce
     return () => clearTimeout(delayDebounce);
   }, [query]);
 
