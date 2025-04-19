@@ -3,6 +3,7 @@ import MobileSidebar from "./components/MobileSidebar";
 import Navbar from "./components/Navbar";
 import "./globals.css";
 import ReduxProvider from "./redux-store/ReduxProvider"; // Import Redux Provider
+import DefaultAlert from "./components/DefaultAlert";
 
 export const metadata = {
   title: "DEV | Explore, Learn, Innovate",
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
           <AuthProvider> {/* Wrap with AuthProvider */}
             <Navbar />
             <MobileSidebar />
+            {/* <DefaultAlert/> */}
             {children}
           </AuthProvider>
         </ReduxProvider>

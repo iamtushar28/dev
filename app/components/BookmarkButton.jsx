@@ -1,61 +1,74 @@
-'use client';
-
+'use client'
 import { useSession } from 'next-auth/react';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
+import DefaultAlert from './DefaultAlert'; // Adjust path if needed
 
 const BookmarkButton = ({ blogId }) => {
   const { data: session } = useSession();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
-  // Check on mount if this blog is already bookmarked
   useEffect(() => {
     const checkBookmark = async () => {
       if (!session) return;
-
-      const res = await fetch(`/api/bookmarks?blogId=${blogId}`);
-      const data = await res.json();
-
-      if (data.bookmarked) {
-        setIsBookmarked(true);
+      try {
+        const res = await fetch(`/api/bookmarks?blogId=${blogId}`);
+        const data = await res.json();
+        if (data.bookmarked) {
+          setIsBookmarked(true);
+        }
+      } catch (err) {
+        console.error('Error checking bookmark:', err);
       }
     };
-
     checkBookmark();
   }, [session, blogId]);
 
   const handleToggleBookmark = async () => {
     if (!session) {
-      alert('Please login to bookmark blogs');
+      setAlertMessage('Please login to bookmark blogs');
       return;
     }
 
     const method = isBookmarked ? 'DELETE' : 'POST';
 
-    const res = await fetch('/api/bookmarks', {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ blogId }),
-    });
+    try {
+      const res = await fetch('/api/bookmarks', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blogId }),
+      });
 
-    if (res.ok) {
-      setIsBookmarked(!isBookmarked);
-    } else {
-      const data = await res.json();
-      console.error(data.error || 'Error toggling bookmark');
+      if (res.ok) {
+        setIsBookmarked(!isBookmarked);
+        setAlertMessage(isBookmarked ? 'Removed from bookmarks ❌' : 'Added to bookmarks ✅');
+      } else {
+        const data = await res.json();
+        setAlertMessage(data.error || 'Error toggling bookmark');
+      }
+    } catch (err) {
+      setAlertMessage('Something went wrong.');
     }
   };
 
   return (
-    <button
-      onClick={handleToggleBookmark}
-      className={`p-2 text-xl ${isBookmarked ? 'text-blue-600' : 'text-zinc-500'}`}
-      title={isBookmarked ? 'Remove Bookmark' : 'Bookmark this blog'}
-    >
-      {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-    </button>
+    <>
+      <button
+        onClick={handleToggleBookmark}
+        className={`p-2 text-xl ${isBookmarked ? 'text-blue-600' : 'text-zinc-500'}`}
+        title={isBookmarked ? 'Remove Bookmark' : 'Bookmark this blog'}
+      >
+        {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+      </button>
+
+      {alertMessage && (
+        <DefaultAlert
+          message={alertMessage}
+          onClose={() => setAlertMessage('')}
+        />
+      )}
+    </>
   );
 };
 

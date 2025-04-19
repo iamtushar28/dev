@@ -59,7 +59,7 @@ export async function POST(req) {
     };
 
     const result = await db.collection("blogs").insertOne(newBlog);
-    return NextResponse.json({ message: "Blog published successfully!", blogId: result.insertedId }, { status: 201 });
+    return NextResponse.json({ message: "Blog published successfully! ✅", blogId: result.insertedId }, { status: 201 });
 
   } catch (error) {
     console.error("POST /api/blog Error:", error);

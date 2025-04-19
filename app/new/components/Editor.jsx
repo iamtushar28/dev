@@ -10,6 +10,7 @@ import Heading from "@tiptap/extension-heading";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useSWRConfig } from "swr"; // Import SWR for cache update
 import Toolbar from "./Toolbar";
+import DefaultAlert from '../../components/DefaultAlert'
 
 const Editor = () => {
     const { mutate } = useSWRConfig(); // Use mutate to refresh blog list
@@ -18,6 +19,7 @@ const Editor = () => {
     const [coverImage, setCoverImage] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(""); // ✅ Alert message state
 
     // Adjust textarea height dynamically
     useEffect(() => {
@@ -70,7 +72,7 @@ const Editor = () => {
             setIsUploading(false);
 
             if (response.ok) {
-                alert(result.message);
+                setAlertMessage(result.message); // ✅ Success
 
                 // ✅ Clear editor after successful post
                 setTitle("");                        // Clear title
@@ -79,13 +81,13 @@ const Editor = () => {
                 setImageFile(null);                  // Reset image file reference
 
                 // ✅ Refresh the blog list after publishing
-                mutate("/api/blog"); 
+                mutate("/api/blog");
             } else {
-                alert(result.error || "Something went wrong.");
+                setAlertMessage(result.error || "Something went wrong."); // ✅ Error
             }
         } catch (error) {
             console.error("Error publishing blog:", error);
-            alert("Failed to publish blog.");
+            setAlertMessage("Failed to publish blog."); // ✅ Network/Error
             setIsUploading(false);
         }
     };
@@ -93,6 +95,12 @@ const Editor = () => {
 
     return (
         <div className="w-full md:w-[80%] min-h-screen py-4 px-2 md:py-8 md:px-8 bg-white rounded">
+
+            {/* ✅ Alert Component */}
+            {alertMessage && (
+                <DefaultAlert message={alertMessage} onClose={() => setAlertMessage('')} />
+            )}
+
             <h4 className="text-start font-semibold capitalize">Create Post</h4>
 
             {/* Cover Image Upload */}
@@ -121,10 +129,10 @@ const Editor = () => {
 
             {/* Blog Editor */}
             <div className="prose prose-lg prose-blue max-w-full">
-              <EditorContent
-              editor={editor}
-              className="mt-4 p-4 min-h-[300px] w-full text-black text-lg border border-gray-300 rounded-md prose-ul:list-disc prose-ol:list-decimal"
-              />
+                <EditorContent
+                    editor={editor}
+                    className="mt-4 p-4 min-h-[300px] w-full text-black text-lg border border-gray-300 rounded-md prose-ul:list-disc prose-ol:list-decimal"
+                />
             </div>
 
             {/* Save Button */}
