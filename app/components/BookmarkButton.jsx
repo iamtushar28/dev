@@ -42,7 +42,7 @@ const BookmarkButton = ({ blogId }) => {
 
       if (res.ok) {
         setIsBookmarked(!isBookmarked);
-        setAlertMessage(isBookmarked ? 'Removed from bookmarks ❌' : 'Added to bookmarks ✅');
+        setAlertMessage(isBookmarked ? 'Removed from bookmarks ❌' : 'Added to Reading list 📑');
       } else {
         const data = await res.json();
         setAlertMessage(data.error || 'Error toggling bookmark');

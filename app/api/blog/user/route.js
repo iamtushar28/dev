@@ -37,6 +37,11 @@ export async function GET(req) {
         }
       },
       {
+        $sort: {
+          createdAt: -1, // 🆕 Sort by newest date first
+        },
+      },
+      {
         $project: {
           _id: 1,
           title: 1,
