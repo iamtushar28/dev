@@ -1,21 +1,20 @@
+"use client";
 import React from 'react'
 import Link from 'next/link'
 import CommentsCount from './CommentsCount';
-import { MdOutlineAddReaction } from "react-icons/md"; //reaction, bookmark icon
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { BsThreeDots } from "react-icons/bs"; // setting icon
 import BookmarkButton from '@/app/components/BookmarkButton';
+import MobileReactionButton from './MobileReactionButton';
 
 const MobileBlogSidebar = ({ blog }) => {
+
     return (
         <div className='block md:hidden'>
             <section className='z-20 flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
 
                 {/* like/reaction button */}
-                <button className='text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-2 items-center'>
-                    <MdOutlineAddReaction className='text-2xl' />
-                    16
-                </button>
+                <MobileReactionButton blogId={blog._id} />
 
                 {/* comment button */}
                 <Link
