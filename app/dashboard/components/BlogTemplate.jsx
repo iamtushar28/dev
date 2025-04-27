@@ -121,30 +121,15 @@ const BlogTemplate = ({ blog }) => {
                         <div className='flex gap-2'>
 
                             {/* reactions */}
-                            <button className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
-
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>
-                                    💖
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>
-                                    🦄
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>
-                                    😲
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>
-                                    🔥
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>
-                                    ✨
-                                </div>
-
-                                {/* reactions count */}
-                                <div className='w-24 h-6 text-zinc-500 absolute left-[5.8rem] top-2 text-sm'>
-                                    284 rections
-                                </div>
-
-                            </button>
+                            <Link
+                                href={`/blog/${blog._id}`}
+                                className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>🦄</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>🔥</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
+                            </Link>
 
                             {/* comment count */}
                             <Link
