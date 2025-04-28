@@ -81,7 +81,7 @@ const BlogTemplate = ({ blog }) => {
             <div className='flex gap-2'>
               <Link
                 href={`/blog/${blog._id}`}
-                className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
+                className='h-8 w-fit hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>🦄</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
