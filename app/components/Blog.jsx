@@ -1,54 +1,20 @@
 "use client";
-import useSWR from "swr";
 import React, { useState, useRef, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import BlogTemplate from "./BlogTemplate";
 import SkeletonLoader from "./SkeletonLoader";
-
-// Fetcher function with optimized parallel author fetching
-const fetcher = async (url) => {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Failed to fetch data");
-
-  const data = await response.json();
-
-  if (!data.blogs || data.blogs.length === 0) return { blogs: [] };
-
-  // Extract unique author IDs
-  const authorIds = [...new Set(data.blogs.map(blog => blog.authorId).filter(Boolean))];
-
-  // Fetch all authors in parallel
-  const authorResponses = await Promise.all(
-    authorIds.map(id => fetch(`/api/user/${id}`).then(res => res.ok ? res.json() : null))
-  );
-
-  // Map authorId to author details
-  const authorMap = authorResponses.reduce((acc, author, index) => {
-    if (author) acc[authorIds[index]] = author;
-    return acc;
-  }, {});
-
-  // Attach author details to each blog
-  const blogsWithAuthors = data.blogs.map(blog => ({
-    ...blog,
-    creatorName: authorMap[blog.authorId]?.name || "Unknown",
-    creatorProfile: authorMap[blog.authorId]?.image || null,
-  }));
-
-  return { blogs: blogsWithAuthors };
-};
+import { useQuery } from "@apollo/client";
+import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 
 const Blog = () => {
-  const { data, error, isLoading, isValidating } = useSWR("/api/blog", fetcher, {
-    revalidateOnFocus: true, // Auto-refresh when user returns
-    refreshInterval: 60000, // Auto-refresh every 30 seconds
+  const { data, loading, error } = useQuery(GET_BLOGS, {
+    fetchPolicy: "cache-and-network",
+    pollInterval: 60000, // Refresh every 60s
   });
 
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const wrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
-
-  const [hasLoaded, setHasLoaded] = useState(false); // Track if data has been fetched
 
   // Close filter menu when clicking outside
   useEffect(() => {
@@ -66,15 +32,6 @@ const Blog = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    if (data && data.blogs) {
-      setHasLoaded(true); // Set to true once data is fetched
-    }
-  }, [data]);
-
-  // Show skeleton only until data has been loaded
-  const shouldShowSkeleton = isLoading && !hasLoaded;
 
   return (
     <section className="w-full md:w-[72%] lg:w-[60%]">
@@ -99,11 +56,20 @@ const Blog = () => {
 
         {/* Filter Menu */}
         {openFilterMenu && (
-          <div ref={wrapperRef} className="absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
+          <div
+            ref={wrapperRef}
+            className="absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48"
+          >
             <ul className="space-y-2">
-              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">Newest⚡</li>
-              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">Most Popular♥️</li>
-              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">Trending🚀</li>
+              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">
+                Newest⚡
+              </li>
+              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">
+                Most Popular♥️
+              </li>
+              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded">
+                Trending🚀
+              </li>
             </ul>
           </div>
         )}
@@ -111,12 +77,21 @@ const Blog = () => {
 
       {/* Blog List Section */}
       <div className="mt-2 flex flex-col gap-3">
-        {shouldShowSkeleton ? (
+        {loading ? (
           <SkeletonLoader />
         ) : error ? (
           <p className="text-red-500">Failed to load blogs.</p>
         ) : data?.blogs?.length > 0 ? (
-          data.blogs.map((blog) => <BlogTemplate key={blog._id} blog={blog} />)
+          data.blogs.map((blog) => (
+            <BlogTemplate
+              key={blog._id}
+              blog={{
+                ...blog,
+                creatorName: blog.author?.name || "Unknown",
+                creatorProfile: blog.author?.image || null,
+              }}
+            />
+          ))
         ) : (
           <p>No blogs found.</p>
         )}

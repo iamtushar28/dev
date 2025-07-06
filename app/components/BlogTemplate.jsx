@@ -3,7 +3,6 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import BlogDate from './BlogDate'
-import CommentsCount from '../blog/components/CommentsCount'
 import BookmarkButton from './BookmarkButton'
 import { useInView } from 'react-intersection-observer'
 import { FaRegComment } from "react-icons/fa"
@@ -93,7 +92,7 @@ const BlogTemplate = ({ blog }) => {
                 href={`/blog/${blog._id}#comments`}
                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                 <FaRegComment className='text-lg' />
-                <CommentsCount blogId={blog._id} />
+                {blog.commentsCount} comment{blog.commentsCount !== 1 ? "s" : ""}
               </Link>
             </div>
 
