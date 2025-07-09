@@ -8,6 +8,7 @@ import Comments from './Comments'
 import CommentsCount from './CommentsCount'
 
 const BlogPost = ({ blog, author }) => {
+
     const [reactions, setReactions] = useState({
         like: 0,
         unicorn: 0,
@@ -68,7 +69,14 @@ const BlogPost = ({ blog, author }) => {
                     {/* name & date of blog post */}
                     <div>
                         <h2 className='font-semibold'>{author.name}</h2>
-                        <BlogDate createdAt={blog?.createdAt} />
+                        <p className="text-sm text-zinc-500">
+                            {new Date(blog?.createdAt).toLocaleDateString(undefined, {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                            })}
+                        </p>
+
                     </div>
                 </div>
 

@@ -7,10 +7,9 @@ import { useQuery } from "@apollo/client";
 import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 
 const Blog = () => {
-  const { data, loading, error } = useQuery(GET_BLOGS, {
-    fetchPolicy: "cache-and-network",
-    pollInterval: 60000, // Refresh every 60s
-  });
+
+  //getting blogs
+  const { data, loading, error } = useQuery(GET_BLOGS);
 
   const [openFilterMenu, setOpenFilterMenu] = useState(false);
   const wrapperRef = useRef(null);

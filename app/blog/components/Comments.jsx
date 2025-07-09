@@ -84,10 +84,21 @@ const CommentsList = ({ blogId }) => {
                     <div className="w-full p-3 border-[0.3px] border-zinc-100 rounded relative">
                         <div className="flex justify-between items-center">
                             <div className="flex flex-col md:flex-row md:items-center md:gap-2 mb-2">
+
+                                {/* name of commenter */}
                                 <h4 className="font-semibold text-zinc-600 capitalize">
                                     {comment.userName}
                                 </h4>
-                                <BlogDate createdAt={comment.createdAt} />
+                                
+                                {/* comment date */}
+                                <p className="text-sm text-zinc-500">
+                                    {new Date(comment?.createdAt).toLocaleDateString(undefined, {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                    })}
+                                </p>
+
                             </div>
 
                             {/* ✅ Only show options if comment was written by the current user */}
@@ -107,7 +118,7 @@ const CommentsList = ({ blogId }) => {
                                 <div
                                     ref={(el) => (wrapperRefs.current[comment._id] = el)}
                                     className="z-10 absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
-                                        
+
                                     <button
                                         className='w-full px-4 py-2 text-zinc-800 font-semibold hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 transition-all duration-200'>
                                         <TbWritingSign />

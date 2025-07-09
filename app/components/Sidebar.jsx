@@ -19,7 +19,7 @@ const Sidebar = () => {
             ))}
 
             {/* other links */}
-            <div className=''>
+            <div className='hidden'>
                 <h4 className='capitalize font-semibold text-zinc-800 mt-3 mb-3'>others</h4>
 
                 <button className='w-full px-4 py-2 text-zinc-600 hover:text-blue-500 hover:bg-blue-100 capitalize text-start rounded flex items-center gap-2 hover:scale-95 transition-all duration-200'>
@@ -40,7 +40,7 @@ const Sidebar = () => {
             </div>
 
             {/* social links */}
-            <div className='px-4'>
+            <div className='px-4 hidden'>
 
                 <h4 className='capitalize font-semibold text-zinc-800 mt-3 mb-3'>social links</h4>
 
@@ -60,7 +60,7 @@ const Sidebar = () => {
             </div>
 
             {/* footer section */}
-            <div className='px-4 mt-4 text-sm text-zinc-500'>
+            <div className='px-4 mt-4 text-sm text-zinc-500 hidden'>
                 DEV Community © 2025.
             </div>
 

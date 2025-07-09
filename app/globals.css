@@ -38,8 +38,15 @@ body {
   animation: shimmer 2.9s infinite linear;
 }
 
-::-webkit-scrollbar{
-  scroll-behavior: smooth;
+/* For all scrollable elements */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* Internet Explorer 10+ */
 }
 
 
