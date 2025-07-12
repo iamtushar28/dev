@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
-import BlogDate from "@/app/components/BlogDate";
 import CommentsSkelaton from "./CommentsSkelaton";
 import { BsThreeDots } from "react-icons/bs";
 import DeleteComment from "./DeleteComment";

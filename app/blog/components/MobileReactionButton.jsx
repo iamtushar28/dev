@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { MdOutlineAddReaction } from "react-icons/md"; //reaction icon
 import { useSession } from "next-auth/react";
 
-const MobileReactionButton = ({ blogId }) => {
+const MobileReactionButton = ({ blog, blogId }) => {
 
     const [showOptions, setShowOptions] = useState(false); // for showing reaction block on click
     const wrapperRef = useRef(null);
@@ -92,6 +92,7 @@ const MobileReactionButton = ({ blogId }) => {
                 onClick={() => setShowOptions(true)}
                 className='text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-2 items-center'>
                 <MdOutlineAddReaction className='text-2xl' />
+                {blog.totalReactionsCount ?? '0'}
             </button>
 
             {/* reaction block */}

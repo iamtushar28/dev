@@ -1,7 +1,6 @@
 "use client";
 import React from 'react'
 import Link from 'next/link'
-import CommentsCount from './CommentsCount';
 import { FaRegComment } from "react-icons/fa"; //comment icon
 import { BsThreeDots } from "react-icons/bs"; // setting icon
 import BookmarkButton from '@/app/components/BookmarkButton';
@@ -14,14 +13,14 @@ const MobileBlogSidebar = ({ blog }) => {
             <section className='z-20 flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
 
                 {/* like/reaction button */}
-                <MobileReactionButton blogId={blog._id} />
+                <MobileReactionButton blogId={blog._id} blog={blog} />
 
                 {/* comment button */}
                 <Link
                     href={`/blog/${blog._id}#comments`}
                     className='text-zinc-600 hover:text-blue-500 transition-all duration-200 flex gap-2 items-center'>
                     <FaRegComment className='text-2xl' />
-                    <CommentsCount blogId={blog._id} />
+                    {blog.commentsCount}
                 </Link>
 
                 {/* bookmark button */}

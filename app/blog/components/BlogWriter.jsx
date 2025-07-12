@@ -5,6 +5,8 @@ import { FiExternalLink } from "react-icons/fi"; //calender, link icon
 
 
 const BlogWriter = ({ author }) => {
+    console.log("joinedAt value:", author?.joinedAt);
+
     return (
         <section className='w-full md:w-[26%] flex flex-col gap-4'>
             {/* section 1 - author detils */}
@@ -79,11 +81,16 @@ const BlogWriter = ({ author }) => {
                     <div className='px-4 mt-4'>
                         <h4 className='text-zinc-600 font-semibold text-xs uppercase'>joined date</h4>
                         <h3 className='text-zinc-500 text-sm mt-1'>
-                            {new Date(author?.joinedAt).toLocaleDateString('en-GB', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric'
-                            })}
+                            <p>
+                                {author?.joinedAt
+                                    ? new Date(Number(author.joinedAt)).toLocaleDateString("en-GB", {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                    })
+                                    : "Unknown"}
+                            </p>
+
                         </h3>
                     </div>
                 </div>

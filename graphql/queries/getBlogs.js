@@ -10,6 +10,7 @@ export const GET_BLOGS = gql`
       createdAt
       updatedAt
       commentsCount
+      totalReactionsCount
       author {
         _id
         name

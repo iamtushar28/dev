@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { MdOutlineAddReaction } from "react-icons/md";
 import { useSession } from "next-auth/react";
 
-const ReactionButton = ({ blogId }) => {
+const ReactionButton = ({ blog, blogId }) => {
     const { data: session } = useSession();
     const [showOptions, setShowOptions] = useState(false);
 
@@ -32,6 +32,8 @@ const ReactionButton = ({ blogId }) => {
         fetchReactions();
     }, []);
 
+
+    //allow react only if login
     const handleReaction = async (reactionType) => {
         if (!session?.user?.id) {
             alert('Please login.');
@@ -60,8 +62,6 @@ const ReactionButton = ({ blogId }) => {
         }
     };
 
-
-
     return (
         <>
             {/* like/reaction button */}
@@ -70,6 +70,7 @@ const ReactionButton = ({ blogId }) => {
                 onMouseLeave={() => setShowOptions(false)}
                 className='text-zinc-600 hover:text-pink-500 w-16 transition-all duration-200 flex flex-col justify-center items-center'>
                 <MdOutlineAddReaction className='text-2xl' />
+                {blog.totalReactionsCount ?? '0'}
             </button>
 
             {/* reaction block */}

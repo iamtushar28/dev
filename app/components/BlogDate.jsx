@@ -34,8 +34,9 @@ const BlogDate = ({ createdAt }) => {
 
   return (
     <p className="text-sm text-zinc-500">
-      {formattedDate}
-      {relativeTime}
+      {timeDifference < ONE_DAY
+        ? formatDistanceToNowStrict(createdDate, { addSuffix: true })
+        : formattedDate}
     </p>
   );
 };

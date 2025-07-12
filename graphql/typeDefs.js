@@ -10,6 +10,8 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     commentsCount: Int
+    totalReactionsCount: Int
+    reactions: ReactionCounts
     author: User
   }
 
@@ -17,6 +19,19 @@ export const typeDefs = gql`
     _id: ID!
     name: String!
     image: String
+    bio: String
+    location: String
+    website: String
+    brandColor: String
+    joinedAt: String
+  }
+
+  type ReactionCounts {
+    like: Int
+    unicorn: Int
+    excite: Int
+    fire: Int
+    star: Int
   }
 
   type Query {

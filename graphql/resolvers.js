@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 
 export const resolvers = {
   Blog: {
-
     //getting blog's author
     author: async (parent, _, context) => {
       try {
@@ -20,6 +19,63 @@ export const resolvers = {
       return await context.db
         .collection("comments")
         .countDocuments({ blog_id: new ObjectId(parent._id) });
+    },
+
+    // Fetch blog reactions
+    reactions: async (parent, _, context) => {
+      try {
+        const blogId = parent._id.toString();
+
+        const reactionDoc = await context.db
+          .collection("reactions")
+          .findOne({ blogId });
+
+        if (!reactionDoc) {
+          return { like: 0, unicorn: 0, excite: 0, fire: 0, star: 0 };
+        }
+
+        return {
+          like: reactionDoc.like || 0,
+          unicorn: reactionDoc.unicorn || 0,
+          excite: reactionDoc.excite || 0,
+          fire: reactionDoc.fire || 0,
+          star: reactionDoc.star || 0,
+        };
+      } catch (error) {
+        console.error("Error fetching reactions:", error);
+        return { like: 0, unicorn: 0, excite: 0, fire: 0, star: 0 };
+      }
+    },
+
+    //featching total reactions count for blog
+    totalReactionsCount: async (parent, _, context) => {
+      try {
+        const blogId = parent._id?.toString();
+        console.log("Looking up reactions for Blog ID:", blogId);
+
+        if (!blogId) return 0;
+
+        const reaction = await context.db
+          .collection("reactions")
+          .findOne({ blogId });
+
+        console.log("Reaction doc found:", reaction);
+
+        if (!reaction) return 0;
+
+        const {
+          like = 0,
+          unicorn = 0,
+          excite = 0,
+          fire = 0,
+          star = 0,
+        } = reaction;
+
+        return like + unicorn + excite + fire + star;
+      } catch (error) {
+        console.error("Error calculating totalReactionsCount:", error);
+        return 0;
+      }
     },
   },
 
