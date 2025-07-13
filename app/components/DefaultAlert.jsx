@@ -3,22 +3,25 @@ import Link from 'next/link';
 
 const DefaultAlert = ({ message, onClose }) => {
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 z-50 h-screen w-full px-2 flex justify-center items-center bg-black bg-opacity-75'>
-      <div className='w-full md:w-[36rem] h-fit py-8 bg-white rounded flex gap-4 flex-col justify-center items-center'>
+    <div className='fixed inset-0 z-50 px-2 bg-black/5 backdrop-blur-sm flex items-center justify-center'>
+      <div className='bg-white p-6 rounded-xl shadow-lg text-start max-w-md w-full'>
         {/* brand logo */}
         <Link
           href={'/'}
-          className='bg-black hidden text-white text-xl h-fit px-2 py-1 font-bold uppercase rounded'>
+          className='bg-black text-white text-base h-fit p-2 font-bold uppercase rounded'>
           Dev
         </Link>
 
-        <p className='text-lg font-semibold text-center px-4'>{message}</p>
+        <p className='text-base mt-6 mb-4'>{message}</p>
 
-        <button
-          className='px-4 py-2 text-white font-semibold bg-black rounded'
-          onClick={onClose}>
-          Continue
-        </button>
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 text-sm font-semibold rounded-3xl text-white bg-green-500 hover:bg-green-600 transition"
+            onClick={onClose}>
+            Continue
+          </button>
+        </div>
+
       </div>
     </div>
   );

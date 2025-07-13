@@ -1,29 +1,29 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
 
-const DeleteAlert = ({ message, onClose, onConfirm }) => {
+const DeleteAlert = ({ title, message, onClose, onConfirm }) => {
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 z-[60] h-screen w-full px-2 flex justify-center items-center bg-black bg-opacity-75'>
-      <div className='w-full md:w-[36rem] h-fit py-8 bg-white rounded flex gap-6 flex-col justify-center items-center'>
-        <Link
-          href={'/'}
-          className='bg-black hidden text-white text-xl h-fit px-2 py-1 font-bold uppercase rounded'>
-          Dev
-        </Link>
+    <div className="fixed inset-0 z-50 px-2 bg-black/5 backdrop-blur-sm flex items-center justify-center">
+      <div className="bg-white p-6 rounded-xl shadow-lg text-start max-w-md w-full">
 
-        <p className='font-semibold text-center px-4'>{message}</p>
+        <p className="text-lg text-gray-800 mb-4 font-semibold">{title}</p>
+        <p className="text-base text-gray-800 mb-4">{message}</p>
 
-        <div className='flex gap-12 items-center'>
+        <div className="flex justify-end gap-4">
+
           <button
-            className='px-4 py-2 text-white font-semibold bg-red-500 hover:bg-red-600 rounded'
-            onClick={onConfirm}>
-            Delete
-          </button>
-          <button
-            className='px-4 py-2 text-black font-semibold border border-black hover:bg-zinc-100 rounded'
-            onClick={onClose}>
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-semibold text-gray-800 rounded-3xl border border-zinc-300 hover:bg-zinc-100 transition"
+          >
             Cancel
           </button>
+
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 text-sm font-semibold text-white rounded-3xl bg-red-500 hover:bg-red-600 transition"
+          >
+            Delete
+          </button>
+
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
-
+import { useApolloClient } from "@apollo/client";
+import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useState, useRef, useEffect } from "react";
 import StarterKit from "@tiptap/starter-kit";
@@ -8,12 +9,11 @@ import ListItem from "@tiptap/extension-list-item";
 import Color from "@tiptap/extension-color";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useSWRConfig } from "swr"; // Import SWR for cache update
 import Toolbar from "./Toolbar";
 import DefaultAlert from '../../components/DefaultAlert'
 
 const Editor = () => {
-    const { mutate } = useSWRConfig(); // Use mutate to refresh blog list
+    const client = useApolloClient(); //initialize client
     const [title, setTitle] = useState("");
     const textareaRef = useRef(null);
     const [coverImage, setCoverImage] = useState(null);
@@ -80,8 +80,12 @@ const Editor = () => {
                 setCoverImage(null);                 // Remove cover image preview
                 setImageFile(null);                  // Reset image file reference
 
-                // ✅ Refresh the blog list after publishing
-                mutate("/api/blog");
+                // ✅ Ask Apollo to re-fetch blogs from the server
+                await client.query({
+                    query: GET_BLOGS,
+                    fetchPolicy: "network-only", // force refresh from server
+                });
+                
             } else {
                 setAlertMessage(result.error || "Something went wrong."); // ✅ Error
             }

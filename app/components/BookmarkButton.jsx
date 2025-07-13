@@ -40,6 +40,11 @@ const BookmarkButton = ({ blogId }) => {
         body: JSON.stringify({ blogId }),
       });
 
+      if (!res.ok) throw new Error('Failed to toggle bookmark');
+
+      // Update state immediately
+      setIsBookmarked((prev) => !prev);
+
     } catch (err) {
       setAlertMessage('Something went wrong.');
     }

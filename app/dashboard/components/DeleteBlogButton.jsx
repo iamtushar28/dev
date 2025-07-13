@@ -1,10 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { mutate } from "swr";
+import { useApolloClient } from "@apollo/client";
+import { GET_USER_BLOGS } from "@/graphql/queries/getUserBlogs";
+import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import DeleteAlert from "../../components/DeleteAlert";
 
 const DeleteBlogButton = ({ blogId }) => {
+  const client = useApolloClient(); //initialize client
+
   const [showModal, setShowModal] = useState(false);
 
   const handleDeleteConfirmed = async () => {
@@ -21,8 +25,19 @@ const DeleteBlogButton = ({ blogId }) => {
         return;
       }
 
-      mutate("/api/blog/user");
+      // ✅ Ask Apollo to re-fetch both blogs and user blogs
+      await client.query({
+        query: GET_BLOGS,
+        fetchPolicy: "network-only", //refresh blog at home page
+      });
+
+      await client.query({
+        query: GET_USER_BLOGS,
+        fetchPolicy: "network-only", //refresh blogs at dashboard
+      });
+
       setShowModal(false); // Close modal after successful deletion
+
     } catch (error) {
       console.error("Delete failed:", error);
       alert("Something went wrong.");
@@ -41,7 +56,8 @@ const DeleteBlogButton = ({ blogId }) => {
 
       {showModal && (
         <DeleteAlert
-          message="Are you sure you want to delete this blog post?"
+          title="Delet Blog?"
+          message="This will delete blog post."
           onClose={() => setShowModal(false)}
           onConfirm={handleDeleteConfirmed}
         />
