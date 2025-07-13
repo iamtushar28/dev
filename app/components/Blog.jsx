@@ -47,6 +47,7 @@ const Blog = () => {
         {/* Filter Button */}
         <button
           ref={filterButtonRef}
+          title="blog filter button"
           onClick={() => setOpenFilterMenu(!openFilterMenu)}
           className="text-xl h-8 w-8 rounded-full hover:bg-blue-100 hover:text-blue-500 transition-all duration-300 flex justify-center items-center"
         >

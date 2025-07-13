@@ -1,4 +1,6 @@
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const resolvers = {
   Blog: {
@@ -51,15 +53,12 @@ export const resolvers = {
     totalReactionsCount: async (parent, _, context) => {
       try {
         const blogId = parent._id?.toString();
-        console.log("Looking up reactions for Blog ID:", blogId);
 
         if (!blogId) return 0;
 
         const reaction = await context.db
           .collection("reactions")
           .findOne({ blogId });
-
-        console.log("Reaction doc found:", reaction);
 
         if (!reaction) return 0;
 
@@ -121,6 +120,46 @@ export const resolvers = {
       } catch (error) {
         console.error("Failed to fetch user:", error);
         throw new Error("Failed to fetch user");
+      }
+    },
+
+    //getting blog of logged-in user
+    getUserBlogs: async (_, __, context) => {
+      const session = context.session;
+
+      if (!session || !session.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const userId = session.user.id;
+
+      const blogs = await context.db
+        .collection("blogs")
+        .find({ authorId: new ObjectId(userId) })
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      return blogs.map((blog) => ({
+        ...blog,
+        _id: blog._id.toString(),
+        authorId: blog.authorId?.toString(),
+      }));
+    },
+
+    // Search blogs by title
+    searchBlogs: async (_, { title }, context) => {
+      try {
+        const regex = new RegExp(title, "i"); // case-insensitive match
+        const blogs = await context.db
+          .collection("blogs")
+          .find({ title: { $regex: regex } })
+          .sort({ createdAt: -1 })
+          .toArray();
+
+        return blogs;
+      } catch (error) {
+        console.error("Error searching blogs:", error);
+        throw new Error("Failed to search blogs");
       }
     },
   },

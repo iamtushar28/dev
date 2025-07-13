@@ -39,5 +39,12 @@ export const typeDefs = gql`
     blog(id: ID!): Blog
     users: [User!]!
     user(id: ID!): User
+    
+
+    # For logged-in user's blogs
+    getUserBlogs: [Blog!]!
+
+    # for searching blog
+    searchBlogs(title: String!): [Blog!]!
   }
 `;

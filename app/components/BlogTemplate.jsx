@@ -78,23 +78,29 @@ const BlogTemplate = ({ blog }) => {
           {/* Reactions, Comments, Save */}
           <div className='mt-4 flex justify-between items-center'>
             <div className='flex gap-4 md:gap-8'>
+
+              {/* reaction count */}
               <Link
                 href={`/blog/${blog._id}`}
-                className='h-8 w-36 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
+                title='add reaction on blog'
+                className='h-8 w-36 md:w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>🦄</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>🔥</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
-                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.3rem] top-1'>{blog.totalReactionsCount ?? '0'}</div> 
+                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>{blog.totalReactionsCount ?? '0'} <span className='text-xs ml-2 hidden md:block'>Reactions</span></div>
 
               </Link>
 
+              {/* comments count */}
               <Link
                 href={`/blog/${blog._id}#comments`}
+                title='comment on blog'
                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                 <FaRegComment className='text-lg' />
                 {blog.commentsCount}
+                <span className='text-xs hidden md:block'>Comments</span>
               </Link>
             </div>
 

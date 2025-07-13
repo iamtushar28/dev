@@ -5,4 +5,5 @@ import { resolvers } from "./resolvers";
 export const schema = createSchema({
   typeDefs,
   resolvers,
+  
 });

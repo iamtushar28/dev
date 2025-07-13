@@ -1,4 +1,3 @@
-// /graphql/queries/getBlogById.js
 import { gql } from "@apollo/client";
 
 export const GET_BLOG_BY_ID = gql`

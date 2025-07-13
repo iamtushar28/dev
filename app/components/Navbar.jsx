@@ -146,6 +146,7 @@ const Navbar = () => {
                 {/* search button - hidden at desktop */}
                 <Link
                     href={'/search'}
+                    title="search"
                     className='md:hidden h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center'>
                     <FiSearch />
                 </Link>
@@ -194,6 +195,7 @@ const Navbar = () => {
                         <div className=''>
                             <Link
                                 href={'/signin'}
+                                name="login button"
                                 className='p-2 capitalize border border-blue-500 text-blue-500 font-semibold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 flex gap-1 items-center'>
                                 Log In
                             </Link>

@@ -1,32 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { GET_BLOGS } from "@/graphql/queries/getBlogs";
+import { GET_SEARCHED_BLOGS } from "@/graphql/queries/getSearchedBlogs";
 import SkeletonList from "./SkeletonList";
 import BlogTemplate from "./BlogTemplate";
 import { FiSearch } from "react-icons/fi";
 
 const SearchedBlogsList = () => {
   const [query, setQuery] = useState("");
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch blogs (all or by search)
+  // Get all blogs by default
+  const { data: allData, loading: loadingAll } = useQuery(GET_BLOGS);
+
+  // Lazy query for search
+  const [searchBlogs, { data: searchData, loading: loadingSearch }] = useLazyQuery(GET_SEARCHED_BLOGS);
+
+  // Trigger search
   useEffect(() => {
-    const fetchBlogs = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/blog/search?title=${encodeURIComponent(query.trim())}`);
-        const data = await res.json();
-        setBlogs(data || []);
-      } catch (err) {
-        console.error("Failed to fetch blogs:", err);
-        setBlogs([]);
-      }
-      setLoading(false);
-    };
+    if (query.trim()) {
+      const delay = setTimeout(() => {
+        searchBlogs({ variables: { title: query.trim() } });
+      }, 1000);
+      return () => clearTimeout(delay);
+    }
+  }, [query, searchBlogs]);
 
-    const delayDebounce = setTimeout(fetchBlogs, 600); // debounce
-    return () => clearTimeout(delayDebounce);
-  }, [query]);
+  const blogs = query.trim()
+    ? searchData?.searchBlogs ?? []
+    : allData?.blogs ?? [];
+
+  const loading = query.trim() ? loadingSearch : loadingAll;
 
   return (
     <>
@@ -48,7 +52,6 @@ const SearchedBlogsList = () => {
 
       {/* Blog list */}
       <div className="w-full md:w-[74%] h-fit">
-        {/* quick filter section */}
         <div className="flex justify-end gap-2">
           <button className="w-fit px-3 py-1 text-sm font-semibold capitalize text-blue-500 bg-white rounded">
             Popular
@@ -61,14 +64,11 @@ const SearchedBlogsList = () => {
           </button>
         </div>
 
-        {/* Blog List Section */}
         <div className="flex flex-col gap-3 mt-5">
           {loading ? (
             <SkeletonList />
           ) : blogs.length > 0 ? (
-            blogs.map((blog) => (
-              <BlogTemplate key={blog._id} blog={blog} />
-            ))
+            blogs.map((blog) => <BlogTemplate key={blog._id} blog={blog} />)
           ) : (
             <p>No blogs found.</p>
           )}
