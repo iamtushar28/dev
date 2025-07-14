@@ -6,6 +6,7 @@ import BlogPost from "../components/BlogPost";
 import BlogSidebar from "../components/BlogSidebar";
 import BlogWriter from "../components/BlogWriter";
 import MobileBlogSidebar from "../components/MobileBlogSidebar";
+import BlogSkelaton from "../components/BlogSkelaton";
 
 export default function BlogPage() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export default function BlogPage() {
   });
 
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <BlogSkelaton/>;
   if (error || !data?.blog) return <p>Error loading blog.</p>;
 
   const blog = data.blog;
