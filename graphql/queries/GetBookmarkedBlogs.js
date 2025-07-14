@@ -1,13 +1,15 @@
 import { gql } from "@apollo/client";
 
-export const GET_SEARCHED_BLOGS = gql`
-  query GetSearchedBlogs($title: String!) {
-    searchBlogs(title: $title) {
+export const GET_BOOKMARKED_BLOGS = gql`
+  query GetBookmarkedBlogs {
+    bookmarkedBlogs {
       _id
       title
+      description
+      coverImage
       createdAt
-      commentsCount
       bookmarked
+      commentsCount
       totalReactionsCount
       author {
         _id

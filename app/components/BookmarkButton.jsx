@@ -1,29 +1,21 @@
-'use client'
+'use client';
+
 import { useSession } from 'next-auth/react';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 import { useState, useEffect } from 'react';
-import DefaultAlert from './DefaultAlert'; // Adjust path if needed
+import { useApolloClient } from '@apollo/client';
+import { GET_BOOKMARKED_BLOGS } from '@/graphql/queries/GetBookmarkedBlogs';
+import DefaultAlert from './DefaultAlert';
 
-const BookmarkButton = ({ blogId }) => {
+const BookmarkButton = ({ blogId, initiallyBookmarked }) => {
   const { data: session } = useSession();
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(initiallyBookmarked);
   const [alertMessage, setAlertMessage] = useState('');
+  const client = useApolloClient();
 
   useEffect(() => {
-    const checkBookmark = async () => {
-      if (!session) return;
-      try {
-        const res = await fetch(`/api/bookmarks?blogId=${blogId}`);
-        const data = await res.json();
-        if (data.bookmarked) {
-          setIsBookmarked(true);
-        }
-      } catch (err) {
-        console.error('Error checking bookmark:', err);
-      }
-    };
-    checkBookmark();
-  }, [session, blogId]);
+    setIsBookmarked(initiallyBookmarked);
+  }, [initiallyBookmarked]);
 
   const handleToggleBookmark = async () => {
     if (!session) {
@@ -31,9 +23,12 @@ const BookmarkButton = ({ blogId }) => {
       return;
     }
 
-    const method = isBookmarked ? 'DELETE' : 'POST';
+    const optimisticState = !isBookmarked;
+    setIsBookmarked(optimisticState);
 
     try {
+      const method = optimisticState ? 'POST' : 'DELETE';
+
       const res = await fetch('/api/bookmarks', {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -42,10 +37,30 @@ const BookmarkButton = ({ blogId }) => {
 
       if (!res.ok) throw new Error('Failed to toggle bookmark');
 
-      // Update state immediately
-      setIsBookmarked((prev) => !prev);
+      // ✅ Update local bookmark icon state on the blog card
+      client.cache.modify({
+        id: client.cache.identify({ __typename: 'Blog', _id: blogId }),
+        fields: {
+          bookmarked() {
+            return optimisticState;
+          },
+        },
+      });
+
+      // ✅ Refetch the reading list (will add/remove the blog automatically)
+      await client.refetchQueries({
+        include: ['GetBookmarkedBlogs', 'GetUserBlogs'],
+      });
+
+      client.query({
+        query: GET_BOOKMARKED_BLOGS,
+        fetchPolicy: 'network-only',
+      });
+
 
     } catch (err) {
+      console.error('Bookmark toggle failed:', err);
+      setIsBookmarked((prev) => !prev); // revert
       setAlertMessage('Something went wrong.');
     }
   };
@@ -54,17 +69,15 @@ const BookmarkButton = ({ blogId }) => {
     <>
       <button
         onClick={handleToggleBookmark}
-        className={`p-2 text-xl ${isBookmarked ? 'text-blue-600' : 'text-zinc-500'}`}
+        className={`p-2 text-xl transition-colors duration-200 ${isBookmarked ? 'text-blue-600' : 'text-zinc-500'
+          }`}
         title={isBookmarked ? 'Remove Bookmark' : 'Bookmark this blog'}
       >
         {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
       </button>
 
       {alertMessage && (
-        <DefaultAlert
-          message={alertMessage}
-          onClose={() => setAlertMessage('')}
-        />
+        <DefaultAlert message={alertMessage} onClose={() => setAlertMessage('')} />
       )}
     </>
   );

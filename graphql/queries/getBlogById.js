@@ -9,6 +9,7 @@ export const GET_BLOG_BY_ID = gql`
       coverImage
       createdAt
       updatedAt
+      bookmarked
       commentsCount
       totalReactionsCount
 
@@ -29,7 +30,7 @@ export const GET_BLOG_BY_ID = gql`
         excite
         fire
         star
-      }  
+      }
     }
   }
 `;

@@ -18,9 +18,9 @@ const BlogTemplate = ({ blog }) => {
 
                     {/* Profile Image */}
                     <div className='h-10 w-10 md:h-12 md:w-12 rounded-full overflow-hidden'>
-                        {blog.creatorProfile && (
+                        {blog.author?.image && (
                             <Image
-                                src={blog.creatorProfile}
+                                src={blog.author?.image}
                                 alt="Creator Profile"
                                 priority={false}
                                 width={48}
@@ -32,7 +32,7 @@ const BlogTemplate = ({ blog }) => {
 
                     {/* Name & Date of Blog Post */}
                     <div>
-                        <h2 className='font-semibold'>{blog.creatorName}</h2>
+                        <h2 className='font-semibold'>{blog.author?.name}</h2>
                         <BlogDate createdAt={blog?.createdAt} />
                     </div>
 
@@ -68,42 +68,38 @@ const BlogTemplate = ({ blog }) => {
                         <div className='flex gap-2'>
 
                             {/* reactions */}
-                            <button className='h-8 w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
+                            <Link
+                                href={`/blog/${blog._id}`}
+                                title='add reaction on blog'
+                                className='h-8 w-36 md:w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
 
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>
-                                    💖
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>
-                                    🦄
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>
-                                    😲
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>
-                                    🔥
-                                </div>
-                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>
-                                    ✨
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-7 top-1 z-30'>🦄</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>🔥</div>
+                                <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
+
+                                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>
+                                    {blog.totalReactionsCount ?? '0'}
+                                    <span className='text-xs ml-2 hidden md:block'>Reactions</span>
                                 </div>
 
-                                {/* reactions count */}
-                                <div className='w-24 h-6 text-zinc-500 absolute left-[5.8rem] top-2 text-sm'>
-                                    284 rections
-                                </div>
+                            </Link>
 
-                            </button>
-
-                            {/* comment count */}
+                            {/* comments count */}
                             <Link
                                 href={`/blog/${blog._id}#comments`}
+                                title='comment on blog'
                                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />
+                                {blog.commentsCount}
+                                <span className='text-xs hidden md:block'>Comments</span>
                             </Link>
 
                         </div>
 
                         {/* save blog */}
-                        <BookmarkButton blogId={blog._id} />
+                        <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} blogData={blog} />
 
                     </div>
 

@@ -7,6 +7,7 @@ export const GET_USER_BLOGS = gql`
       title
       createdAt
       updatedAt
+      bookmarked
       author {
         _id
         name

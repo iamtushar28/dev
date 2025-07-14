@@ -81,11 +81,39 @@ export const resolvers = {
   Query: {
     blogs: async (_, __, context) => {
       try {
-        return await context.db
+        const session = context.session;
+        const userId = session?.user?.id;
+
+        const blogs = await context.db
           .collection("blogs")
           .find()
-          .sort({ createdAt: -1 }) // newest first
+          .sort({ createdAt: -1 })
           .toArray();
+
+        if (!userId) {
+          // not logged in, return blogs with bookmarked = false
+          return blogs.map((blog) => ({
+            ...blog,
+            _id: blog._id.toString(),
+            bookmarked: false,
+          }));
+        }
+
+        // Get all bookmarks by current user
+        const userBookmarks = await context.db
+          .collection("bookmarks")
+          .find({ userId })
+          .toArray();
+
+        const bookmarkedBlogIds = new Set(
+          userBookmarks.map((b) => b.blogId.toString())
+        );
+
+        return blogs.map((blog) => ({
+          ...blog,
+          _id: blog._id.toString(),
+          bookmarked: bookmarkedBlogIds.has(blog._id.toString()),
+        }));
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
         throw new Error("Failed to fetch blogs");
@@ -94,9 +122,32 @@ export const resolvers = {
 
     blog: async (_, { id }, context) => {
       try {
-        return await context.db
+        const blog = await context.db
           .collection("blogs")
           .findOne({ _id: new ObjectId(id) });
+
+        if (!blog) {
+          throw new Error("Blog not found");
+        }
+
+        const session = context.session;
+        let isBookmarked = false;
+
+        if (session?.user?.id) {
+          const bookmark = await context.db.collection("bookmarks").findOne({
+            userId: session.user.id,
+            blogId: id,
+          });
+
+          isBookmarked = !!bookmark;
+        }
+
+        return {
+          ...blog,
+          _id: blog._id.toString(),
+          authorId: blog.authorId?.toString(),
+          bookmarked: isBookmarked, // ✅ always return boolean
+        };
       } catch (error) {
         console.error("Failed to fetch blog:", error);
         throw new Error("Failed to fetch blog");
@@ -133,6 +184,15 @@ export const resolvers = {
 
       const userId = session.user.id;
 
+      // Fetch user's bookmarks
+      const bookmarks = await context.db
+        .collection("bookmarks")
+        .find({ userId: userId })
+        .toArray();
+
+      const bookmarkedIds = new Set(bookmarks.map((b) => b.blogId.toString()));
+
+      // Fetch blogs authored by the user
       const blogs = await context.db
         .collection("blogs")
         .find({ authorId: new ObjectId(userId) })
@@ -143,24 +203,81 @@ export const resolvers = {
         ...blog,
         _id: blog._id.toString(),
         authorId: blog.authorId?.toString(),
+        bookmarked: bookmarkedIds.has(blog._id.toString()), // ✅ Include this field
       }));
     },
 
     // Search blogs by title
     searchBlogs: async (_, { title }, context) => {
+      const session = context.session;
+      const userId = session?.user?.id;
+
       try {
-        const regex = new RegExp(title, "i"); // case-insensitive match
+        const regex = new RegExp(title, "i"); // case-insensitive search
+
+        // Fetch blogs matching the search
         const blogs = await context.db
           .collection("blogs")
           .find({ title: { $regex: regex } })
           .sort({ createdAt: -1 })
           .toArray();
 
-        return blogs;
+        // If user is logged in, get their bookmarked blog IDs
+        let bookmarkedIds = new Set();
+        if (userId) {
+          const bookmarks = await context.db
+            .collection("bookmarks")
+            .find({ userId: userId })
+            .toArray();
+
+          bookmarkedIds = new Set(bookmarks.map((b) => b.blogId.toString()));
+        }
+
+        return blogs.map((blog) => ({
+          ...blog,
+          _id: blog._id.toString(),
+          authorId: blog.authorId?.toString(),
+          bookmarked: bookmarkedIds.has(blog._id.toString()),
+        }));
       } catch (error) {
         console.error("Error searching blogs:", error);
         throw new Error("Failed to search blogs");
       }
+    },
+
+    //bookmarked blogs of user
+    bookmarkedBlogs: async (_, __, context) => {
+      const session = context.session;
+
+      if (!session?.user?.id) {
+        throw new Error("Unauthorized");
+      }
+
+      const userId = session.user.id;
+
+      // 🔹 Step 1: Get bookmarks for the user
+      const bookmarks = await context.db
+        .collection("bookmarks")
+        .find({ userId }) // userId is string in DB
+        .toArray();
+
+      const blogIds = bookmarks.map((b) => new ObjectId(b.blogId));
+
+      if (blogIds.length === 0) return [];
+
+      // 🔹 Step 2: Fetch blogs by those IDs
+      const blogs = await context.db
+        .collection("blogs")
+        .find({ _id: { $in: blogIds } })
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      return blogs.map((blog) => ({
+        ...blog,
+        _id: blog._id.toString(),
+        authorId: blog.authorId?.toString(),
+        bookmarked: true, // ✅ always true for reading list
+      }));
     },
   },
 };

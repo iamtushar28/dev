@@ -9,6 +9,7 @@ export const GET_BLOGS = gql`
       coverImage
       createdAt
       updatedAt
+      bookmarked
       commentsCount
       totalReactionsCount
       author {

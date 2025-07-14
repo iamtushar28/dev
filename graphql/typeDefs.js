@@ -13,6 +13,7 @@ export const typeDefs = gql`
     totalReactionsCount: Int
     reactions: ReactionCounts
     author: User
+    bookmarked: Boolean!
   }
 
   type User {
@@ -39,12 +40,17 @@ export const typeDefs = gql`
     blog(id: ID!): Blog
     users: [User!]!
     user(id: ID!): User
-    
 
     # For logged-in user's blogs
     getUserBlogs: [Blog!]!
 
     # for searching blog
     searchBlogs(title: String!): [Blog!]!
+
+    # Check a single blog quickly (handy for BookmarkButton)
+    isBlogBookmarked(blogId: ID!): Boolean!
+
+    # for showing bookmarked blog of loged in user
+    bookmarkedBlogs: [Blog]
   }
 `;

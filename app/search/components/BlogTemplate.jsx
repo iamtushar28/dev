@@ -94,7 +94,7 @@ const BlogTemplate = ({ blog }) => {
                         </div>
 
                         {/* save blog */}
-                        <BookmarkButton blogId={blog._id} />
+                        <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
 
                     </div>
 

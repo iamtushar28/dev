@@ -23,7 +23,7 @@ const BlogSidebar = ({ blog }) => {
             </Link>
 
             {/* bookmark button */}
-            <BookmarkButton blogId={blog._id} />
+            <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
 
             {/* settings button */}
             <button className='text-2xl h-10 w-10 rounded-full text-zinc-600 hover:bg-zinc-200 transition-all duration-200 flex justify-center items-center'>
