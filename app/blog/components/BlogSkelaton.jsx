@@ -47,7 +47,6 @@ const BlogSkelaton = () => {
                 {/* title */}
                 <div className='px-3 md:px-0'>
                     <div className='mt-6 w-full h-4 md:h-8 bg-zinc-100 rounded-2xl skeleton'></div>
-                    <div className='mt-6 w-full h-4 md:h-8 bg-zinc-100 rounded-2xl skeleton'></div>
                 </div>
 
             </div>

@@ -11,11 +11,16 @@ export const GET_BLOGS = gql`
       updatedAt
       bookmarked
       commentsCount
-      totalReactionsCount
+      
       author {
         _id
         name
         image
+      }
+
+      reactions {
+        emoji
+        count
       }
     }
   }

@@ -10,10 +10,20 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     commentsCount: Int
-    totalReactionsCount: Int
-    reactions: ReactionCounts
     author: User
     bookmarked: Boolean!
+    reactions: [EmojiCount!]!
+    userReactions: [String!]!
+  }
+
+  type EmojiCount {
+    emoji: String!
+    count: Int!
+  }
+
+  type Mutation {
+    # TOGGLE REACTION
+    toggleReaction(blogId: ID!, emoji: String!): EmojiCount!
   }
 
   type User {
@@ -25,14 +35,6 @@ export const typeDefs = gql`
     website: String
     brandColor: String
     joinedAt: String
-  }
-
-  type ReactionCounts {
-    like: Int
-    unicorn: Int
-    excite: Int
-    fire: Int
-    star: Int
   }
 
   type Query {

@@ -13,7 +13,6 @@ export const GET_USER_BLOGS = gql`
         name
         image
       }
-      totalReactionsCount
       commentsCount
     }
   }

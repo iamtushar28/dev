@@ -23,58 +23,70 @@ export const resolvers = {
         .countDocuments({ blog_id: new ObjectId(parent._id) });
     },
 
-    // Fetch blog reactions
-    reactions: async (parent, _, context) => {
-      try {
-        const blogId = parent._id.toString();
+    reactions: async (parent, _, { db }) => {
+      const results = await db
+        .collection("reactions")
+        .aggregate([
+          { $match: { blogId: parent._id.toString() } },
+          { $group: { _id: "$emoji", count: { $sum: 1 } } },
+          { $project: { emoji: "$_id", count: 1, _id: 0 } },
+        ])
+        .toArray();
 
-        const reactionDoc = await context.db
-          .collection("reactions")
-          .findOne({ blogId });
-
-        if (!reactionDoc) {
-          return { like: 0, unicorn: 0, excite: 0, fire: 0, star: 0 };
-        }
-
-        return {
-          like: reactionDoc.like || 0,
-          unicorn: reactionDoc.unicorn || 0,
-          excite: reactionDoc.excite || 0,
-          fire: reactionDoc.fire || 0,
-          star: reactionDoc.star || 0,
-        };
-      } catch (error) {
-        console.error("Error fetching reactions:", error);
-        return { like: 0, unicorn: 0, excite: 0, fire: 0, star: 0 };
-      }
+      return results;
     },
 
-    //featching total reactions count for blog
-    totalReactionsCount: async (parent, _, context) => {
-      try {
-        const blogId = parent._id?.toString();
+    userReactions: async (parent, _, { db, session }) => {
+      if (!session || !session.user?.id) return [];
 
-        if (!blogId) return 0;
+      const userId = session.user.id;
 
-        const reaction = await context.db
-          .collection("reactions")
-          .findOne({ blogId });
+      const results = await db
+        .collection("reactions")
+        .find({
+          blogId: parent._id.toString(),
+          userId,
+        })
+        .toArray();
 
-        if (!reaction) return 0;
+      return results.map((r) => r.emoji);
+    },
+  },
 
-        const {
-          like = 0,
-          unicorn = 0,
-          excite = 0,
-          fire = 0,
-          star = 0,
-        } = reaction;
-
-        return like + unicorn + excite + fire + star;
-      } catch (error) {
-        console.error("Error calculating totalReactionsCount:", error);
-        return 0;
+  Mutation: {
+    //toogling reaction
+    toggleReaction: async (_, { blogId, emoji }, { db, session }) => {
+      if (!session || !session.user?.id) {
+        throw new Error("Unauthorized");
       }
+
+      const userId = session.user.id;
+
+      const reactions = db.collection("reactions");
+      const filter = {
+        blogId,
+        userId,
+        emoji,
+      };
+
+      const existing = await reactions.findOne(filter);
+
+      if (existing) {
+        // 👎 REMOVE reaction
+        await reactions.deleteOne({ _id: existing._id });
+      } else {
+        // 👍 ADD reaction
+        await reactions.insertOne({
+          blogId,
+          userId,
+          emoji,
+          createdAt: new Date(),
+        });
+      }
+
+      // ✅ Return updated count
+      const count = await reactions.countDocuments({ blogId, emoji });
+      return { emoji, count };
     },
   },
 

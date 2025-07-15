@@ -13,6 +13,12 @@ const BlogTemplate = ({ blog }) => {
     threshold: 0.1,
   });
 
+  // Get current emoji counts and user's reactions
+  const emojiCounts = {};
+  blog.reactions?.forEach(({ emoji, count }) => {
+    emojiCounts[emoji] = count;
+  });
+
   return (
     <div ref={ref} className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
       {/* Cover Image */}
@@ -89,7 +95,12 @@ const BlogTemplate = ({ blog }) => {
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>🔥</div>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
-                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>{blog.totalReactionsCount ?? '0'} <span className='text-xs ml-2 hidden md:block'>Reactions</span></div>
+
+                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>
+
+                  {Object.values(emojiCounts).reduce((acc, v) => acc + v, 0) || 0}
+
+                  <span className='text-xs ml-2 hidden md:block'>Reactions</span></div>
 
               </Link>
 
@@ -104,7 +115,7 @@ const BlogTemplate = ({ blog }) => {
               </Link>
             </div>
 
-            <BookmarkButton blogId={blog._id}  initiallyBookmarked={blog.bookmarked} />
+            <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
           </div>
         </div>
       </div>

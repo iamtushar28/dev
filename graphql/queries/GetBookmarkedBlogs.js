@@ -10,7 +10,6 @@ export const GET_BOOKMARKED_BLOGS = gql`
       createdAt
       bookmarked
       commentsCount
-      totalReactionsCount
       author {
         _id
         name

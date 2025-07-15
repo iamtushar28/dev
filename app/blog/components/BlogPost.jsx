@@ -42,28 +42,22 @@ const BlogPost = ({ blog, author }) => {
                     {/* name & date of blog post */}
                     <div>
                         <h2 className='font-semibold'>{author.name}</h2>
-                         <BlogDate createdAt={blog?.createdAt} />
+                        <BlogDate createdAt={blog?.createdAt} />
                     </div>
                 </div>
 
                 {/* reactions (showing counts) */}
-                <div className='mt-4 text-lg flex gap-10 items-center'>
-                    <div className="flex items-center">
-                        💖 <span className="text-xs">{blog.reactions.like}</span>
-                    </div>
-                    <div className="flex items-center">
-                        🦄 <span className="text-xs">{blog.reactions.unicorn}</span>
-                    </div>
-                    <div className="flex items-center">
-                        😲 <span className="text-xs">{blog.reactions.excite}</span>
-                    </div>
-                    <div className="flex items-center">
-                        🔥 <span className="text-xs">{blog.reactions.fire}</span>
-                    </div>
-                    <div className="flex items-center">
-                        ✨ <span className="text-xs">{blog.reactions.star}</span>
-                    </div>
+                <div className='mt-4 text-lg flex gap-6 md:gap-12 items-center'>
+                    {["💖", "🦄", "😲", "🔥", "✨"].map((emoji) => {
+                        const count = blog.reactions?.find((r) => r.emoji === emoji)?.count || 0;
+                        return (
+                            <div key={emoji} className="flex items-center">
+                                {emoji} <span className="text-xs ml-1">{count}</span>
+                            </div>
+                        );
+                    })}
                 </div>
+
 
                 {/* blog info - title, tags, comments */}
                 <div className='mt-4'>
@@ -102,7 +96,7 @@ const BlogPost = ({ blog, author }) => {
                 {/* heading */}
                 <div className='flex items-center gap-2 text-2xl font-bold'>
                     <h2 className='capitalize'>Comments -</h2>
-                     {blog.commentsCount}
+                    {blog.commentsCount}
                 </div>
 
                 {/* for adding comment on blog */}

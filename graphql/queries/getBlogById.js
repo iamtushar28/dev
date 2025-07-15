@@ -11,7 +11,6 @@ export const GET_BLOG_BY_ID = gql`
       updatedAt
       bookmarked
       commentsCount
-      totalReactionsCount
 
       author {
         _id
@@ -25,12 +24,10 @@ export const GET_BLOG_BY_ID = gql`
       }
 
       reactions {
-        like
-        unicorn
-        excite
-        fire
-        star
+        emoji
+        count
       }
+      userReactions
     }
   }
 `;

@@ -1,114 +1,133 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MdOutlineAddReaction } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import { useMutation } from "@apollo/client";
+import { TOGGLE_REACTION } from "@/graphql/mutations/toggleReaction";
+import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
+
+const EMOJIS = ["💖", "🦄", "😲", "🔥", "✨"];
 
 const ReactionButton = ({ blog, blogId }) => {
-    const { data: session } = useSession();
-    const [showOptions, setShowOptions] = useState(false);
+  const { data: session } = useSession();
+  const [showOptions, setShowOptions] = useState(false);
 
-    const [reactions, setReactions] = useState({
-        like: 0,
-        unicorn: 0,
-        excite: 0,
-        fire: 0,
-        star: 0,
-    });
+  const [toggleReaction] = useMutation(TOGGLE_REACTION);
 
-    const fetchReactions = async () => {
-        try {
-            const res = await fetch(`/api/reactions?blogId=${blogId}`);
-            const data = await res.json();
-            if (res.ok) {
-                setReactions(data.reactions);
-            }
-        } catch (error) {
-            console.error('Failed to fetch reactions', error);
-        }
-    };
+  const handleReactionClick = async (emoji) => {
+    if (!session) return;
 
-    useEffect(() => {
-        fetchReactions();
-    }, []);
+    const userId = session.user.id;
+
+    // Get current count and reaction state
+    const prevCount = emojiCounts[emoji] || 0;
+    const hasReacted = userReacted.has(emoji);
+
+    try {
+      await toggleReaction({
+        variables: { blogId, emoji },
+
+        // 👇 Optimistic update: guess what the server will return
+        optimisticResponse: {
+          toggleReaction: {
+            __typename: "EmojiCount",
+            emoji,
+            count: hasReacted ? prevCount - 1 : prevCount + 1,
+          },
+        },
+
+        // 👇 Update Apollo cache manually for immediate UI feedback
+        update: (cache, { data: { toggleReaction } }) => {
+          const existing = cache.readQuery({
+            query: GET_BLOG_BY_ID,
+            variables: { id: blogId },
+          });
+
+          if (!existing?.blog) return;
+
+          const updatedReactions = (existing.blog.reactions || []).map((r) => ({ ...r }));
+          const idx = updatedReactions.findIndex((r) => r.emoji === emoji);
+
+          if (idx !== -1) {
+            updatedReactions[idx].count = toggleReaction.count;
+          } else {
+            updatedReactions.push({ emoji, count: toggleReaction.count, __typename: "EmojiCount" });
+          }
+
+          let updatedUserReactions = new Set(existing.blog.userReactions || []);
+          if (hasReacted) {
+            updatedUserReactions.delete(emoji);
+          } else {
+            updatedUserReactions.add(emoji);
+          }
+
+          cache.writeQuery({
+            query: GET_BLOG_BY_ID,
+            variables: { id: blogId },
+            data: {
+              blog: {
+                ...existing.blog,
+                reactions: updatedReactions,
+                userReactions: Array.from(updatedUserReactions),
+              },
+            },
+          });
+        },
+      });
+    } catch (error) {
+      console.error("Reaction failed:", error.message);
+    }
+  };
 
 
-    //allow react only if login
-    const handleReaction = async (reactionType) => {
-        if (!session?.user?.id) {
-            alert('Please login.');
-            return;
-        }
+  // Get current emoji counts and user's reactions
+  const emojiCounts = {};
+  blog.reactions?.forEach(({ emoji, count }) => {
+    emojiCounts[emoji] = count;
+  });
 
-        try {
-            const res = await fetch('/api/reactions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    blogId,
-                    reactionType,
-                    userId: session.user.id,
-                }),
-            });
+  const userReacted = new Set(blog.userReactions || []);
 
-            const data = await res.json();
-            if (res.ok) {
-                setReactions(data.reactions);
-            }
-        } catch (error) {
-            console.error('Failed to react', error);
-        }
-    };
+  return (
+    <div className="relative">
+      {/* Reaction Button */}
+      <button
+        onMouseEnter={() => setShowOptions(true)}
+        onMouseLeave={() => setShowOptions(false)}
+        className="text-zinc-600 hover:text-pink-500 w-16 transition-all duration-200 flex flex-col justify-center items-center"
+      >
+        <MdOutlineAddReaction className="text-2xl" />
+        <span className="text-sm">
+          {Object.values(emojiCounts).reduce((acc, v) => acc + v, 0) || 0}
+        </span>
+      </button>
 
-    return (
-        <>
-            {/* like/reaction button */}
-            <button
-                onMouseEnter={() => setShowOptions(true)}
-                onMouseLeave={() => setShowOptions(false)}
-                className='text-zinc-600 hover:text-pink-500 w-16 transition-all duration-200 flex flex-col justify-center items-center'>
-                <MdOutlineAddReaction className='text-2xl' />
-                {blog.totalReactionsCount ?? '0'}
-            </button>
+      {/* Reaction Panel */}
+      {showOptions && (
+        <div
+          onMouseEnter={() => setShowOptions(true)}
+          onMouseLeave={() => setShowOptions(false)}
+          className="w-96 px-2 h-16 bg-white flex justify-around items-center absolute z-20 -top-5 left-16 rounded-2xl shadow"
+        >
+          {EMOJIS.map((emoji) => {
+            const count = emojiCounts[emoji] || 0;
+            const reacted = userReacted.has(emoji);
+            return (
+              <button
+                key={emoji}
+                onClick={() => handleReactionClick(emoji)}
+                className={`text-lg p-2 rounded-full transition hover:scale-110 duration-200 ${reacted ? "bg-pink-100" : "hover:bg-gray-100"
+                  }`}
+              >
+                {emoji} <span className="text-xs">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
 
-            {/* reaction block */}
-            {showOptions && (
-                <div
-                    onMouseEnter={() => setShowOptions(true)}
-                    onMouseLeave={() => setShowOptions(false)}
-                    className='w-80 h-16 bg-white flex justify-around items-center absolute z-20 top-14 left-16 rounded-2xl shadow'>
-
-                    {/* like btn */}
-                    <button onClick={() => handleReaction('like')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        💖 <span className='text-xs'>{reactions.like}</span>
-                    </button>
-
-                    {/* unicorn btn */}
-                    <button onClick={() => handleReaction('unicorn')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        🦄 <span className='text-xs'>{reactions.unicorn}</span>
-                    </button>
-
-                    {/* excite btn */}
-                    <button onClick={() => handleReaction('excite')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        😲 <span className='text-xs'>{reactions.excite}</span>
-                    </button>
-
-                    {/* fire btn */}
-                    <button onClick={() => handleReaction('fire')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        🔥 <span className='text-xs'>{reactions.fire}</span>
-                    </button>
-
-                    {/* star btn */}
-                    <button onClick={() => handleReaction('star')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        ✨ <span className='text-xs'>{reactions.star}</span>
-                    </button>
-
-                </div>
-            )}
-        </>
-    )
-}
-
-export default ReactionButton
+export default ReactionButton;

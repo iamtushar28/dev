@@ -1,135 +1,149 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
-import { MdOutlineAddReaction } from "react-icons/md"; //reaction icon
+import { MdOutlineAddReaction } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import { useMutation } from "@apollo/client";
+import { TOGGLE_REACTION } from "@/graphql/mutations/toggleReaction";
+import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
+
+const EMOJIS = ["💖", "🦄", "😲", "🔥", "✨"];
 
 const MobileReactionButton = ({ blog, blogId }) => {
+  const { data: session } = useSession();
+  const [showOptions, setShowOptions] = useState(false);
+  const wrapperRef = useRef(null);
+  const buttonRef = useRef(null);
 
-    const [showOptions, setShowOptions] = useState(false); // for showing reaction block on click
-    const wrapperRef = useRef(null);
-    const buttonRef = useRef(null);
+  const [toggleReaction] = useMutation(TOGGLE_REACTION);
 
-    // Hide profile menu when clicked outside
-    const handleClickOutside = (event) => {
-        if (
-            showOptions && // Only check if menu is already open
-            wrapperRef.current &&
-            !wrapperRef.current.contains(event.target) &&
-            buttonRef.current &&
-            !buttonRef.current.contains(event.target) // Ensure click is not on the button
-        ) {
-            setShowOptions(false);
-        }
-    };
+  // Event listener to close the emoji popup
+  const handleClickOutside = (event) => {
+    if (
+      showOptions &&
+      wrapperRef.current &&
+      !wrapperRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
+      setShowOptions(false);
+    }
+  };
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showOptions]); // Depend on `showOptions` to correctly track its state
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showOptions]);
 
+  const handleReactionClick = async (emoji) => {
+    if (!session) {
+      alert("Please login.");
+      return;
+    }
 
-    const { data: session } = useSession();
+    try {
+      await toggleReaction({
+        variables: { blogId, emoji },
+        optimisticResponse: {
+          toggleReaction: {
+            __typename: "EmojiCount",
+            emoji,
+            count:
+              (blog.reactions.find((r) => r.emoji === emoji)?.count || 0) +
+              (blog.userReactions.includes(emoji) ? -1 : 1),
+          },
+        },
+        update: (cache, { data: { toggleReaction } }) => {
+          const existing = cache.readQuery({
+            query: GET_BLOG_BY_ID,
+            variables: { id: blogId },
+          });
 
-    const [reactions, setReactions] = useState({
-        like: 0,
-        unicorn: 0,
-        excite: 0,
-        fire: 0,
-        star: 0,
-    });
+          if (!existing?.blog) return;
 
-    const fetchReactions = async () => {
-        try {
-            const res = await fetch(`/api/reactions?blogId=${blogId}`);
-            const data = await res.json();
-            if (res.ok) {
-                setReactions(data.reactions);
-            }
-        } catch (error) {
-            console.error('Failed to fetch reactions', error);
-        }
-    };
+          const updatedReactions = (existing.blog.reactions || []).map((r) => ({
+            ...r,
+          }));
+          const idx = updatedReactions.findIndex(
+            (r) => r.emoji === toggleReaction.emoji
+          );
 
-    useEffect(() => {
-        fetchReactions();
-    }, []);
+          if (idx !== -1) {
+            updatedReactions[idx].count = toggleReaction.count;
+          } else {
+            updatedReactions.push(toggleReaction);
+          }
 
-    const handleReaction = async (reactionType) => {
-        if (!session?.user?.id) {
-            alert('Please login.');
-            return;
-        }
+          let updatedUserReactions = new Set(existing.blog.userReactions || []);
+          if (updatedUserReactions.has(emoji)) {
+            updatedUserReactions.delete(emoji);
+          } else {
+            updatedUserReactions.add(emoji);
+          }
 
-        try {
-            const res = await fetch('/api/reactions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    blogId,
-                    reactionType,
-                    userId: session.user.id,
-                }),
-            });
+          cache.writeQuery({
+            query: GET_BLOG_BY_ID,
+            variables: { id: blogId },
+            data: {
+              blog: {
+                ...existing.blog,
+                reactions: updatedReactions,
+                userReactions: Array.from(updatedUserReactions),
+              },
+            },
+          });
+        },
+      });
+    } catch (error) {
+      console.error("Failed to react", error);
+    }
+  };
 
-            const data = await res.json();
-            if (res.ok) {
-                setReactions(data.reactions);
-            }
-        } catch (error) {
-            console.error('Failed to react', error);
-        }
-    };
+  const emojiCounts = {};
+  blog.reactions?.forEach(({ emoji, count }) => {
+    emojiCounts[emoji] = count;
+  });
 
-    return (
-        <>
-            {/* like/reaction button */}
-            <button
-                ref={buttonRef}
-                onClick={() => setShowOptions(true)}
-                className='text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-2 items-center'>
-                <MdOutlineAddReaction className='text-2xl' />
-                {blog.totalReactionsCount ?? '0'}
-            </button>
+  const userReacted = new Set(blog.userReactions || []);
 
-            {/* reaction block */}
-            {showOptions && (
-                <div
-                    ref={wrapperRef}
-                    className='w-80 h-16 bg-white flex justify-around items-center absolute z-20 bottom-16 left-4 rounded-2xl shadow'>
+  return (
+    <>
+      {/* Trigger button */}
+      <button
+        ref={buttonRef}
+        onClick={() => setShowOptions(true)}
+        className="text-zinc-600 hover:text-pink-500 transition-all duration-200 flex gap-2 items-center"
+      >
+        <MdOutlineAddReaction className="text-2xl" />
+        {Object.values(emojiCounts).reduce((acc, v) => acc + v, 0) || "0"}
+      </button>
 
-                    {/* like btn */}
-                    <button onClick={() => handleReaction('like')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        💖 <span className='text-xs'>{reactions.like}</span>
-                    </button>
+      {/* Reaction Panel */}
+      {showOptions && (
+        <div
+          ref={wrapperRef}
+          className="w-80 px-2 h-16 bg-white flex justify-around items-center absolute z-20 bottom-16 left-4 rounded-2xl shadow"
+        >
+          {EMOJIS.map((emoji) => {
+            const count = emojiCounts[emoji] || 0;
+            const reacted = userReacted.has(emoji);
 
-                    {/* unicorn btn */}
-                    <button onClick={() => handleReaction('unicorn')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        🦄 <span className='text-xs'>{reactions.unicorn}</span>
-                    </button>
+            return (
+              <button
+                key={emoji}
+                onClick={() => handleReactionClick(emoji)}
+                className={`text-xl p-2 rounded-full transition hover:scale-110 duration-200 ${
+                  reacted ? "bg-pink-100" : "hover:bg-zinc-100"
+                }`}
+              >
+                {emoji} <span className="text-xs">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </>
+  );
+};
 
-                    {/* excite btn */}
-                    <button onClick={() => handleReaction('excite')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        😲 <span className='text-xs'>{reactions.excite}</span>
-                    </button>
-
-                    {/* fire btn */}
-                    <button onClick={() => handleReaction('fire')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        🔥 <span className='text-xs'>{reactions.fire}</span>
-                    </button>
-
-                    {/* star btn */}
-                    <button onClick={() => handleReaction('star')} className='text-xl p-2 rounded-full hover:bg-zinc-100'>
-                        ✨ <span className='text-xs'>{reactions.star}</span>
-                    </button>
-
-                </div>
-            )}
-        </>
-    )
-}
-
-export default MobileReactionButton
+export default MobileReactionButton;
