@@ -9,16 +9,24 @@ export const typeDefs = gql`
     authorId: ID!
     createdAt: String
     updatedAt: String
-    commentsCount: Int
     author: User
     bookmarked: Boolean!
     reactions: [EmojiCount!]!
     userReactions: [String!]!
+    commentsCount: Int!
   }
 
   type EmojiCount {
     emoji: String!
     count: Int!
+  }
+
+  type Comment {
+    _id: ID!
+    comment: String!
+    user: User! 
+    blogId: ID!
+    createdAt: String!
   }
 
   type Mutation {
@@ -54,5 +62,8 @@ export const typeDefs = gql`
 
     # for showing bookmarked blog of loged in user
     bookmarkedBlogs: [Blog]
+
+    #for getting comments
+    getBlogComments(blogId: ID!): [Comment!]!
   }
 `;

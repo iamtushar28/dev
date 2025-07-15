@@ -16,13 +16,7 @@ export const resolvers = {
       }
     },
 
-    //getting comments count of blog
-    commentsCount: async (parent, _, context) => {
-      return await context.db
-        .collection("comments")
-        .countDocuments({ blog_id: new ObjectId(parent._id) });
-    },
-
+    // getting reactions
     reactions: async (parent, _, { db }) => {
       const results = await db
         .collection("reactions")
@@ -50,6 +44,27 @@ export const resolvers = {
         .toArray();
 
       return results.map((r) => r.emoji);
+    },
+
+    //getting comment count
+    commentsCount: async (parent, _, context) => {
+      return await context.db
+        .collection("comments")
+        .countDocuments({ blog_id: new ObjectId(parent._id) });
+    },
+  },
+
+  //get commenter
+  Comment: {
+    user: async (parent, _, context) => {
+      try {
+        return await context.db
+          .collection("users")
+          .findOne({ _id: new ObjectId(parent.user_id) }); // FIXED!
+      } catch (error) {
+        console.error("Failed to fetch comment user:", error);
+        return null;
+      }
     },
   },
 
@@ -183,6 +198,22 @@ export const resolvers = {
       } catch (error) {
         console.error("Failed to fetch user:", error);
         throw new Error("Failed to fetch user");
+      }
+    },
+
+    //getting comments of blogs
+    getBlogComments: async (_, { blogId }, context) => {
+      try {
+        const comments = await context.db
+          .collection("comments")
+          .find({ blog_id: new ObjectId(blogId) })
+          .sort({ createdAt: -1 })
+          .toArray();
+
+        return comments;
+      } catch (error) {
+        console.error("Failed to fetch comments:", error);
+        return [];
       }
     },
 

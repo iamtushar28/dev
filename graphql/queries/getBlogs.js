@@ -11,7 +11,7 @@ export const GET_BLOGS = gql`
       updatedAt
       bookmarked
       commentsCount
-      
+
       author {
         _id
         name

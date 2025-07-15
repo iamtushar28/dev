@@ -95,15 +95,14 @@ const BlogPost = ({ blog, author }) => {
             <div className='mt-8 px-2 md:px-6' id='comments'>
                 {/* heading */}
                 <div className='flex items-center gap-2 text-2xl font-bold'>
-                    <h2 className='capitalize'>Comments -</h2>
-                    {blog.commentsCount}
+                    <h2 className='capitalize'>Comments - {blog.commentsCount}</h2>  
                 </div>
 
                 {/* for adding comment on blog */}
                 <AddComment blog={blog} />
 
                 {/* for showing all comments of blog */}
-                <Comments blogId={blog._id} />
+                <Comments blogId={blog._id} blog={blog} />
             </div>
 
         </section>

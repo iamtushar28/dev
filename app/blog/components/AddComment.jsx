@@ -1,13 +1,14 @@
 'use client';
-
+import { useApolloClient } from "@apollo/client";
+import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
+import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
-import { useSWRConfig } from 'swr';
-import DefaultAlert from '../../components/DefaultAlert'; 
+import DefaultAlert from '../../components/DefaultAlert';
 
 const AddComment = ({ blog }) => {
-  const { mutate } = useSWRConfig();
+  const client = useApolloClient();
   const { data: session } = useSession();
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -18,21 +19,11 @@ const AddComment = ({ blog }) => {
 
     try {
       const newComment = {
-        _id: Date.now(),
         user_id: session.user.id,
         blog_id: blog._id,
         comment: data.comment,
         createdAt: new Date().toISOString(),
-        userName: session.user.name,
-        userProfile: session.user.image || '/default-avatar.png',
       };
-
-      // Optimistic UI update
-      mutate(
-        `/api/comments?blog_id=${blog._id}`,
-        (existingComments = []) => [...existingComments, newComment],
-        false
-      );
 
       const response = await fetch('/api/comments', {
         method: 'POST',
@@ -42,9 +33,29 @@ const AddComment = ({ blog }) => {
 
       if (!response.ok) throw new Error('Failed to submit comment');
 
-      mutate(`/api/comments?blog_id=${blog._id}`); // Revalidate cache
-      reset(); // Clear the input
-      setAlertMessage('Comment added successfully! ✅');
+      // ✅ Clear form
+      reset();
+
+      // ✅ Refetch cached queries
+      await client.refetchQueries({
+        include: ['GetBlogComments', 'getBlogById', 'getBlogs'], // Must match operation names
+      });
+
+      // ✅ Force network fetch to ensure fresh data (including updated commentCount)
+      await Promise.all([
+        client.query({
+          query: GET_BLOG_BY_ID,
+          variables: { id: blog._id },
+          fetchPolicy: 'network-only',
+        }),
+        client.query({
+          query: GET_BLOGS,
+          fetchPolicy: 'network-only',
+        }),
+      ]);
+
+
+      // setAlertMessage('Comment added successfully! ✅');
     } catch (error) {
       console.error('Error adding comment:', error);
       setAlertMessage('Failed to submit comment. Please try again.');
