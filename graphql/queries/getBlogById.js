@@ -10,7 +10,6 @@ export const GET_BLOG_BY_ID = gql`
       createdAt
       updatedAt
       bookmarked
-      commentsCount
 
       author {
         _id
@@ -28,6 +27,18 @@ export const GET_BLOG_BY_ID = gql`
         count
       }
       userReactions
+
+      comments {
+        _id
+        comment
+        createdAt
+        author {
+          _id
+          name
+          image
+        }
+      }
+      commentsCount
     }
   }
 `;

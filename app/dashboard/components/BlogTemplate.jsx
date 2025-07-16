@@ -15,6 +15,11 @@ const BlogTemplate = ({ blog }) => {
     const [openBlogOptionMenu, setOpenBlogOptionMenu] = useState(false);
     const wrapperRef = useRef(null);
     const blogOptionButtonRef = useRef(null);
+    // Get current emoji counts and user's reactions
+    const emojiCounts = {};
+    blog.reactions?.forEach(({ emoji, count }) => {
+        emojiCounts[emoji] = count;
+    });
 
     // Close blog options menu when clicking outside
     useEffect(() => {
@@ -129,7 +134,11 @@ const BlogTemplate = ({ blog }) => {
                                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-11 top-1 z-20'>😲</div>
                                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[3.7rem] top-1 z-10'>🔥</div>
                                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
-                                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>0<span className='text-xs ml-2 hidden md:block'>Reactions</span></div>
+
+                                <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>
+                                    {Object.values(emojiCounts).reduce((acc, v) => acc + v, 0) || 0}
+                                    <span className='text-xs ml-2 hidden md:block'>Reactions</span>
+                                </div>
 
                             </Link>
 
@@ -139,7 +148,7 @@ const BlogTemplate = ({ blog }) => {
                                 title='comment on blog'
                                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />
-                               
+                                {blog.commentsCount}
                                 <span className='text-xs hidden md:block'>Comments</span>
                             </Link>
 

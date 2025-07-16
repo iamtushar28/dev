@@ -1,11 +1,14 @@
 'use client'
 import React from 'react'
+import { useSession } from 'next-auth/react';
 import Image from 'next/image'
 import AddComment from './AddComment'
 import Comments from './Comments'
 import BlogDate from '@/app/components/BlogDate'
 
 const BlogPost = ({ blog, author }) => {
+
+    const { data: session } = useSession();
 
     return (
         <section className='md:ml-24 w-full md:w-[66%] h-fit pb-12 bg-white md:rounded'>
@@ -99,7 +102,7 @@ const BlogPost = ({ blog, author }) => {
                 </div>
 
                 {/* for adding comment on blog */}
-                <AddComment blog={blog} />
+                <AddComment blog={blog} session={session}/>
 
                 {/* for showing all comments of blog */}
                 <Comments blogId={blog._id} blog={blog} />

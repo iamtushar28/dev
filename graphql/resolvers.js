@@ -46,25 +46,29 @@ export const resolvers = {
       return results.map((r) => r.emoji);
     },
 
-    //getting comment count
-    commentsCount: async (parent, _, context) => {
-      return await context.db
+    // 🚀 Comments (from updated schema)
+    comments: async (parent, _, { db }) => {
+      return await db
+        .collection("comments")
+        .find({ blog_id: new ObjectId(parent._id) })
+        .sort({ createdAt: -1 }) // Optional: show latest first
+        .toArray();
+    },
+
+    // 🧮 Count
+    commentsCount: async (parent, _, { db }) => {
+      return await db
         .collection("comments")
         .countDocuments({ blog_id: new ObjectId(parent._id) });
     },
   },
 
-  //get commenter
   Comment: {
-    user: async (parent, _, context) => {
-      try {
-        return await context.db
-          .collection("users")
-          .findOne({ _id: new ObjectId(parent.user_id) }); // FIXED!
-      } catch (error) {
-        console.error("Failed to fetch comment user:", error);
-        return null;
-      }
+    // 👤 Get the comment's author (now using `user_id`)
+    author: async (parent, _, { db }) => {
+      return await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(parent.user_id) });
     },
   },
 
@@ -102,6 +106,59 @@ export const resolvers = {
       // ✅ Return updated count
       const count = await reactions.countDocuments({ blogId, emoji });
       return { emoji, count };
+    },
+
+    // ✍️ Add comment using `comment`, `user_id`, `blog_id`
+    addComment: async (_, { blogId, comment }, { db, session }) => {
+      if (!session?.user?.id) throw new Error("Unauthorized");
+
+      const userId = session.user.id;
+
+      const commentDoc = {
+        comment: comment,
+        blog_id: new ObjectId(blogId),
+        user_id: new ObjectId(userId),
+        createdAt: new Date(),
+      };
+
+      const result = await db.collection("comments").insertOne(commentDoc);
+
+      return {
+        _id: result.insertedId,
+        comment: commentDoc.comment,
+        blog_id: commentDoc.blog_id,
+        user_id: commentDoc.user_id,
+        createdAt: commentDoc.createdAt,
+      };
+    },
+
+    deleteComment: async (_, { commentId, blogId }, { db, session }) => {
+      if (!session?.user?.id) throw new Error("Unauthorized");
+
+      const userId = session.user.id;
+
+      const comment = await db
+        .collection("comments")
+        .findOne({ _id: new ObjectId(commentId) });
+
+      if (!comment) throw new Error("Comment not found");
+      if (comment.user_id.toString() !== userId.toString())
+        throw new Error("Unauthorized");
+
+      // Delete the comment
+      await db
+        .collection("comments")
+        .deleteOne({ _id: new ObjectId(commentId) });
+
+      // Decrement comment count in blog
+      await db
+        .collection("blogs")
+        .updateOne(
+          { _id: new ObjectId(blogId) },
+          { $inc: { commentsCount: -1 } }
+        );
+
+      return { _id: commentId };
     },
   },
 
@@ -198,22 +255,6 @@ export const resolvers = {
       } catch (error) {
         console.error("Failed to fetch user:", error);
         throw new Error("Failed to fetch user");
-      }
-    },
-
-    //getting comments of blogs
-    getBlogComments: async (_, { blogId }, context) => {
-      try {
-        const comments = await context.db
-          .collection("comments")
-          .find({ blog_id: new ObjectId(blogId) })
-          .sort({ createdAt: -1 })
-          .toArray();
-
-        return comments;
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-        return [];
       }
     },
 

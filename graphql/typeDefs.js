@@ -13,7 +13,17 @@ export const typeDefs = gql`
     bookmarked: Boolean!
     reactions: [EmojiCount!]!
     userReactions: [String!]!
+    comments: [Comment!]!
     commentsCount: Int!
+  }
+
+  type Comment {
+    _id: ID!
+    comment: String!
+    user_id: ID!
+    blog_id: ID!
+    createdAt: String
+    author: User
   }
 
   type EmojiCount {
@@ -21,17 +31,12 @@ export const typeDefs = gql`
     count: Int!
   }
 
-  type Comment {
-    _id: ID!
-    comment: String!
-    user: User! 
-    blogId: ID!
-    createdAt: String!
-  }
-
   type Mutation {
     # TOGGLE REACTION
     toggleReaction(blogId: ID!, emoji: String!): EmojiCount!
+
+    addComment(blogId: ID!, userId: ID!, comment: String!): Comment!
+    deleteComment(commentId: ID!, blogId: ID!): Comment!
   }
 
   type User {
@@ -62,8 +67,5 @@ export const typeDefs = gql`
 
     # for showing bookmarked blog of loged in user
     bookmarkedBlogs: [Blog]
-
-    #for getting comments
-    getBlogComments(blogId: ID!): [Comment!]!
   }
 `;

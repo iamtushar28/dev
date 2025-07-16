@@ -7,6 +7,13 @@ import BookmarkButton from '../components/BookmarkButton';
 import { FaRegComment } from "react-icons/fa"; //comment icon
 
 const BlogTemplate = ({ blog }) => {
+
+    // Get current emoji counts and user's reactions
+    const emojiCounts = {};
+    blog.reactions?.forEach(({ emoji, count }) => {
+        emojiCounts[emoji] = count;
+    });
+
     return (
         <div className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
 
@@ -80,7 +87,7 @@ const BlogTemplate = ({ blog }) => {
                                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-[4.7rem] top-1'>✨</div>
 
                                 <div className='h-6 w-6 text-sm text-zinc-500 rounded-full flex justify-center items-center absolute left-[6.4rem] md:left-[8.2rem] top-1'>
-                                   0
+                                    {Object.values(emojiCounts).reduce((acc, v) => acc + v, 0) || 0}
                                     <span className='text-xs ml-2 hidden md:block'>Reactions</span>
                                 </div>
 

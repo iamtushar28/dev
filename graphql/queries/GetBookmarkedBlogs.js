@@ -9,12 +9,16 @@ export const GET_BOOKMARKED_BLOGS = gql`
       coverImage
       createdAt
       bookmarked
-      commentsCount
       author {
         _id
         name
         image
       }
+      reactions {
+        emoji
+        count
+      }
+      commentsCount
     }
   }
 `;

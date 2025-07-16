@@ -1,50 +1,52 @@
-"use client";
-import React from "react";
-import { useApolloClient } from "@apollo/client";
-import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
-import { GET_BLOGS } from "@/graphql/queries/getBlogs";
-import { RiDeleteBin6Line } from "react-icons/ri"; //delet icon
+// components/DeleteComment.js
+'use client';
 
-const DeleteComment = ({ commentId, blog, blogId }) => {
-    const client = useApolloClient();
-    const deleteComment = async () => {
-        try {
-            const res = await fetch(`/api/comments?comment_id=${commentId}`, {
-                method: "DELETE",
+import { useMutation } from '@apollo/client';
+import { DELETE_COMMENT } from '@/graphql/mutations/deleteComment';
+import { GET_BLOG_BY_ID } from '@/graphql/queries/getBlogById';
+
+const DeleteComment = ({ commentId, blogId }) => {
+    const [deleteComment, { loading }] = useMutation(DELETE_COMMENT, {
+        update(cache, { data: { deleteComment } }) {
+            const existing = cache.readQuery({
+                query: GET_BLOG_BY_ID,
+                variables: { id: blogId },
             });
 
-            if (!res.ok) throw new Error("Failed to delete comment");
-
-            // ✅ Refetch cached queries
-            await client.refetchQueries({
-                include: ['GetBlogComments', 'getBlogById', 'getBlogs'], // Must match operation names
-            });
-
-            // ✅ Force network fetch to ensure fresh data (including updated commentCount)
-            await Promise.all([
-                client.query({
+            if (existing?.blog) {
+                cache.writeQuery({
                     query: GET_BLOG_BY_ID,
-                    variables: { id: blog._id },
-                    fetchPolicy: 'network-only',
-                }),
-                client.query({
-                    query: GET_BLOGS,
-                    fetchPolicy: 'network-only',
-                }),
-            ]);
+                    variables: { id: blogId },
+                    data: {
+                        blog: {
+                            ...existing.blog,
+                            comments: existing.blog.comments.filter(
+                                (comment) => comment._id !== deleteComment._id
+                            ),
+                            commentsCount: Math.max((existing.blog.commentsCount || 1) - 1, 0),
+                        },
+                    },
+                });
+            }
+        },
+        onError: (err) => {
+            console.error('Delete failed:', err.message);
+        },
+    });
 
-        } catch (err) {
-            console.error("Error deleting comment:", err);
-        }
+    const handleDelete = () => {
+
+        deleteComment({ variables: { commentId, blogId } });
+
     };
 
     return (
         <button
-            onClick={deleteComment}
-            className='w-full px-4 py-2 text-zinc-800 font-semibold hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 transition-all duration-200'
+            onClick={handleDelete}
+            disabled={loading}
+            className="w-full px-4 py-2 text-red-600 font-semibold hover:text-white hover:bg-red-500 capitalize text-start rounded flex items-center gap-2 transition-all duration-200 mt-2"
         >
-            <RiDeleteBin6Line />
-            Delete
+            🗑 Delete
         </button>
     );
 };

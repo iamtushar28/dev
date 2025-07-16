@@ -8,12 +8,16 @@ export const GET_USER_BLOGS = gql`
       createdAt
       updatedAt
       bookmarked
+      commentsCount
       author {
         _id
         name
         image
       }
-      commentsCount
+      reactions {
+        emoji
+        count
+      }
     }
   }
 `;

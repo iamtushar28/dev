@@ -1,77 +1,60 @@
 'use client';
-import { useApolloClient } from "@apollo/client";
-import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
-import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useApolloClient } from '@apollo/client';
+import { ADD_COMMENT } from '@/graphql/mutations/addComment';
+import { GET_BLOG_BY_ID } from '@/graphql/queries/getBlogById';
 import DefaultAlert from '../../components/DefaultAlert';
 
-const AddComment = ({ blog }) => {
+const AddComment = ({ blog, session }) => {
   const client = useApolloClient();
-  const { data: session } = useSession();
-
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const [alertMessage, setAlertMessage] = useState('');
 
-  const onSubmit = async (data) => {
-    if (!session) return;
+  const [addComment] = useMutation(ADD_COMMENT, {
+    update(cache, { data: { addComment } }) {
+      const blogId = blog._id;
 
-    try {
-      const newComment = {
-        user_id: session.user.id,
-        blog_id: blog._id,
-        comment: data.comment,
-        createdAt: new Date().toISOString(),
-      };
-
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        body: JSON.stringify(newComment),
-        headers: { 'Content-Type': 'application/json' },
+      const existing = cache.readQuery({
+        query: GET_BLOG_BY_ID,
+        variables: { id: blogId },
       });
 
-      if (!response.ok) throw new Error('Failed to submit comment');
-
-      // ✅ Clear form
-      reset();
-
-      // ✅ Refetch cached queries
-      await client.refetchQueries({
-        include: ['GetBlogComments', 'getBlogById', 'getBlogs'], // Must match operation names
-      });
-
-      // ✅ Force network fetch to ensure fresh data (including updated commentCount)
-      await Promise.all([
-        client.query({
+      if (existing?.blog) {
+        cache.writeQuery({
           query: GET_BLOG_BY_ID,
-          variables: { id: blog._id },
-          fetchPolicy: 'network-only',
-        }),
-        client.query({
-          query: GET_BLOGS,
-          fetchPolicy: 'network-only',
-        }),
-      ]);
-
-
-      // setAlertMessage('Comment added successfully! ✅');
-    } catch (error) {
-      console.error('Error adding comment:', error);
+          variables: { id: blogId },
+          data: {
+            blog: {
+              ...existing.blog,
+              comments: [addComment, ...(existing.blog.comments || [])],
+              commentsCount: (existing.blog.commentsCount || 0) + 1,
+            },
+          },
+        });
+      }
+    },
+    onCompleted: () => reset(),
+    onError: (error) => {
+      console.error('Add comment failed:', error);
       setAlertMessage('Failed to submit comment. Please try again.');
-    }
+    },
+  });
+
+  const onSubmit = (data) => {
+    if (!session) return;
+    addComment({
+      variables: {
+        blogId: blog._id,
+        userId: session.user.id,
+        comment: data.comment,
+      },
+    });
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
-        {session && (
-          <>
-            <input type="hidden" {...register('user_id')} value={session.user.id} readOnly />
-            <input type="hidden" {...register('blog_id')} value={blog._id} readOnly />
-          </>
-        )}
-
         <textarea
           {...register('comment', { required: 'Comment cannot be empty' })}
           className="w-full h-16 p-3 border rounded hover:ring-2 hover:ring-blue-600 outline-none transition-all duration-300"

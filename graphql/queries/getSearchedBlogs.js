@@ -6,13 +6,17 @@ export const GET_SEARCHED_BLOGS = gql`
       _id
       title
       createdAt
-      commentsCount
       bookmarked
       author {
         _id
         name
         image
       }
+      reactions {
+        emoji
+        count
+      }
+      commentsCount
     }
   }
 `;
