@@ -5,7 +5,6 @@ import { FiExternalLink } from "react-icons/fi"; //calender, link icon
 
 
 const BlogWriter = ({ author }) => {
-    console.log("joinedAt value:", author?.joinedAt);
 
     return (
         <section className='w-full md:w-[26%] flex flex-col gap-4'>
