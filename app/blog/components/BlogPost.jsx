@@ -26,7 +26,7 @@ const BlogPost = ({ blog, author }) => {
             )}
 
             {/* blog info */}
-            <div className='px-4 md:px-6 py-6'>
+            <div className='px-4 md:px-10 py-6'>
                 {/* creator info */}
                 <div className='flex gap-2 items-center'>
                     {/* profile image */}
@@ -50,7 +50,7 @@ const BlogPost = ({ blog, author }) => {
                 </div>
 
                 {/* reactions (showing counts) */}
-                <div className='mt-4 text-lg flex gap-6 md:gap-12 items-center'>
+                <div className='mt-4 text-xl md:text-2xl flex gap-6 md:gap-12 items-center'>
                     {["💖", "🦄", "😲", "🔥", "✨"].map((emoji) => {
                         const count = blog.reactions?.find((r) => r.emoji === emoji)?.count || 0;
                         return (
@@ -85,9 +85,9 @@ const BlogPost = ({ blog, author }) => {
             </div>
 
             {/* blog description */}
-            <div className='px-4 md:px-6 mb-8'>
+            <div className='px-4 md:px-10 mb-8'>
                 <div
-                    className="prose prose-lg prose-blue max-w-full"
+                    className="md:text-xl prose prose-lg prose-blue max-w-full"
                     dangerouslySetInnerHTML={{ __html: blog.description }}
                 />
             </div>

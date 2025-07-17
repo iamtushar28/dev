@@ -17,6 +17,7 @@ const BlogDate = ({ createdAt }) => {
   const now = new Date();
   const timeDifference = now - createdDate;
 
+   // Time constants for logic
   const ONE_MINUTE = 60 * 1000;
   const FOUR_MINUTES = 4 * ONE_MINUTE;
   const ONE_DAY = 24 * 60 * 60 * 1000;
@@ -26,6 +27,7 @@ const BlogDate = ({ createdAt }) => {
     return <p className="text-sm text-zinc-500">Just now</p>;
   }
 
+  // show date
   const formattedDate = format(createdDate, "dd MMM yyyy");
   const relativeTime =
     timeDifference < ONE_DAY

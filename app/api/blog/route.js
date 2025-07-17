@@ -67,77 +67,6 @@ export async function POST(req) {
   }
 }
 
-// GET: Fetch blogs with author info
-export async function GET(req) {
-  try {
-    const client = await clientPromise;
-    const db = client.db();
-
-    const { searchParams } = new URL(req.url);
-    const filter = searchParams.get("filter") || "latest";
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = Math.min(parseInt(searchParams.get("limit") || "25"), 100); // cap to 100 max for performance
-
-    // Sorting options
-    const sortOptions = {
-      latest: { createdAt: -1 },
-      "top-week": { likes: -1 },
-      "top-month": { likes: -1 },
-      "top-year": { likes: -1 },
-      "top-infinity": { likes: -1 },
-    };
-    const sortBy = sortOptions[filter] || { createdAt: -1 };
-
-    // Projection stage (fields to include)
-    const projection = {
-      _id: 1,
-      title: 1,
-      content: 1,
-      createdAt: 1,
-      coverImage: 1,
-      authorId: 1,
-      creatorName: "$author.name",
-      creatorProfile: "$author.image"
-    };
-
-    const pipeline = [
-      { $sort: sortBy },
-      { $skip: (page - 1) * limit },
-      { $limit: limit },
-      {
-        $lookup: {
-          from: "users",
-          let: { authorId: "$authorId" },
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$_id", { $toObjectId: "$$authorId" }] }
-              }
-            },
-            { $project: { name: 1, image: 1 } } // only fetch required fields
-          ],
-          as: "author"
-        }
-      },
-      {
-        $unwind: {
-          path: "$author",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      { $project: projection }
-    ];
-
-    const blogs = await db.collection("blogs").aggregate(pipeline).toArray();
-
-    return NextResponse.json({ blogs: blogs || [] }, { status: 200 });
-
-  } catch (error) {
-    console.error("GET /api/blog Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}
-
 // PUT: Update an existing blog
 export async function PUT(req) {
   try {
@@ -190,36 +119,6 @@ export async function PUT(req) {
 
   } catch (error) {
     console.error("PUT /api/blog Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}
-
-// DELETE: Remove a blog post
-export async function DELETE(req) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { blogId } = await req.json();
-
-    const client = await clientPromise;
-    const db = client.db();
-
-    const deletedBlog = await db.collection("blogs").findOneAndDelete({
-      _id: new ObjectId(blogId),
-      authorId: new ObjectId(session.user.id),
-    });
-
-    if (!deletedBlog.value) {
-      return NextResponse.json({ error: "Blog not found or unauthorized" }, { status: 404 });
-    }
-
-    return NextResponse.json({ message: "Blog deleted successfully!" });
-
-  } catch (error) {
-    console.error("DELETE /api/blog Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

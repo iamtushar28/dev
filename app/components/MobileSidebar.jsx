@@ -17,6 +17,7 @@ const MobileSidebar = () => {
         <section className={`fixed top-0 left-0 py-4 flex w-[85%] h-screen bg-white flex-col gap-1 z-50 shadow-lg ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-all duration-200`}>
 
             <div className='overflow-y-scroll scroll-smooth'>
+                
                 {/* brand logo */}
                 <div className='px-5 pb-4 flex justify-between items-center'>
                     <div className='flex gap-2 items-center'>

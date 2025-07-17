@@ -1,8 +1,5 @@
 import React from 'react'
-// import Image from 'next/image'
 import { discussions } from '../data/discussions'
-// import BlogImage from '@/public/images/myImage.jpg'
-
 
 const Discussions = () => {
     return (
@@ -43,13 +40,6 @@ const Discussions = () => {
 
                     {/* title */}
                     <h4 className='capitalize text-zinc-700'>just launched🚀</h4>
-
-                    {/* banner image */}
-                    {/* <Image
-                        src={BlogImage}
-                        alt='banner image'
-                        className='w-full rounded mt-2'
-                    /> */}
 
                     {/* activity title */}
                     <h2 className='font-semibold text-blue-600 underline mt-2'>Frontend Challenge: February Edition</h2>

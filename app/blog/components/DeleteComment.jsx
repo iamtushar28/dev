@@ -4,6 +4,7 @@
 import { useMutation } from '@apollo/client';
 import { DELETE_COMMENT } from '@/graphql/mutations/deleteComment';
 import { GET_BLOG_BY_ID } from '@/graphql/queries/getBlogById';
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const DeleteComment = ({ commentId, blogId }) => {
     const [deleteComment, { loading }] = useMutation(DELETE_COMMENT, {
@@ -35,18 +36,19 @@ const DeleteComment = ({ commentId, blogId }) => {
     });
 
     const handleDelete = () => {
-
         deleteComment({ variables: { commentId, blogId } });
-
     };
 
     return (
         <button
             onClick={handleDelete}
             disabled={loading}
-            className="w-full px-4 py-2 text-red-600 font-semibold hover:text-white hover:bg-red-500 capitalize text-start rounded flex items-center gap-2 transition-all duration-200 mt-2"
+            className="w-full px-4 py-2 text-red-600 font-semibold hover:text-white hover:bg-red-500 capitalize text-start rounded flex items-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-            🗑 Delete
+
+            <RiDeleteBin6Line />
+            {loading ? "Deleting..." : "Delete"}
+
         </button>
     );
 };

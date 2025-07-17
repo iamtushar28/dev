@@ -15,6 +15,7 @@ const BlogTemplate = ({ blog }) => {
     const [openBlogOptionMenu, setOpenBlogOptionMenu] = useState(false);
     const wrapperRef = useRef(null);
     const blogOptionButtonRef = useRef(null);
+    
     // Get current emoji counts and user's reactions
     const emojiCounts = {};
     blog.reactions?.forEach(({ emoji, count }) => {

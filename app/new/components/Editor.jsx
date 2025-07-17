@@ -1,5 +1,6 @@
 "use client";
 import { useApolloClient } from "@apollo/client";
+import { GET_USER_BLOGS } from "@/graphql/queries/getUserBlogs";
 import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useState, useRef, useEffect } from "react";
@@ -85,7 +86,11 @@ const Editor = () => {
                     query: GET_BLOGS,
                     fetchPolicy: "network-only", // force refresh from server
                 });
-                
+                await client.query({
+                    query: GET_USER_BLOGS,
+                    fetchPolicy: "network-only",
+                });
+
             } else {
                 setAlertMessage(result.error || "Something went wrong."); // ✅ Error
             }
