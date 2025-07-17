@@ -47,11 +47,13 @@ const BlogWriter = ({ author }) => {
                 </div>
 
                 {/* about author */}
-                <div className='px-4 mt-4'>
-                    <p className='text-zinc-600'>
-                        {author.bio}
-                    </p>
-                </div>
+                {author?.bio && (
+                    <div className='px-4 mt-4'>
+                        <p className='text-zinc-600'>
+                            {author.bio}
+                        </p>
+                    </div>
+                )}
 
                 {/* website link */}
                 {author?.website && (
@@ -70,11 +72,15 @@ const BlogWriter = ({ author }) => {
                 )}
 
                 <div className='flex gap-4'>
+
                     {/* author location */}
-                    <div className='px-4 mt-4'>
-                        <h4 className='text-zinc-600 font-semibold text-xs uppercase'>Location</h4>
-                        <h3 className='text-zinc-500 text-sm mt-1'>{author.location || "NA"}</h3>
-                    </div>
+                    {author?.location && (
+                        <div className='px-4 mt-4'>
+                            <h4 className='text-zinc-600 font-semibold text-xs uppercase'>Location</h4>
+                            <h3 className='text-zinc-500 text-sm mt-1'>{author.location || "NA"}</h3>
+                        </div>
+                    )}
+
 
                     {/* joined date */}
                     <div className='px-4 mt-4'>
