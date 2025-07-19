@@ -13,6 +13,7 @@ import { MdMenu } from "react-icons/md"; //menu
 import { RiNotification2Line } from "react-icons/ri";//notification icon
 import { TbLogout2, TbWritingSign } from "react-icons/tb"; //logout, writing icon
 import { LuClipboardList, LuLayoutDashboard } from "react-icons/lu"; //list, dashboard icon
+import { RxCross2 } from "react-icons/rx"; //cross icon
 
 const Navbar = () => {
 
@@ -107,6 +108,15 @@ const Navbar = () => {
                         onChange={(e) => setQuery(e.target.value)}
                     />
 
+                    {query && (
+                        <button
+                            className='h-10 w-10 text-xl font-semibold flex justify-center items-center'
+                            onClick={() => setQuery('')}
+                        >
+                            <RxCross2 />
+                        </button>
+                    )}
+
                 </div>
 
                 {/* search suggestion box */}
@@ -118,20 +128,21 @@ const Navbar = () => {
                             <div
                                 key={blog._id}
                                 className="p-4 hover:bg-blue-50 cursor-pointer"
-                                onClick={() => {
-                                    // redirect to blog detail if needed
-                                    window.location.href = `/blog/${blog._id}`;
-                                }}
                             >
-                                <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
-                                <h2 className="text-lg font-semibold">{blog.title}</h2>
-                                <h6 className="text-sm text-zinc-600">
-                                    {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    })}
-                                </h6>
+                                <Link
+                                    // redirect to blog detail if needed
+                                    href={`/blog/${blog._id}`}>
+
+                                    <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
+                                    <h2 className="text-lg font-semibold">{blog.title}</h2>
+                                    <h6 className="text-sm text-zinc-600">
+                                        {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })}
+                                    </h6>
+                                </Link>
                             </div>
                         ))}
 
