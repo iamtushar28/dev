@@ -1,19 +1,29 @@
 "use client";
+import { useState, useRef, useEffect } from "react";
 import { useApolloClient } from "@apollo/client";
 import { GET_USER_BLOGS } from "@/graphql/queries/getUserBlogs";
 import { GET_BLOGS } from "@/graphql/queries/getBlogs";
 import { useEditor, EditorContent } from "@tiptap/react";
-import { useState, useRef, useEffect } from "react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import ListItem from "@tiptap/extension-list-item";
 import Color from "@tiptap/extension-color";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@tiptap/extension-placeholder";
+import Link from '@tiptap/extension-link'
 import Toolbar from "./Toolbar";
 import DefaultAlert from '../../components/DefaultAlert'
 
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+// load all languages with "all" or common languages with "common"
+import { all, createLowlight } from 'lowlight'
+import 'highlight.js/styles/atom-one-light.css';
+
 const Editor = () => {
+
+    // create a lowlight instance with all languages loaded
+    const lowlight = createLowlight(all);
+
     const client = useApolloClient(); //initialize client
     const [title, setTitle] = useState("");
     const textareaRef = useRef(null);
@@ -44,12 +54,22 @@ const Editor = () => {
     // Initialize TipTap Editor
     const editor = useEditor({
         extensions: [
-            StarterKit.configure({ bulletList: { keepMarks: true }, orderedList: { keepMarks: true } }),
+            StarterKit.configure({
+                codeBlock: false,
+                history: true,
+                bulletList: { keepMarks: true },
+                orderedList: { keepMarks: true },
+            }),
             TextStyle,
             ListItem,
             Color,
             Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
             Placeholder.configure({ placeholder: "Start writing your blog..." }),
+
+            CodeBlockLowlight.configure({
+                lowlight,
+                defaultLanguage: 'javascript', // optional fallback
+            }),
         ],
     });
 
@@ -140,7 +160,7 @@ const Editor = () => {
             <div className="prose prose-lg prose-blue max-w-full">
                 <EditorContent
                     editor={editor}
-                    className="mt-4 p-4 min-h-[300px] w-full text-black text-lg border border-gray-300 rounded-md prose-ul:list-disc prose-ol:list-decimal"
+                    className="mt-4 p-4 h-[30rem] w-full text-black text-lg border border-blue-300 rounded-md prose-ul:list-disc prose-ol:list-decimal overflow-y-scroll"
                 />
             </div>
 

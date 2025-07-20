@@ -71,6 +71,25 @@ const Toolbar = ({ editor }) => {
                 <BsCode />
             </button>
 
+
+            <select
+                onChange={(e) =>
+                    editor.chain().focus().setCodeBlock({ language: e.target.value }).run()
+                }
+                value={editor.getAttributes("codeBlock").language || ""}
+                className={`p-2 rounded outline-none text-sm ${editor.isActive("codeBlock") ? "ring-2 ring-blue-600" : "bg-white"} border`}
+            >
+                <option value="">Language</option>
+                <option value="javascript">Js</option>
+                <option value="typescript">Ts</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="cpp">C++</option>
+                <option value="python">Py</option>
+                <option value="graphql">GraphQL</option>
+            </select>
+
+
             <button
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
                 className={`p-2 rounded text-xl ${editor.isActive("blockquote") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
@@ -98,8 +117,6 @@ const Toolbar = ({ editor }) => {
             >
                 Horizontal rule
             </button>
-
-
 
         </div>
     );

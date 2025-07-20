@@ -17,6 +17,13 @@ body {
     /* color: #fa5d84; */
 }
 
+/* global.css */
+.prose pre {
+  background-color: #f6f8fa !important;
+  color: #24292f;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
 
 @keyframes shimmer {
   0% {
