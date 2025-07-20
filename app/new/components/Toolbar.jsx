@@ -5,68 +5,91 @@ import {
     BiStrikethrough,
     BiListUl,
     BiListOl,
+    BiLinkAlt,
 } from "react-icons/bi";
 import { BsTypeH1, BsTypeH2 } from "react-icons/bs";
+import { CiImageOn } from "react-icons/ci";
+import { FaYoutube } from "react-icons/fa";
 import { BsCode, BsBlockquoteLeft } from "react-icons/bs";
 import { AiOutlineRedo, AiOutlineUndo } from "react-icons/ai";
 
-const Toolbar = ({ editor }) => {
+const Toolbar = ({ editor, onImageUpload, onLinkUpload, onYTVideoEmbed }) => {
     if (!editor) return null;
 
     return (
         <div className="flex flex-wrap gap-2 mt-6 mb-6">
             <button
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("bold") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("bold") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BiBold />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("italic") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("italic") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BiItalic />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 2 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 2 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BsTypeH1 />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 3 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 3 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BsTypeH2 />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleStrike().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("strike") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("strike") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BiStrikethrough />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("bulletList") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("bulletList") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BiListUl />
             </button>
 
             <button
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("orderedList") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("orderedList") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BiListOl />
             </button>
 
             <button
+                onClick={onLinkUpload}
+                className={`p-2 rounded text-xl hover:ring-2 ring-blue-600 border transition-all duration-200`}
+            >
+                <BiLinkAlt />
+            </button>
+
+            <button
+                onClick={onImageUpload}
+                className={`p-2 rounded text-xl hover:ring-2 ring-blue-600 border transition-all duration-200`}
+            >
+                <CiImageOn />
+            </button>
+            <button
+                onClick={onYTVideoEmbed}
+                className={`p-2 rounded text-xl text-red-500 hover:ring-2 ring-blue-600 border transition-all duration-200`}
+            >
+                <FaYoutube/>
+            </button>
+
+            <button
                 onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("codeBlock") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("codeBlock") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BsCode />
             </button>
@@ -77,7 +100,7 @@ const Toolbar = ({ editor }) => {
                     editor.chain().focus().setCodeBlock({ language: e.target.value }).run()
                 }
                 value={editor.getAttributes("codeBlock").language || ""}
-                className={`p-2 rounded outline-none text-sm ${editor.isActive("codeBlock") ? "ring-2 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded outline-none text-sm ${editor.isActive("codeBlock") ? "ring-2 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <option value="">Language</option>
                 <option value="javascript">Js</option>
@@ -92,7 +115,7 @@ const Toolbar = ({ editor }) => {
 
             <button
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                className={`p-2 rounded text-xl ${editor.isActive("blockquote") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} border`}
+                className={`p-2 rounded text-xl ${editor.isActive("blockquote") ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BsBlockquoteLeft />
             </button>

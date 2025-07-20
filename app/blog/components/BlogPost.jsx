@@ -1,14 +1,27 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react';
 import Image from 'next/image'
 import AddComment from './AddComment'
 import Comments from './Comments'
 import BlogDate from '@/app/components/BlogDate'
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-light.css'; // You can change theme here
 
 const BlogPost = ({ blog, author }) => {
 
     const { data: session } = useSession();
+
+    const contentRef = useRef(null);
+
+    useEffect(() => {
+    if (contentRef.current) {
+        requestAnimationFrame(() => {
+            hljs.highlightAll();
+        });
+    }
+}, [blog.description]);
+
 
     return (
         <section className='md:ml-24 w-full md:w-[66%] h-fit pb-12 bg-white md:rounded'>
@@ -87,6 +100,7 @@ const BlogPost = ({ blog, author }) => {
             {/* blog description */}
             <div className='px-4 md:px-10 mb-8'>
                 <div
+                    ref={contentRef}
                     className="md:text-xl prose prose-lg prose-blue max-w-full"
                     dangerouslySetInnerHTML={{ __html: blog.description }}
                 />
@@ -98,11 +112,11 @@ const BlogPost = ({ blog, author }) => {
             <div className='mt-8 px-2 md:px-6' id='comments'>
                 {/* heading */}
                 <div className='flex items-center gap-2 text-2xl font-bold'>
-                    <h2 className='capitalize'>Comments - {blog.commentsCount}</h2>  
+                    <h2 className='capitalize'>Comments - {blog.commentsCount}</h2>
                 </div>
 
                 {/* for adding comment on blog */}
-                <AddComment blog={blog} session={session}/>
+                <AddComment blog={blog} session={session} />
 
                 {/* for showing all comments of blog */}
                 <Comments blogId={blog._id} blog={blog} />

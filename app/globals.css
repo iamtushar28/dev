@@ -56,4 +56,9 @@ body {
   -ms-overflow-style: none;    /* Internet Explorer 10+ */
 }
 
+/* global.css */
+.prose img.my-custom-image-class {
+  border-radius: 16px;
+}
+
 
