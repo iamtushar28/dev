@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { ADD_COMMENT } from '@/graphql/mutations/addComment';
-import { GET_BLOG_BY_ID } from '@/graphql/queries/getBlogById';
+import { GET_BLOG_BY_SLUG } from '@/graphql/queries/BlogBySlug';
 import DefaultAlert from '../../components/DefaultAlert';
 
 const AddComment = ({ blog, session }) => {
@@ -19,13 +19,13 @@ const AddComment = ({ blog, session }) => {
       const blogId = blog._id;
 
       const existing = cache.readQuery({
-        query: GET_BLOG_BY_ID,
+        query: GET_BLOG_BY_SLUG,
         variables: { id: blogId },
       });
 
       if (existing?.blog) {
         cache.writeQuery({
-          query: GET_BLOG_BY_ID,
+          query: GET_BLOG_BY_SLUG,
           variables: { id: blogId },
           data: {
             blog: {

@@ -204,11 +204,9 @@ export const resolvers = {
       }
     },
 
-    blog: async (_, { id }, context) => {
+    blogBySlug: async (_, { slug }, context) => {
       try {
-        const blog = await context.db
-          .collection("blogs")
-          .findOne({ _id: new ObjectId(id) });
+        const blog = await context.db.collection("blogs").findOne({ slug });
 
         if (!blog) {
           throw new Error("Blog not found");
@@ -220,7 +218,7 @@ export const resolvers = {
         if (session?.user?.id) {
           const bookmark = await context.db.collection("bookmarks").findOne({
             userId: session.user.id,
-            blogId: id,
+            blogId: blog._id.toString(),
           });
 
           isBookmarked = !!bookmark;
@@ -230,11 +228,11 @@ export const resolvers = {
           ...blog,
           _id: blog._id.toString(),
           authorId: blog.authorId?.toString(),
-          bookmarked: isBookmarked, // ✅ always return boolean
+          bookmarked: isBookmarked,
         };
       } catch (error) {
-        console.error("Failed to fetch blog:", error);
-        throw new Error("Failed to fetch blog");
+        console.error("Failed to fetch blog by slug:", error);
+        throw new Error("Failed to fetch blog by slug");
       }
     },
 

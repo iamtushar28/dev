@@ -50,7 +50,7 @@ const BlogTemplate = ({ blog }) => {
 
                     {/* blog title */}
                     <Link
-                        href={`/blog/${blog._id}`} // Pass blog ID dynamically
+                        href={`/blog/${blog.slug}`} // Pass blog ID dynamically
                         className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
                     >
                         {blog.title}
@@ -76,7 +76,7 @@ const BlogTemplate = ({ blog }) => {
 
                             {/* reaction count */}
                             <Link
-                                href={`/blog/${blog._id}`}
+                                href={`/blog/${blog.slug}`}
                                 title='add reaction on blog'
                                 className='h-8 w-36 md:w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
                                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
@@ -94,7 +94,7 @@ const BlogTemplate = ({ blog }) => {
 
                             {/* comments count */}
                             <Link
-                                href={`/blog/${blog._id}#comments`}
+                                href={`/blog/${blog.slug}#comments`}
                                 title='comment on blog'
                                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                                 <FaRegComment className='text-lg' />

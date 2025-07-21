@@ -290,7 +290,6 @@ const Editor = () => {
                 <label htmlFor="coverImage" className="cursor-pointer px-4 py-3 bg-white border border-gray-200 rounded-lg hover:ring-2 hover:ring-blue-600 transition font-semibold text-zinc-600">
                     Add Cover Image
                 </label>
-                <p className="text-xs mb-4 text-red-600">Use landscape images only*</p>
             </div>
 
             {/* Display Cover Image */}

@@ -44,6 +44,7 @@ export async function GET(req) {
         $project: {
           _id: 1,
           title: 1,
+          slug: 1,
           creatorName: "$author.name",
           creatorProfile: "$author.image",
           createdAt: 1,

@@ -5,7 +5,7 @@ import { MdOutlineAddReaction } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { TOGGLE_REACTION } from "@/graphql/mutations/toggleReaction";
-import { GET_BLOG_BY_ID } from "@/graphql/queries/getBlogById";
+import { GET_BLOG_BY_SLUG } from "@/graphql/queries/BlogBySlug";
 
 const EMOJIS = ["💖", "🦄", "😲", "🔥", "✨"];
 
@@ -55,7 +55,7 @@ const MobileReactionButton = ({ blog, blogId }) => {
         },
         update: (cache, { data: { toggleReaction } }) => {
           const existing = cache.readQuery({
-            query: GET_BLOG_BY_ID,
+            query: GET_BLOG_BY_SLUG,
             variables: { id: blogId },
           });
 
@@ -82,7 +82,7 @@ const MobileReactionButton = ({ blog, blogId }) => {
           }
 
           cache.writeQuery({
-            query: GET_BLOG_BY_ID,
+            query: GET_BLOG_BY_SLUG,
             variables: { id: blogId },
             data: {
               blog: {

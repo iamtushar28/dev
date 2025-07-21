@@ -131,7 +131,7 @@ const Navbar = () => {
                             >
                                 <Link
                                     // redirect to blog detail if needed
-                                    href={`/blog/${blog._id}`}>
+                                    href={`/blog/${blog.slug}`}>
 
                                     <div className="flex items-center gap-2">
                                         <Image src={blog.creatorProfile} alt="bloger image" height={30} width={30} className="rounded-full" />

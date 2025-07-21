@@ -3,20 +3,20 @@
 
 import { useMutation } from '@apollo/client';
 import { DELETE_COMMENT } from '@/graphql/mutations/deleteComment';
-import { GET_BLOG_BY_ID } from '@/graphql/queries/getBlogById';
+import { GET_BLOG_BY_SLUG } from '@/graphql/queries/BlogBySlug';
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const DeleteComment = ({ commentId, blogId }) => {
     const [deleteComment, { loading }] = useMutation(DELETE_COMMENT, {
         update(cache, { data: { deleteComment } }) {
             const existing = cache.readQuery({
-                query: GET_BLOG_BY_ID,
+                query: GET_BLOG_BY_SLUG,
                 variables: { id: blogId },
             });
 
             if (existing?.blog) {
                 cache.writeQuery({
-                    query: GET_BLOG_BY_ID,
+                    query: GET_BLOG_BY_SLUG,
                     variables: { id: blogId },
                     data: {
                         blog: {

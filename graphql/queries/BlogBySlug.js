@@ -1,9 +1,10 @@
 import { gql } from "@apollo/client";
 
-export const GET_BLOG_BY_ID = gql`
-  query Blog($id: ID!) {
-    blog(id: $id) {
+export const GET_BLOG_BY_SLUG = gql`
+  query BlogBySlug($slug: String!) {
+    blogBySlug(slug: $slug) {
       _id
+      slug
       title
       description
       coverImage

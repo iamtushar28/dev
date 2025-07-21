@@ -29,7 +29,7 @@ const BlogTemplate = ({ blog }) => {
   return (
     <div ref={ref} className='w-full h-fit pb-1 bg-white overflow-hidden md:rounded'>
       {/* Cover Image */}
-      <Link href={`/blog/${blog._id}`}>
+      <Link href={`/blog/${blog.slug}`}>
         {inView && blog.coverImage && (
           <Image
             src={blog.coverImage}
@@ -70,13 +70,11 @@ const BlogTemplate = ({ blog }) => {
         <div className='mt-3'>
 
           <Link
-            href={`/blog/${blog._id}`}
+            href={`/blog/${blog.slug}`}
             className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
           >
             {truncateText(blog.title, 96)}
           </Link>
-
-
 
           {/* Tags */}
           <div className='mt-2'>
@@ -97,7 +95,7 @@ const BlogTemplate = ({ blog }) => {
 
               {/* reaction count */}
               <Link
-                href={`/blog/${blog._id}`}
+                href={`/blog/${blog.slug}`}
                 title='add reaction on blog'
                 className='h-8 w-36 md:w-48 hover:bg-zinc-100 rounded transition-all duration-200 flex relative'>
                 <div className='h-6 w-6 text-sm ring-1 bg-slate-100 ring-white rounded-full flex justify-center items-center absolute left-3 top-1 z-40'>💖</div>
@@ -116,7 +114,7 @@ const BlogTemplate = ({ blog }) => {
 
               {/* comments count */}
               <Link
-                href={`/blog/${blog._id}#comments`}
+                href={`/blog/${blog.slug}#comments`}
                 title='comment on blog'
                 className='capitalize text-xs text-zinc-500 md:text-sm flex gap-2 items-center px-2 py-1 hover:bg-zinc-100 rounded transition-all duration-200'>
                 <FaRegComment className='text-lg' />
@@ -129,6 +127,7 @@ const BlogTemplate = ({ blog }) => {
             <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
 
           </div>
+          
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ import path from "path";
 import fs from "fs/promises";
 import { ObjectId } from "mongodb";
 import cloudinary from "cloudinary";
+import slugify from "slugify";
+import { nanoid } from "nanoid";
 
 // POST: Create a new blog with image upload
 cloudinary.v2.config({
@@ -46,12 +48,17 @@ export async function POST(req) {
       coverImageUrl = uploadedImage.secure_url; // Get Cloudinary image URL
     }
 
+    // Generate Unique Slug
+    const slugBase = slugify(title, { lower: true, strict: true });
+    const uniqueSlug = `${slugBase}-${nanoid(6)}`; // e.g., "my-post-title-d9k3le"
+
     // Save to MongoDB
     const client = await clientPromise;
     const db = client.db();
     const newBlog = {
       title,
       description,
+      slug: uniqueSlug,
       coverImage: coverImageUrl, // Store Cloudinary image URL in DB
       authorId: new ObjectId(session.user.id),
       createdAt: new Date(),

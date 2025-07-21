@@ -4,6 +4,7 @@ export const GET_BLOGS = gql`
   query GetBlogs {
     blogs {
       _id
+      slug
       title
       description
       coverImage

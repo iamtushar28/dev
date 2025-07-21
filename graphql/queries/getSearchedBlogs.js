@@ -5,6 +5,7 @@ export const GET_SEARCHED_BLOGS = gql`
     searchBlogs(title: $title) {
       _id
       title
+      slug
       createdAt
       bookmarked
       author {

@@ -4,6 +4,7 @@ export const typeDefs = gql`
   type Blog {
     _id: ID!
     title: String!
+    slug: String!
     description: String!
     coverImage: String
     authorId: ID!
@@ -32,9 +33,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    # TOGGLE REACTION
     toggleReaction(blogId: ID!, emoji: String!): EmojiCount!
-
     addComment(blogId: ID!, userId: ID!, comment: String!): Comment!
     deleteComment(commentId: ID!, blogId: ID!): Comment!
   }
@@ -53,19 +52,12 @@ export const typeDefs = gql`
   type Query {
     blogs: [Blog!]!
     blog(id: ID!): Blog
+    blogBySlug(slug: String!): Blog
     users: [User!]!
     user(id: ID!): User
-
-    # For logged-in user's blogs
     getUserBlogs: [Blog!]!
-
-    # for searching blog
     searchBlogs(title: String!): [Blog!]!
-
-    # Check a single blog quickly (handy for BookmarkButton)
     isBlogBookmarked(blogId: ID!): Boolean!
-
-    # for showing bookmarked blog of loged in user
     bookmarkedBlogs: [Blog]
   }
 `;

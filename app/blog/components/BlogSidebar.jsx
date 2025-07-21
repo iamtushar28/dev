@@ -16,7 +16,7 @@ const BlogSidebar = ({ blog }) => {
 
             {/* comment button */}
             <Link
-                href={`/blog/${blog._id}#comments`}
+                href={`/blog/${blog.slug}#comments`}
                 className='text-zinc-600 hover:text-blue-500 transition-all duration-200 flex flex-col justify-center items-center'>
                 <FaRegComment className='text-2xl' />
                 {blog.commentsCount}

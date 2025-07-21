@@ -5,6 +5,7 @@ export const GET_USER_BLOGS = gql`
     getUserBlogs {
       _id
       title
+      slug
       createdAt
       updatedAt
       bookmarked

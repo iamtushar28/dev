@@ -17,7 +17,7 @@ const MobileBlogSidebar = ({ blog }) => {
 
                 {/* comment button */}
                 <Link
-                    href={`/blog/${blog._id}#comments`}
+                    href={`/blog/${blog.slug}#comments`}
                     className='text-zinc-600 hover:text-blue-500 transition-all duration-200 flex gap-2 items-center'>
                     <FaRegComment className='text-2xl' />
                     {blog.commentsCount}
