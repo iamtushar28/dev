@@ -133,8 +133,15 @@ const Navbar = () => {
                                     // redirect to blog detail if needed
                                     href={`/blog/${blog._id}`}>
 
-                                    <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
-                                    <h2 className="text-lg font-semibold">{blog.title}</h2>
+                                    <div className="flex items-center gap-2">
+                                        <Image src={blog.creatorProfile} alt="bloger image" height={30} width={30} className="rounded-full" />
+                                        <h4 className="capitalize text-sm text-zinc-600">{blog.creatorName}</h4>
+                                    </div>
+
+                                    <h2 className="text-lg font-semibold">
+                                        {blog.title.length > 94 ? blog.title.slice(0, 94) + "..." : blog.title}
+                                    </h2>
+
                                     <h6 className="text-sm text-zinc-600">
                                         {new Date(blog.createdAt).toLocaleDateString('en-US', {
                                             year: 'numeric',

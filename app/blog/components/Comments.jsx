@@ -35,7 +35,7 @@ const CommentsList = ({ blog }) => {
   }, [activeCommentId]);
 
   if (!comments.length)
-    return <p className="text-zinc-400">No comments yet. Be the first to comment!</p>;
+    return <p className="text-zinc-400 mt-2">No comments yet. Be the first to comment!</p>;
 
   return (
     <div className="mt-6 flex flex-col gap-4">

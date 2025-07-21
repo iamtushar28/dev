@@ -32,7 +32,8 @@ const DeleteAlert = ({ title, message, onClose, onConfirm, isDeleting }) => {
           {/* Cancel */}
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-semibold text-gray-800 rounded-3xl border border-zinc-300 hover:bg-zinc-100 transition"
+            disabled={isDeleting}
+            className="px-4 py-2 text-sm font-semibold text-gray-800 rounded-3xl border border-zinc-300 hover:bg-zinc-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

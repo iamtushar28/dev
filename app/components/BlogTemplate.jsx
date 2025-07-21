@@ -13,6 +13,13 @@ const BlogTemplate = ({ blog }) => {
     threshold: 0.1,
   });
 
+  //show only first 96 character of title
+  const truncateText = (text, limit) => {
+    if (text.length <= limit) return text;
+    return text.slice(0, text.slice(0, limit).lastIndexOf(" ")) + "...";
+  };
+
+
   // Get current emoji counts and user's reactions
   const emojiCounts = {};
   blog.reactions?.forEach(({ emoji, count }) => {
@@ -61,12 +68,15 @@ const BlogTemplate = ({ blog }) => {
 
         {/* Blog Title */}
         <div className='mt-3'>
+
           <Link
             href={`/blog/${blog._id}`}
             className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
           >
-            {blog.title}
+            {truncateText(blog.title, 96)}
           </Link>
+
+
 
           {/* Tags */}
           <div className='mt-2'>
@@ -117,7 +127,7 @@ const BlogTemplate = ({ blog }) => {
 
             {/* bookmark blog button */}
             <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
-            
+
           </div>
         </div>
       </div>

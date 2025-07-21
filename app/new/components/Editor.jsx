@@ -29,6 +29,7 @@ const Editor = () => {
 
     const client = useApolloClient(); //initialize client
     const [title, setTitle] = useState("");
+    const [titleError, setTitleError] = useState("");
     const textareaRef = useRef(null);
     const [coverImage, setCoverImage] = useState(null);
     const [imageFile, setImageFile] = useState(null);
@@ -79,7 +80,7 @@ const Editor = () => {
                 allowBase64: true,
                 inline: true,
                 HTMLAttributes: {
-                    class: 'my-custom-image-class',
+                    class: 'my-custom-media-class',
                 },
             }),
 
@@ -146,6 +147,9 @@ const Editor = () => {
             Youtube.configure({
                 controls: false,
                 nocookie: true,
+                HTMLAttributes: {
+                    class: 'my-custom-media-class',
+                },
             }),
 
         ],
@@ -201,18 +205,10 @@ const Editor = () => {
             return alert('Please enter a valid YouTube URL.');
         }
 
-        // Set dimensions based on screen width
-        const isMobile = window.innerWidth <= 768
-
-        const width = '100%' // Always 100% width
-        const height = isMobile ? 200 : 400 // Different height based on screen size
-
         // Insert YouTube video
         try {
             editor.commands.setYoutubeVideo({
                 src: url,
-                width: '100%', 
-                height: 400, 
             });
 
         } catch (e) {
@@ -224,6 +220,14 @@ const Editor = () => {
     if (!editor) return null;
 
     const handleSave = async () => {
+
+        if (!title.trim()) {
+            setTitleError("Title is required!");
+            return;
+        } else {
+            setTitleError(""); // Clear previous error if title is valid
+        }
+
         setIsUploading(true);
         const content = editor.getHTML();
         const formData = new FormData();
@@ -298,7 +302,12 @@ const Editor = () => {
                 placeholder="New post title here..."
                 className="text-3xl font-extrabold w-full outline-none resize-none overflow-hidden placeholder:text-zinc-600 mt-6"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                    setTitle(e.target.value);
+                    if (titleError && e.target.value.trim()) {
+                        setTitleError(""); // Clear the error once there's input
+                    }
+                }}
             />
 
             {/* Toolbar */}
@@ -313,7 +322,8 @@ const Editor = () => {
             </div>
 
             {/* Save Button */}
-            <div className="mt-6">
+            <div className="mt-6 flex items-center gap-10">
+
                 <button
                     onClick={handleSave}
                     className={`px-5 py-2 text-white rounded-lg font-semibold transition ${isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
@@ -322,7 +332,14 @@ const Editor = () => {
                 >
                     {isUploading ? "Publishing..." : "Publish"}
                 </button>
+
+
+                {titleError && (
+                    <p className="py-2 pl-4 pr-16 bg-red-50 shadow text-red-500 text-sm rounded-lg">{titleError}</p>
+                )}
+
             </div>
+
         </div>
     );
 };

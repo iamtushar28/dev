@@ -11,11 +11,6 @@ body {
   box-shadow: none !important;
 }
 
-.ProseMirror ul,
-.ProseMirror ol {
-    color: black !important;
-    /* color: #fa5d84; */
-}
 
 /* global.css */
 .prose pre {
@@ -56,9 +51,35 @@ body {
   -ms-overflow-style: none;    /* Internet Explorer 10+ */
 }
 
-/* global.css */
-.prose img.my-custom-image-class {
-  border-radius: 16px;
+.prose img.my-custom-media-class,
+.prose iframe.my-custom-media-class {
+  border-radius: 6px;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+.prose iframe.my-custom-media-class {
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 768px) {
+  .prose iframe.my-custom-media-class {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: auto;
+  }
 }
 
 
+blockquote {
+  color: #3B82F6; /* Tailwind's blue-500 */
+  background-color: #f6f8fa;
+  border-left: 4px solid #3B82F6 !important;
+  padding: 0.5px;
+  font-style: italic;
+}
+
+::marker{
+  color: #000000 !important;
+}

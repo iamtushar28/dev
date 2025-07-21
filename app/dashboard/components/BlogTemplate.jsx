@@ -15,12 +15,18 @@ const BlogTemplate = ({ blog }) => {
     const [openBlogOptionMenu, setOpenBlogOptionMenu] = useState(false);
     const wrapperRef = useRef(null);
     const blogOptionButtonRef = useRef(null);
-    
+
     // Get current emoji counts and user's reactions
     const emojiCounts = {};
     blog.reactions?.forEach(({ emoji, count }) => {
         emojiCounts[emoji] = count;
     });
+
+    //show only first 75 character of title
+    const truncateText = (text, limit) => {
+        if (text.length <= limit) return text;
+        return text.slice(0, text.slice(0, limit).lastIndexOf(" ")) + "...";
+    };
 
     // Close blog options menu when clicking outside
     useEffect(() => {
@@ -104,7 +110,7 @@ const BlogTemplate = ({ blog }) => {
                         href={`/blog/${blog._id}`} // Pass blog ID dynamically
                         className="text-xl md:text-2xl font-semibold hover:text-blue-600 transition-all"
                     >
-                        {blog.title}
+                        {truncateText(blog.title, 75)}
                     </Link>
 
                     {/* tags */}
