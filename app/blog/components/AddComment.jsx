@@ -1,47 +1,44 @@
 'use client';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ADD_COMMENT } from '@/graphql/mutations/addComment';
 import { GET_BLOG_BY_SLUG } from '@/graphql/queries/BlogBySlug';
 import DefaultAlert from '../../components/DefaultAlert';
 
 const AddComment = ({ blog, session }) => {
-  const client = useApolloClient();
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const [alertMessage, setAlertMessage] = useState(''); //handling alert message state
-  const [isUploading, setIsUploading] = useState(false); //handling add comment status
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const [addComment] = useMutation(ADD_COMMENT, {
     update(cache, { data: { addComment } }) {
-
-      setIsUploading(true); //porcessing comment
-      const blogId = blog._id;
-
       const existing = cache.readQuery({
         query: GET_BLOG_BY_SLUG,
-        variables: { id: blogId },
+        variables: { slug: blog.slug },
       });
 
-      if (existing?.blog) {
-        cache.writeQuery({
-          query: GET_BLOG_BY_SLUG,
-          variables: { id: blogId },
-          data: {
-            blog: {
-              ...existing.blog,
-              comments: [addComment, ...(existing.blog.comments || [])],
-              commentsCount: (existing.blog.commentsCount || 0) + 1,
-            },
-          },
-        });
-      }
+      if (!existing?.blogBySlug) return;
 
-      setIsUploading(false);
+      cache.writeQuery({
+        query: GET_BLOG_BY_SLUG,
+        variables: { slug: blog.slug },
+        data: {
+          blogBySlug: {
+            ...existing.blogBySlug,
+            comments: [addComment, ...(existing.blogBySlug.comments || [])],
+            commentsCount: (existing.blogBySlug.commentsCount || 0) + 1,
+          },
+        },
+      });
     },
-    onCompleted: () => reset(),
+    onCompleted: () => {
+      setIsUploading(false);
+      reset();
+    },
     onError: (error) => {
       console.error('Add comment failed:', error);
+      setIsUploading(false);
       setAlertMessage('Failed to submit comment. Please try again.');
     },
   });
@@ -49,7 +46,7 @@ const AddComment = ({ blog, session }) => {
   const onSubmit = (data) => {
     if (!session) return;
 
-    setIsUploading(true); // ✅ Start loading before mutation fires
+    setIsUploading(true);
 
     addComment({
       variables: {
@@ -57,27 +54,25 @@ const AddComment = ({ blog, session }) => {
         userId: session.user.id,
         comment: data.comment,
       },
-    }).finally(() => {
-      setIsUploading(false); // ✅ Ensure loading ends
     });
-
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
-        <div className='flex gap-2 w-full'>
-          {session && (<img
-            src={session.user.image}
-            alt="User image"
-            className="h-8 w-8 rounded-full object-cover"
-          />
+        <div className="flex gap-2 w-full">
+          {session && (
+            <img
+              src={session.user.image}
+              alt="User image"
+              className="h-8 w-8 rounded-full object-cover"
+            />
           )}
           <textarea
             {...register('comment', { required: 'Comment required!' })}
             className="w-full h-16 p-3 border rounded hover:ring-2 hover:ring-blue-600 outline-none transition-all duration-300"
             placeholder="Write a comment..."
-          ></textarea>
+          />
         </div>
 
         {errors.comment && (
@@ -88,9 +83,13 @@ const AddComment = ({ blog, session }) => {
           <div className="w-full flex justify-end mt-2">
             <button
               type="submit"
-              className={`px-3 py-2 text-white font-semibold rounded ${isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+              className={`px-3 py-2 text-white font-semibold rounded ${isUploading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+              disabled={isUploading}
             >
-              {isUploading ? "Adding..." : "Add Comment"}
+              {isUploading ? 'Adding...' : 'Add Comment'}
             </button>
           </div>
         )}

@@ -9,7 +9,7 @@ import { GET_BLOG_BY_SLUG } from "@/graphql/queries/BlogBySlug";
 
 const EMOJIS = ["💖", "🦄", "😲", "🔥", "✨"];
 
-const MobileReactionButton = ({ blog, blogId }) => {
+const MobileReactionButton = ({ blog }) => {
   const { data: session } = useSession();
   const [showOptions, setShowOptions] = useState(false);
   const wrapperRef = useRef(null);
@@ -17,7 +17,6 @@ const MobileReactionButton = ({ blog, blogId }) => {
 
   const [toggleReaction] = useMutation(TOGGLE_REACTION);
 
-  // Event listener to close the emoji popup
   const handleClickOutside = (event) => {
     if (
       showOptions &&
@@ -35,47 +34,58 @@ const MobileReactionButton = ({ blog, blogId }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showOptions]);
 
+  const emojiCounts = {};
+  blog.reactions?.forEach(({ emoji, count }) => {
+    emojiCounts[emoji] = count;
+  });
+
+  const userReacted = new Set(blog.userReactions || []);
+
   const handleReactionClick = async (emoji) => {
     if (!session) {
       alert("Please login.");
       return;
     }
 
+    const prevCount = emojiCounts[emoji] || 0;
+    const hasReacted = userReacted.has(emoji);
+
     try {
       await toggleReaction({
-        variables: { blogId, emoji },
+        variables: { blogId: blog._id, emoji },
         optimisticResponse: {
           toggleReaction: {
             __typename: "EmojiCount",
             emoji,
-            count:
-              (blog.reactions.find((r) => r.emoji === emoji)?.count || 0) +
-              (blog.userReactions.includes(emoji) ? -1 : 1),
+            count: hasReacted ? prevCount - 1 : prevCount + 1,
           },
         },
         update: (cache, { data: { toggleReaction } }) => {
           const existing = cache.readQuery({
             query: GET_BLOG_BY_SLUG,
-            variables: { id: blogId },
+            variables: { slug: blog.slug },
           });
 
-          if (!existing?.blog) return;
+          if (!existing?.blogBySlug) return;
 
-          const updatedReactions = (existing.blog.reactions || []).map((r) => ({
-            ...r,
-          }));
-          const idx = updatedReactions.findIndex(
-            (r) => r.emoji === toggleReaction.emoji
-          );
+          const updatedReactions = [...(existing.blogBySlug.reactions || [])];
+          const idx = updatedReactions.findIndex((r) => r.emoji === emoji);
 
           if (idx !== -1) {
-            updatedReactions[idx].count = toggleReaction.count;
+            updatedReactions[idx] = {
+              ...updatedReactions[idx],
+              count: toggleReaction.count,
+            };
           } else {
-            updatedReactions.push(toggleReaction);
+            updatedReactions.push({
+              emoji,
+              count: toggleReaction.count,
+              __typename: "EmojiCount",
+            });
           }
 
-          let updatedUserReactions = new Set(existing.blog.userReactions || []);
-          if (updatedUserReactions.has(emoji)) {
+          const updatedUserReactions = new Set(existing.blogBySlug.userReactions || []);
+          if (hasReacted) {
             updatedUserReactions.delete(emoji);
           } else {
             updatedUserReactions.add(emoji);
@@ -83,10 +93,10 @@ const MobileReactionButton = ({ blog, blogId }) => {
 
           cache.writeQuery({
             query: GET_BLOG_BY_SLUG,
-            variables: { id: blogId },
+            variables: { slug: blog.slug },
             data: {
-              blog: {
-                ...existing.blog,
+              blogBySlug: {
+                ...existing.blogBySlug,
                 reactions: updatedReactions,
                 userReactions: Array.from(updatedUserReactions),
               },
@@ -98,13 +108,6 @@ const MobileReactionButton = ({ blog, blogId }) => {
       console.error("Failed to react", error);
     }
   };
-
-  const emojiCounts = {};
-  blog.reactions?.forEach(({ emoji, count }) => {
-    emojiCounts[emoji] = count;
-  });
-
-  const userReacted = new Set(blog.userReactions || []);
 
   return (
     <>

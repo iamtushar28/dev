@@ -13,7 +13,7 @@ const MobileBlogSidebar = ({ blog }) => {
             <section className='z-20 flex fixed bottom-0 right-0 left-0 w-full py-2 bg-white shadow-lg border-t border-zinc-200 justify-around'>
 
                 {/* like/reaction button */}
-                <MobileReactionButton blogId={blog._id} blog={blog} />
+                <MobileReactionButton blog={blog} />
 
                 {/* comment button */}
                 <Link

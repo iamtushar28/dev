@@ -12,7 +12,7 @@ const BlogSidebar = ({ blog }) => {
         <section className='hidden md:flex fixed left-0 w-20 h-fit py-20 gap-10 flex-col items-center'>
 
             {/* like/reaction component */}
-            <ReactionButton blogId={blog._id} blog={blog} />
+            <ReactionButton blog={blog} />
 
             {/* comment button */}
             <Link

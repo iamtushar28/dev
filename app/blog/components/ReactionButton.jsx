@@ -9,26 +9,30 @@ import { GET_BLOG_BY_SLUG } from "@/graphql/queries/BlogBySlug";
 
 const EMOJIS = ["💖", "🦄", "😲", "🔥", "✨"];
 
-const ReactionButton = ({ blog, blogId }) => {
+const ReactionButton = ({ blog }) => {
   const { data: session } = useSession();
   const [showOptions, setShowOptions] = useState(false);
 
   const [toggleReaction] = useMutation(TOGGLE_REACTION);
 
+  // These recompute each render
+  const emojiCounts = {};
+  blog.reactions?.forEach(({ emoji, count }) => {
+    emojiCounts[emoji] = count;
+  });
+
+  const userReacted = new Set(blog.userReactions || []);
+
   const handleReactionClick = async (emoji) => {
     if (!session) return;
 
-    const userId = session.user.id;
-
-    // Get current count and reaction state
     const prevCount = emojiCounts[emoji] || 0;
     const hasReacted = userReacted.has(emoji);
 
     try {
       await toggleReaction({
-        variables: { blogId, emoji },
+        variables: { blogId: blog._id, emoji },
 
-        // 👇 Optimistic update: guess what the server will return
         optimisticResponse: {
           toggleReaction: {
             __typename: "EmojiCount",
@@ -37,25 +41,31 @@ const ReactionButton = ({ blog, blogId }) => {
           },
         },
 
-        // 👇 Update Apollo cache manually for immediate UI feedback
         update: (cache, { data: { toggleReaction } }) => {
           const existing = cache.readQuery({
             query: GET_BLOG_BY_SLUG,
-            variables: { id: blogId },
+            variables: { slug: blog.slug }, // ✅ use slug
           });
 
-          if (!existing?.blog) return;
+          if (!existing?.blogBySlug) return;
 
-          const updatedReactions = (existing.blog.reactions || []).map((r) => ({ ...r }));
+          const updatedReactions = [...(existing.blogBySlug.reactions || [])];
           const idx = updatedReactions.findIndex((r) => r.emoji === emoji);
 
           if (idx !== -1) {
-            updatedReactions[idx].count = toggleReaction.count;
+            updatedReactions[idx] = {
+              ...updatedReactions[idx],
+              count: toggleReaction.count,
+            };
           } else {
-            updatedReactions.push({ emoji, count: toggleReaction.count, __typename: "EmojiCount" });
+            updatedReactions.push({
+              emoji,
+              count: toggleReaction.count,
+              __typename: "EmojiCount",
+            });
           }
 
-          let updatedUserReactions = new Set(existing.blog.userReactions || []);
+          const updatedUserReactions = new Set(existing.blogBySlug.userReactions || []);
           if (hasReacted) {
             updatedUserReactions.delete(emoji);
           } else {
@@ -64,10 +74,10 @@ const ReactionButton = ({ blog, blogId }) => {
 
           cache.writeQuery({
             query: GET_BLOG_BY_SLUG,
-            variables: { id: blogId },
+            variables: { slug: blog.slug }, // ✅ match query
             data: {
-              blog: {
-                ...existing.blog,
+              blogBySlug: {
+                ...existing.blogBySlug,
                 reactions: updatedReactions,
                 userReactions: Array.from(updatedUserReactions),
               },
@@ -79,15 +89,6 @@ const ReactionButton = ({ blog, blogId }) => {
       console.error("Reaction failed:", error.message);
     }
   };
-
-
-  // Get current emoji counts and user's reactions
-  const emojiCounts = {};
-  blog.reactions?.forEach(({ emoji, count }) => {
-    emojiCounts[emoji] = count;
-  });
-
-  const userReacted = new Set(blog.userReactions || []);
 
   return (
     <div className="relative">
@@ -117,8 +118,9 @@ const ReactionButton = ({ blog, blogId }) => {
               <button
                 key={emoji}
                 onClick={() => handleReactionClick(emoji)}
-                className={`text-lg p-2 rounded-full transition hover:scale-110 duration-200 ${reacted ? "bg-pink-100" : "hover:bg-gray-100"
-                  }`}
+                className={`text-lg p-2 rounded-full transition hover:scale-110 duration-200 ${
+                  reacted ? "bg-pink-100" : "hover:bg-gray-100"
+                }`}
               >
                 {emoji} <span className="text-xs">{count}</span>
               </button>
