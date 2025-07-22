@@ -77,7 +77,7 @@ const CommentsList = ({ blog }) => {
                   >
                     <DeleteComment
                       commentId={comment._id}
-                      blog={blog}
+                      blogSlug={blog.slug}
                       blogId={blog._id}
                     />
                   </div>
