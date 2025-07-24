@@ -21,7 +21,7 @@ export async function POST(req) {
         break;
 
       case "generateContent":
-        prompt = `Write a 250-300 word blog post titled "${title}". Use clear <h2>, <p>, and <ul> HTML tags. Do not return markdown or code blocks. Output only valid HTML.`;
+        prompt = `Write a 230-280 word blog post titled "${title}". Use clear <h2>, <p>, and <ul> HTML tags. Do not return markdown or code blocks. Output only valid HTML.`;
         break;
 
       case "suggestKeywords":

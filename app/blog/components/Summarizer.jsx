@@ -16,7 +16,18 @@ const Summarizer = ({ blogDescription }) => {
     const fetchSummary = async () => {
         setLoading(true);
 
-        const plainText = stripHtml(blogDescription); // 🔥 Convert HTML to clean text
+        const stripHtml = (html) => {
+            if (!html) return '';
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        };
+
+        const getFirstWords = (text, wordLimit = 280) => {
+            return text.split(/\s+/).slice(0, wordLimit).join(' ');
+        };
+
+        const plainText = getFirstWords(stripHtml(blogDescription), 280); // ✅ Trim to 280 words
 
         try {
             const res = await fetch('/api/blog/summarize', {
@@ -38,6 +49,7 @@ const Summarizer = ({ blogDescription }) => {
             setLoading(false);
         }
     };
+
 
     return (
         <>
