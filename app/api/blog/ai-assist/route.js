@@ -5,22 +5,36 @@ const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 export async function POST(req) {
   try {
-    const { type, title, content } = await req.json();
-    let prompt = "";
+    const { type, title } = await req.json();
 
-    if (type === "enhanceTitle") {
-      prompt = `Enhance this blog title to make it more compelling and SEO-friendly. Return only one line improved title:\n\n"${title}"`;
-    } else if (type === "generateContent") {
-      prompt = `Write a 300-350 word blog post titled '${title}'. Format output as valid HTML (with <p>, <h2>, <ul>, etc.) for use in a rich-text editor. Do not include Markdown formatting or triple backticks`;
-    } else if (type === "suggestKeywords") {
-      prompt = `Suggest 5 concise, SEO-optimized keywords for the blog title: '${title}'. (single joined phrase without spaces & comma-separated (e.g., riseofai, aiengineer).`;
-    } else {
-      return new Response(JSON.stringify({ error: "Invalid action type" }), {
+    if (!type || !title) {
+      return new Response(JSON.stringify({ error: "Missing type or title" }), {
         status: 400,
       });
     }
 
-    // Use streaming for large content
+    let prompt = "";
+
+    switch (type) {
+      case "enhanceTitle":
+        prompt = `Improve this blog title for clarity and SEO. Respond with only the revised title:\n"${title}"`;
+        break;
+
+      case "generateContent":
+        prompt = `Write a 250-300 word blog post titled "${title}". Use clear <h2>, <p>, and <ul> HTML tags. Do not return markdown or code blocks. Output only valid HTML.`;
+        break;
+
+      case "suggestKeywords":
+        prompt = `Generate 5 SEO keywords for: "${title}". It a joined phrase without spaces (e.g., fullstackdeveloper, remoteworktips). Return only a comma-separated list.`;
+        break;
+
+      default:
+        return new Response(JSON.stringify({ error: "Invalid action type" }), {
+          status: 400,
+        });
+    }
+
+    // Use streaming for content generation
     if (type === "generateContent") {
       const result = await model.generateContentStream(prompt);
       let fullText = "";
@@ -34,13 +48,15 @@ export async function POST(req) {
       });
     }
 
-    // Use regular method for short prompts
+    // For enhanceTitle and suggestKeywords
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
 
     if (type === "enhanceTitle") {
       return new Response(JSON.stringify({ title: text }), { status: 200 });
-    } else if (type === "suggestKeywords") {
+    }
+
+    if (type === "suggestKeywords") {
       const keywords = text
         .split(/[\n,|-]/)
         .map((k) => k.trim())
@@ -49,6 +65,7 @@ export async function POST(req) {
       return new Response(JSON.stringify({ keywords }), { status: 200 });
     }
 
+    // Fallback
     return new Response(JSON.stringify({ error: "Unhandled type" }), {
       status: 400,
     });
