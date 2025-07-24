@@ -6,6 +6,7 @@ export const GET_SEARCHED_BLOGS = gql`
       _id
       title
       slug
+      tags
       createdAt
       bookmarked
       author {

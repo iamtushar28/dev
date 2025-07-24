@@ -26,7 +26,7 @@ export async function POST(req) {
     const formData = await req.formData();
     const title = formData.get("title") || "Untitled";
     const description = formData.get("description") || "";
-    const tags = formData.get("tags") ? formData.get("tags").split(",") : [];
+    const tags = formData.get("tags") ? JSON.parse(formData.get("tags")) : [];
 
     let coverImageUrl = "";
 

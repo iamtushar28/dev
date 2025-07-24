@@ -77,17 +77,30 @@ const BlogTemplate = ({ blog }) => {
           </Link>
 
           {/* Tags */}
-          <div className='mt-2'>
-            <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-              #NextJs
-            </button>
-            <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-              #Frontend-dev
-            </button>
-            <button className='text-sm text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-              #Javascript
-            </button>
-          </div>
+          {blog?.tags?.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {blog?.tags.map((tag, i) => {
+                const hashColors = [
+                  'text-blue-500',
+                  'text-green-500',
+                  'text-pink-500',
+                  'text-purple-500',
+                  'text-yellow-500',
+                ];
+                const hashColor = hashColors[i % hashColors.length];
+
+                return (
+                  <button
+                    key={i}
+                    className="text-sm text-zinc-500 px-2 hover:underline"
+                  >
+                    <span className={`${hashColor}`}>#</span>
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Reactions, Comments, Save */}
           <div className='mt-4 flex justify-between items-center'>
@@ -127,7 +140,7 @@ const BlogTemplate = ({ blog }) => {
             <BookmarkButton blogId={blog._id} initiallyBookmarked={blog.bookmarked} />
 
           </div>
-          
+
         </div>
       </div>
     </div>

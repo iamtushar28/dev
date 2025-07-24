@@ -6,6 +6,7 @@ export const GET_BLOG_BY_SLUG = gql`
       _id
       slug
       title
+      tags
       description
       coverImage
       createdAt

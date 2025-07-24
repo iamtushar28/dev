@@ -7,6 +7,7 @@ import Comments from './Comments'
 import BlogDate from '@/app/components/BlogDate'
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-light.css'; // You can change theme here
+import Summarizer from './Summarizer';
 
 const BlogPost = ({ blog, author }) => {
 
@@ -15,12 +16,20 @@ const BlogPost = ({ blog, author }) => {
     const contentRef = useRef(null);
 
     useEffect(() => {
-    if (contentRef.current) {
-        requestAnimationFrame(() => {
-            hljs.highlightAll();
-        });
-    }
-}, [blog.description]);
+        if (contentRef.current) {
+            const codeBlocks = contentRef.current.querySelectorAll('pre code');
+
+            // 💡 Unset previously highlighted blocks
+            codeBlocks.forEach((block) => {
+                block.removeAttribute('data-highlighted');
+            });
+
+            // ✅ Re-run highlight.js
+            requestAnimationFrame(() => {
+                hljs.highlightAll();
+            });
+        }
+    }, [blog.description]);
 
 
     return (
@@ -82,18 +91,37 @@ const BlogPost = ({ blog, author }) => {
                         {blog.title}
                     </h2>
 
-                    {/* tags */}
-                    <div className='mt-4'>
-                        <button className='text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-                            #NextJs
-                        </button>
-                        <button className='text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-                            #Frontend-dev
-                        </button>
-                        <button className='text-zinc-500 px-2 py-1 rounded hover:ring-2 hover:ring-blue-300 hover:bg-blue-100 transition-all duration-200'>
-                            #Javascript
-                        </button>
-                    </div>
+                    {/* Tags */}
+                    {blog?.tags?.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-1">
+                            {blog?.tags.map((tag, i) => {
+                                const hashColors = [
+                                    'text-blue-500',
+                                    'text-green-500',
+                                    'text-pink-500',
+                                    'text-purple-500',
+                                    'text-yellow-500',
+                                ];
+                                const hashColor = hashColors[i % hashColors.length];
+
+                                return (
+                                    <button
+                                        key={i}
+                                        className="text-sm text-zinc-500 px-2 hover:underline"
+                                    >
+                                        <span className={`${hashColor}`}>#</span>
+                                        {tag}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* blog summarizer */}
+                    {session && (
+                        <Summarizer blogDescription={blog.description} />
+                    )}
+
                 </div>
             </div>
 

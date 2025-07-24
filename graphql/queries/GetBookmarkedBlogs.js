@@ -6,6 +6,7 @@ export const GET_BOOKMARKED_BLOGS = gql`
       _id
       title
       slug
+      tags
       description
       coverImage
       createdAt

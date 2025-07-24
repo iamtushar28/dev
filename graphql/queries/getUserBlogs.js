@@ -6,6 +6,7 @@ export const GET_USER_BLOGS = gql`
       _id
       title
       slug
+      tags
       createdAt
       updatedAt
       bookmarked

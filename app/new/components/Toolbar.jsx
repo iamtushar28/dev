@@ -7,7 +7,7 @@ import {
     BiListOl,
     BiLinkAlt,
 } from "react-icons/bi";
-import { BsTypeH1, BsTypeH2 } from "react-icons/bs";
+import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
 import { CiImageOn } from "react-icons/ci";
 import { FaYoutube } from "react-icons/fa";
 import { BsCode, BsBlockquoteLeft } from "react-icons/bs";
@@ -33,17 +33,23 @@ const Toolbar = ({ editor, onImageUpload, onLinkUpload, onYTVideoEmbed }) => {
             </button>
 
             <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 2 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
+                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 1 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
                 <BsTypeH1 />
             </button>
 
             <button
+                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 2 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
+            >
+                <BsTypeH2 />
+            </button>
+            <button
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                 className={`p-2 rounded text-xl ${editor.isActive('heading', { level: 3 }) ? "ring-2 text-blue-600 ring-blue-600" : "bg-white"} hover:ring-2 ring-blue-600 border transition-all duration-200`}
             >
-                <BsTypeH2 />
+                <BsTypeH3 />
             </button>
 
             <button

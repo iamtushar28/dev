@@ -21,6 +21,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 // load all languages with "all" or common languages with "common"
 import { all, createLowlight } from 'lowlight'
 import 'highlight.js/styles/atom-one-light.css';
+import AiAssistMenu from "./AiAssistMenu";
 
 const Editor = () => {
 
@@ -28,7 +29,9 @@ const Editor = () => {
     const lowlight = createLowlight(all);
 
     const client = useApolloClient(); //initialize client
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [keywords, setKeywords] = useState([]);
     const [titleError, setTitleError] = useState("");
     const textareaRef = useRef(null);
     const [coverImage, setCoverImage] = useState(null);
@@ -232,6 +235,7 @@ const Editor = () => {
         const content = editor.getHTML();
         const formData = new FormData();
         formData.append("title", title);
+        formData.append("tags", JSON.stringify(keywords));
         formData.append("description", content);
         if (imageFile) formData.append("coverImage", imageFile);
 
@@ -292,6 +296,17 @@ const Editor = () => {
                 </label>
             </div>
 
+            {/* ai assist */}
+            <div className="flex justify-end">
+                <AiAssistMenu
+                    title={title}
+                    content={content}
+                    setTitle={setTitle}
+                    setContent={(newContent) => editor?.commands.setContent(newContent)}
+                    setKeywords={setKeywords}
+                />
+            </div>
+
             {/* Display Cover Image */}
             {coverImage && <img src={coverImage} alt="Cover Preview" className="w-full h-auto object-cover shadow-sm" />}
 
@@ -304,13 +319,36 @@ const Editor = () => {
                 onChange={(e) => {
                     setTitle(e.target.value);
                     if (titleError && e.target.value.trim()) {
-                        setTitleError(""); // Clear the error once there's input
+                        setTitleError('');
                     }
                 }}
             />
 
+            {/* Display suggested keywords */}
+            {keywords.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {keywords.map((kw, i) => {
+                        const colors = [
+                            'text-blue-500',
+                            'text-green-500',
+                            'text-pink-500',
+                            'text-purple-500',
+                            'text-yellow-500',
+                        ];
+                        const hashColor = colors[i % colors.length]; // Cycle through colors
+
+                        return (
+                            <button title="tags" key={i} className="text-[#404040] cursor-pointer">
+                                <span className={`${hashColor}`}>#</span>
+                                {kw}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
             {/* Toolbar */}
-            <Toolbar editor={editor} onImageUpload={addImage} onLinkUpload={setLink} onYTVideoEmbed={addYoutubeVideo} />
+            <Toolbar editor={editor} />
 
             {/* Blog Editor */}
             <div className="prose prose-lg prose-blue max-w-full">

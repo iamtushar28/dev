@@ -5,6 +5,7 @@ export const typeDefs = gql`
     _id: ID!
     title: String!
     slug: String!
+    tags: [String!]!
     description: String!
     coverImage: String
     authorId: ID!

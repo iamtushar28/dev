@@ -40,6 +40,17 @@ body {
   animation: shimmer 2.9s infinite linear;
 }
 
+.skeleton2 {
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 25%,     /* cool gray */
+    #b7c2f5 50%,     /* brighter Gemini blue */
+    #e5e7eb 75%      /* cool gray again */
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.9s infinite linear;
+}
+
 /* For all scrollable elements */
 ::-webkit-scrollbar {
   display: none;
