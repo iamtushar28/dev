@@ -5,6 +5,7 @@ import BlogDate from '../components/BlogDate';
 import BookmarkButton from '../components/BookmarkButton';
 
 import { FaRegComment } from "react-icons/fa"; //comment icon
+import Tags from '../components/Tags';
 
 const BlogTemplate = ({ blog }) => {
 
@@ -57,30 +58,7 @@ const BlogTemplate = ({ blog }) => {
                     </Link>
 
                     {/* Tags */}
-                    {blog?.tags?.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-1">
-                            {blog?.tags.map((tag, i) => {
-                                const hashColors = [
-                                    'text-blue-500',
-                                    'text-green-500',
-                                    'text-pink-500',
-                                    'text-purple-500',
-                                    'text-yellow-500',
-                                ];
-                                const hashColor = hashColors[i % hashColors.length];
-
-                                return (
-                                    <button
-                                        key={i}
-                                        className="text-sm text-zinc-500 px-2 hover:underline"
-                                    >
-                                        <span className={`${hashColor}`}>#</span>
-                                        {tag}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    )}
+                    <Tags blogTags={blog?.tags} />
 
                     {/* button - reactions, comment, save blog  */}
                     <div className='mt-4 flex justify-between items-center'>

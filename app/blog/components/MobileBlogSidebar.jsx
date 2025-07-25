@@ -5,6 +5,7 @@ import { FaRegComment } from "react-icons/fa"; //comment icon
 import { BsThreeDots } from "react-icons/bs"; // setting icon
 import BookmarkButton from '@/app/components/BookmarkButton';
 import MobileReactionButton from './MobileReactionButton';
+import ShareButton from './ShareButton';
 
 const MobileBlogSidebar = ({ blog }) => {
 
@@ -26,10 +27,8 @@ const MobileBlogSidebar = ({ blog }) => {
                 {/* bookmark button */}
                 <BookmarkButton blogId={blog._id} />
 
-                {/* settings button */}
-                <button className='text-2xl h-10 w-10 rounded-full text-zinc-600 hover:bg-zinc-200 transition-all duration-200 flex justify-center items-center'>
-                    <BsThreeDots />
-                </button>
+                {/* share button */}
+                <ShareButton />
 
             </section>
         </div>

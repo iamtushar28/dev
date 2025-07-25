@@ -159,7 +159,7 @@ const Navbar = () => {
             </section>
 
             {/* section 2 - login, create post, user, notifiction */}
-            <section className='flex gap-1 md:gap-4 items-center'>
+            <section className='flex gap-2 md:gap-4 items-center'>
 
                 {/* search button - hidden at desktop */}
                 <Link
@@ -182,8 +182,18 @@ const Navbar = () => {
                             </Link>
                         </div>
 
+                        {/* create post button for mobile screen */}
+                        <div className="block md:hidden">
+                            <Link
+                                href={"/new"}
+                                className="h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center"
+                            >
+                                <TbWritingSign />
+                            </Link>
+                        </div>
+
                         {/* Notification button */}
-                        <div className="relative">
+                        <div className="relative hidden md:block">
                             <Link
                                 href={"/notifications"}
                                 className="h-10 w-10 text-2xl hover:bg-blue-50 rounded-full transition-all duration-200 flex justify-center items-center"

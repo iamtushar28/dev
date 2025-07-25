@@ -6,6 +6,7 @@ import BlogDate from './BlogDate'
 import BookmarkButton from './BookmarkButton'
 import { useInView } from 'react-intersection-observer'
 import { FaRegComment } from "react-icons/fa"
+import Tags from './Tags';
 
 const BlogTemplate = ({ blog }) => {
   const { ref, inView } = useInView({
@@ -77,30 +78,7 @@ const BlogTemplate = ({ blog }) => {
           </Link>
 
           {/* Tags */}
-          {blog?.tags?.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {blog?.tags.map((tag, i) => {
-                const hashColors = [
-                  'text-blue-500',
-                  'text-green-500',
-                  'text-pink-500',
-                  'text-purple-500',
-                  'text-yellow-500',
-                ];
-                const hashColor = hashColors[i % hashColors.length];
-
-                return (
-                  <button
-                    key={i}
-                    className="text-sm text-zinc-500 px-2 hover:underline"
-                  >
-                    <span className={`${hashColor}`}>#</span>
-                    {tag}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          <Tags blogTags={blog?.tags} />
 
           {/* Reactions, Comments, Save */}
           <div className='mt-4 flex justify-between items-center'>

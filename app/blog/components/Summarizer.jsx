@@ -28,7 +28,7 @@ const Summarizer = ({ blogDescription }) => {
         };
 
         const plainText = getFirstWords(stripHtml(blogDescription), 280); // ✅ Trim to 280 words
-
+F
         try {
             const res = await fetch('/api/blog/summarize', {
                 method: 'POST',

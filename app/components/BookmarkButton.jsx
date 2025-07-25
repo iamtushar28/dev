@@ -81,7 +81,7 @@ const BookmarkButton = ({ blogId, initiallyBookmarked }) => {
         onClick={handleToggleBookmark}
         className={`p-2 text-xl transition-colors duration-200 ${
           isBookmarked ? 'text-blue-600' : 'text-zinc-500'
-        }`}
+        } hover:text-blue-500`}
         title={isBookmarked ? 'Remove Bookmark' : 'Bookmark this blog'}
       >
         {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}

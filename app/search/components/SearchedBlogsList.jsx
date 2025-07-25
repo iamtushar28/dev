@@ -10,8 +10,11 @@ import { FiSearch } from "react-icons/fi";
 const SearchedBlogsList = () => {
   const [query, setQuery] = useState("");
 
+  // Filter state and menu control
+  const [filter, setFilter] = useState("newest"); // Default to 'newest'
+
   // Get all blogs by default
-  const { data: allData, loading: loadingAll } = useQuery(GET_BLOGS);
+  const { data: allData, loading: loadingAll, error } = useQuery(GET_BLOGS);
 
   // Lazy query for search
   const [searchBlogs, { data: searchData, loading: loadingSearch }] = useLazyQuery(GET_SEARCHED_BLOGS);
@@ -31,6 +34,30 @@ const SearchedBlogsList = () => {
     : allData?.blogs ?? [];
 
   const loading = query.trim() ? loadingSearch : loadingAll;
+
+  // Filter and sort blogs based on selected filter
+  const getFilteredBlogs = () => {
+    if (!allData?.blogs) return [];
+
+    switch (filter) {
+      case "popular":
+        // Sort by number of total reactions
+        return [...allData.blogs].sort((a, b) => {
+          const aReactions = a.reactions?.reduce((sum, r) => sum + r.count, 0) || 0;
+          const bReactions = b.reactions?.reduce((sum, r) => sum + r.count, 0) || 0;
+          return bReactions - aReactions;
+        });
+
+      case "trending":
+        // Sort by number of comments
+        return [...allData.blogs].sort((a, b) => (b.commentsCount || 0) - (a.commentsCount || 0));
+
+      case "newest":
+      default:
+        // Default: newest blogs first (as returned by server)
+        return [...allData.blogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+  };
 
   return (
     <>
@@ -53,22 +80,52 @@ const SearchedBlogsList = () => {
       {/* Blog list */}
       <div className="w-full md:w-[74%] h-fit">
         <div className="flex justify-end gap-2">
-          <button className="w-fit px-3 py-1 text-sm font-semibold capitalize text-blue-500 bg-white rounded">
-            Popular
+
+          <button
+            onClick={() => {
+              setFilter("newest");
+            }}
+            className={`w-fit px-3 py-1 text-sm capitalize font-semibold ${filter === "newest" ? 'bg-white text-blue-500' : ''} rounded hover:text-blue-500 hover:bg-white transition-all duration-200`}
+          >
+            ⚡Newest
           </button>
-          <button className="w-fit px-3 py-1 text-sm capitalize hover:text-blue-500 hover:bg-white rounded">
-            Newest
+
+          <button
+            onClick={() => {
+              setFilter("popular");
+            }}
+            className={`w-fit px-3 py-1 text-sm capitalize font-semibold ${filter === "popular" ? 'bg-white text-blue-500' : ''} rounded hover:text-blue-500 hover:bg-white transition-all duration-200`}
+          >
+            ♥️Popular
           </button>
-          <button className="w-fit px-3 py-1 text-sm capitalize hover:text-blue-500 hover:bg-white rounded">
-            Oldest
+
+          <button
+            onClick={() => {
+              setFilter("trending");
+            }}
+            className={`w-fit px-3 py-1 text-sm capitalize font-semibold ${filter === "trending" ? 'bg-white text-blue-500' : ''} rounded hover:text-blue-500 hover:bg-white transition-all duration-200`}
+          >
+            🚀Trending
           </button>
+
         </div>
 
         <div className="flex flex-col gap-3 mt-5">
           {loading ? (
             <SkeletonList />
-          ) : blogs.length > 0 ? (
-            blogs.map((blog) => <BlogTemplate key={blog._id} blog={blog} />)
+          ) : error ? (
+            <p className="text-red-500">Failed to load blogs.</p>
+          ) : getFilteredBlogs().length > 0 ? (
+            getFilteredBlogs().map((blog) => (
+              <BlogTemplate
+                key={blog._id}
+                blog={{
+                  ...blog,
+                  creatorName: blog.author?.name || "Unknown",
+                  creatorProfile: blog.author?.image || null,
+                }}
+              />
+            ))
           ) : (
             <p>No blogs found.</p>
           )}

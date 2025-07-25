@@ -29,6 +29,7 @@ export async function POST(req) {
     const tags = formData.get("tags") ? JSON.parse(formData.get("tags")) : [];
 
     let coverImageUrl = "";
+    let coverImagePublicId = "";
 
     // Handle Image Upload
     const file = formData.get("coverImage");
@@ -46,6 +47,7 @@ export async function POST(req) {
       );
 
       coverImageUrl = uploadedImage.secure_url; // Get Cloudinary image URL
+      coverImagePublicId = uploadedImage.public_id; //Get Cloudinary image id
     }
 
     // Generate Unique Slug
@@ -60,6 +62,7 @@ export async function POST(req) {
       description,
       slug: uniqueSlug,
       coverImage: coverImageUrl, // Store Cloudinary image URL in DB
+      coverImagePublicId: coverImagePublicId, // Store Cloudinary image URL in DB
       authorId: new ObjectId(session.user.id),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -180,7 +183,10 @@ export async function DELETE(req) {
       );
     }
 
-    // ⛔️ SKIPPING Cloudinary deletion for now
+    // Delete cover image from Cloudinary (if present)
+    if (existingBlog.coverImagePublicId) {
+      await cloudinary.uploader.destroy(existingBlog.coverImagePublicId);
+    }
 
     await db.collection("blogs").deleteOne({ _id: new ObjectId(blogId) });
 
