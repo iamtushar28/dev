@@ -9,13 +9,14 @@ import cloudinary from "cloudinary";
 import slugify from "slugify";
 import { nanoid } from "nanoid";
 
-// POST: Create a new blog with image upload
+// initializing cloudinary for uploading image
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// POST: Create a new blog with image upload
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -62,12 +63,10 @@ export async function POST(req) {
       description,
       slug: uniqueSlug,
       coverImage: coverImageUrl, // Store Cloudinary image URL in DB
-      coverImagePublicId: coverImagePublicId, // Store Cloudinary image URL in DB
+      coverImagePublicId: coverImagePublicId, // Store Cloudinary image id in DB
       authorId: new ObjectId(session.user.id),
       createdAt: new Date(),
       updatedAt: new Date(),
-      likes: 0,
-      commentsCount: 0,
       tags,
     };
 

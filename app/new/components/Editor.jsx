@@ -74,19 +74,22 @@ const Editor = () => {
             Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
             Placeholder.configure({ placeholder: "Start writing your blog..." }),
 
+            //CodeBlockLowlight configuration            
             CodeBlockLowlight.configure({
                 lowlight,
                 defaultLanguage: 'javascript', // optional fallback
             }),
 
+            //Image configuration            
             Image.configure({
                 allowBase64: true,
                 inline: true,
                 HTMLAttributes: {
-                    class: 'my-custom-media-class',
+                    class: 'my-custom-media-class', //adding custom class for custom preview styling
                 },
             }),
 
+            //Link configuration            
             Link.configure({
                 openOnClick: false,
                 autolink: true,
@@ -147,11 +150,12 @@ const Editor = () => {
                 },
             }),
 
+            //youtube configuration
             Youtube.configure({
                 controls: false,
                 nocookie: true,
                 HTMLAttributes: {
-                    class: 'my-custom-media-class',
+                    class: 'my-custom-media-class', //adding custom class for custom preview styling
                 },
             }),
 
@@ -348,7 +352,11 @@ const Editor = () => {
             )}
 
             {/* Toolbar */}
-            <Toolbar editor={editor} />
+            <Toolbar editor={editor}
+                onImageUpload={addImage}
+                onLinkUpload={setLink}
+                onYTVideoEmbed={addYoutubeVideo}
+            />
 
             {/* Blog Editor */}
             <div className="prose prose-lg prose-blue max-w-full">
@@ -363,11 +371,20 @@ const Editor = () => {
 
                 <button
                     onClick={handleSave}
-                    className={`px-5 py-2 text-white rounded-lg font-semibold transition ${isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                    className={`px-5 py-2 text-white rounded-lg font-semibold bg-blue-600 hover:bg-blue-700 transition items-center flex gap-2 disabled:opacity-60  ${isUploading ? "cursor-not-allowed " : ""
                         }`}
                     disabled={isUploading}
                 >
-                    {isUploading ? "Publishing..." : "Publish"}
+                    {isUploading ? (
+                        <>
+                            <span>Publishing...</span>
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        </>
+                    ) : (
+                        <>
+                            <span>Publish</span>
+                        </>
+                    )}
                 </button>
 
 
