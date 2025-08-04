@@ -257,6 +257,7 @@ const Editor = () => {
 
                 // ✅ Clear editor after successful post
                 setTitle("");                        // Clear title
+                setKeywords("");                     // Clear A FKeywords
                 editor.commands.clearContent();      // Clear editor content
                 setCoverImage(null);                 // Remove cover image preview
                 setImageFile(null);                  // Reset image file reference

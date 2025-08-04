@@ -21,11 +21,11 @@ export async function POST(req) {
         break;
 
       case "generateContent":
-        prompt = `Write a 230-280 word blog post titled "${title}". Use clear <h2>, <p>, and <ul> HTML tags. Do not return markdown or code blocks. Output only valid HTML.`;
+        prompt = `Write a 230-240 word blog post titled "${title}". Use clear <h2>, <p>, and <ul> HTML tags. Do not return markdown or code blocks. Output only valid HTML.`;
         break;
 
       case "suggestKeywords":
-        prompt = `Generate 5 SEO keywords for: "${title}". It a joined phrase without spaces (e.g., fullstackdeveloper, remoteworktips). Return only a comma-separated list.`;
+        prompt = `Generate 5 SEO keywords for: "${title}". Single word (e.g. ai, webdev) or a joined phrase without spaces (e.g., fullstackdeveloper, remoteworktips). Return only a comma-separated list.`;
         break;
 
       default:
@@ -37,14 +37,27 @@ export async function POST(req) {
     // Use streaming for content generation
     if (type === "generateContent") {
       const result = await model.generateContentStream(prompt);
-      let fullText = "";
+      const encoder = new TextEncoder();
 
-      for await (const chunk of result.stream) {
-        fullText += chunk.text();
-      }
+      const stream = new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of result.stream) {
+              const text = chunk.text();
+              controller.enqueue(encoder.encode(text));
+            }
+            controller.close();
+          } catch (err) {
+            controller.error(err);
+          }
+        },
+      });
 
-      return new Response(JSON.stringify({ content: fullText.trim() }), {
-        status: 200,
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/plain",
+          "Cache-Control": "no-cache",
+        },
       });
     }
 
@@ -69,7 +82,6 @@ export async function POST(req) {
     return new Response(JSON.stringify({ error: "Unhandled type" }), {
       status: 400,
     });
-
   } catch (err) {
     console.error("AI Assist Error:", err);
     return new Response(

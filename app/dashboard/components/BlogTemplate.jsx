@@ -91,11 +91,6 @@ const BlogTemplate = ({ blog }) => {
                     {openBlogOptionMenu && (
                         <div ref={wrapperRef} className="absolute top-10 right-0 bg-white shadow-lg rounded-lg p-3 w-48">
                             <ul className="space-y-2">
-                                <button
-                                    className='w-full px-4 py-2 text-zinc-800 font-semibold hover:text-blue-500 hover:bg-blue-50 capitalize text-start rounded flex items-center gap-2 transition-all duration-200'>
-                                    <TbWritingSign className='text-lg' />
-                                    Edit post
-                                </button>
                                 <DeleteBlogButton blogId={blog._id} />
                             </ul>
                         </div>

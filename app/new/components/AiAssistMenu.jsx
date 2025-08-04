@@ -20,12 +20,29 @@ const AiAssistMenu = ({ title, content, setTitle, setContent, setKeywords }) => 
         body: JSON.stringify({ type, title, content }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'AI error');
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'AI error');
+      }
 
-      if (type === 'enhanceTitle') setTitle(data.title);
-      if (type === 'generateContent') setContent(data.content);
-      if (type === 'suggestKeywords') setKeywords(data.keywords);
+      if (type === 'generateContent') {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let fullText = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          fullText += chunk;
+          setContent(fullText); // Live update
+        }
+      } else {
+        const data = await res.json();
+        if (type === 'enhanceTitle') setTitle(data.title);
+        if (type === 'suggestKeywords') setKeywords(data.keywords);
+      }
     } catch (err) {
       console.error('AI Assist failed:', err);
     } finally {
@@ -33,7 +50,7 @@ const AiAssistMenu = ({ title, content, setTitle, setContent, setKeywords }) => 
     }
   };
 
-  // 🔻 Close on outside click
+  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {

@@ -14,7 +14,7 @@ export async function POST(req) {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-    const prompt = `Please summarize the following blog post content in 3-4 sentences:\n\n${description}`;
+    const prompt = `summarize the following blog post content in 3-4 sentences:\n\n${description}`;
 
     const result = await model.generateContent(prompt);
     const text = await result.response.text();
